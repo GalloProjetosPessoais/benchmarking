@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENXR - Recuperar Conta</title>
+    <link rel="stylesheet" href="/css/cores.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body >
+    <div class="container">
+        <div class="painel-esquerdo">
+            <div class="logo">
+                <img src="/img/logo.png" class="logo">
+            </div>
+            <h1>Bem-vindo!</h1>
+            <p>Sistema Desenvolvido por Hadare Tecnologia da Informação para a Companhia Mineira de Açúcar e Álcool.
+            </p>
+        </div>
+
+        <div class="painel-direito">
+            <div class="login">
+                <h2>Recuperar Acesso</h2>
+                <% if (typeof message == 'undefined') { %>
+                <form action="/usuarios/recuperarConta" method="POST" class="login-form">
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    <button class="btn" type="submit">Solicitar Recuperação</button>
+                    <a href="/login">Voltar ao login</a>
+                </form>
+                <% } else { %>
+                    <h3><%= message %></h3>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <script src="/js/theme.js"></script>
+</body>
+
+</html>

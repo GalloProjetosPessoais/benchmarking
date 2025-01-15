@@ -1,0 +1,56 @@
+:root {
+    --deslizante-fundo-claro: #c5c5c5;
+    --deslizante-fundo-escuro: #00652c;
+    --deslizante-botao-claro: #f5f5f5;
+    --deslizante-botao-escuro: #002410;
+
+    --fundo-claro: #f4f4f4;
+    --texto-claro: #ffffff;
+
+    --verde-claro: #00652c;
+    --verde-mais-claro: #007f37;
+    --verde-escuro: #013220;
+    --cinza-claro: #c5c5c5;
+    --cinza-escuro: #011e08;
+    --cinza-mais-escuro: #021606;
+    --branco: #ffffff;
+    --cinza-fundo: #eaeaea;
+
+
+    --primary: #007f37;
+    --primary-hover: #00652c;
+
+    --warning: #cd8220;
+    --warning-hover: #975806;
+
+    --danger: #751414;
+    --danger-hover: #4c1111;
+
+    --info: #2933b8;
+    --info-hover: #131a7e;
+
+    --light-color: #2b3036;
+	--light-second-color: #727475;
+	--light-background: #ffffff;
+	--light-second-background: #f1f1f1;
+
+	--dark-color: #d0d0d0;
+	--dark-second-color: #f5f6fa;
+	--dark-background: #23262b;
+	--dark-second-background: #1d1e24;
+
+}
+
+.light {
+	--main-bg-color: var(--light-background);
+	--second-bg-color: var(--light-second-background);
+	--main-color: var(--light-color);
+	--second-color: var(--light-second-color);
+}
+
+.dark {
+	--main-bg-color: var(--dark-background);
+	--second-bg-color: var(--dark-second-background);
+	--main-color: var(--dark-color);
+	--second-color: var(--dark-second-color);
+}

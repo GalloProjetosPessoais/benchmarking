@@ -1,0 +1,47 @@
+<div class="row">
+    <form class="col-sm-12 bg-secondary" method="post" action="/usuarios/create">
+        <div class="row">
+            <div class="form-group col-md-12 col-lg-6">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" value="<%= usuario ? usuario.nome : '' %>" readonly>
+            </div>
+            <div class="form-group col-md-12 col-lg-6">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<%= usuario ? usuario.email : '' %>" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12 col-lg-6">
+                <label for="grupo">Grupo</label>
+                <input type="text" id="grupo" name="grupo" value="<%= usuario ? usuario.grupoNome : '' %>" readonly>
+            </div>
+            <div class="form-group col-md-12 col-lg-6">
+                <label for="perfil">Perfil</label>
+                <input type="text" id="perfil" name="perfil" value="<%= usuario ? usuario.perfil : '' %>" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12 col-lg-4">
+                <label for="ultimaAlteracaoSenha">Perfil</label>
+                <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha" value="<%= usuario ? usuario.ultimaAlteracaoSenha : '' %>" readonly>
+            </div>
+            <div class="form-checked col-md-12 col-lg-4">
+                <input type="checkbox" id="ativo" name="ativo" checked="<%= usuario ? usuario.ativo : '' %>" disabled>
+                <label for="ativo">Ativo</label>
+            </div>
+            <div class="form-checked col-md-12 col-lg-4">
+                <input type="checkbox" id="bloqueado" name="bloqueado" checked="<%= usuario ? usuario.bloqueado : '' %>" disabled>
+                <label for="bloqueado">Bloqueado</label>
+            </div>
+        </div>
+
+        <div class="row my-10 px-10 g-10">
+            <a class="btn btn-warning mt-10" href="/usuarios/edit/<%= usuario.id %>">
+                <i class='bx bxs-edit'></i> Alterar
+            </a>
+            <a class="btn btn-info mt-10" href="/usuarios">
+                <i class='bx bx-arrow-back'></i> Voltar
+            </a>
+        </div>
+    </form>
+</div>

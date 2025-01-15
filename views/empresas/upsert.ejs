@@ -1,0 +1,38 @@
+<div class="row">
+    <form class="col-sm-12 bg-secondary" method="post" action="/empresas/upsert/<%= empresa.id %>">
+        <input type="hidden" id="id" name="id" value="<%= empresa ? empresa.id : '' %>" >
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label for="grupoId">Grupo</label>
+                <select id="grupoId" name="grupoId" >
+                    <% if (grupos && grupos.length > 0) { %>
+                        <% grupos.forEach(grupo => { %>
+                            <option value="<%= grupo.id %>" <%= empresa && empresa.grupoId == grupo.id ? 'selected' : '' %>>
+                                <%= grupo.descricao %>
+                            </option>
+                        <% }); %>
+                    <% } else { %>
+                        <option value="">Nenhum grupo disponível</option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group col-sm-12 col-md-10">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" value="<%= empresa ? empresa.nome : '' %>" required>
+            </div>
+            <div class="form-checked col-sm-12 col-md-2">
+                <input type="checkbox" id="ativo" name="ativo" value=<%= empresa.ativo %> <%= empresa.ativo ? 'checked' : 'unchecked' %>>
+                <label for="ativo">Ativo</label>
+            </div>
+        </div>
+
+        <div class="row my-10 px-10 g-10">
+            <button class="btn btn-primary mt-10" type="submit">
+                <i class='bx bxs-save'></i> Salvar
+            </button>
+            <a class="btn btn-danger mt-10" href="/empresas">
+                <i class='bx bx-x'></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>

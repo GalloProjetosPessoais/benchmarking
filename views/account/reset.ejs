@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENXR - Trocar Senha</title>
+    <link rel="stylesheet" href="/css/cores.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body >
+    <div class="container">
+        <div class="painel-esquerdo">
+            <div class="logo">
+                <img src="/img/logo.png" class="logo">
+            </div>
+            <h1>Bem-vindo!</h1>
+            <p>Sistema Desenvolvido por Hadare Tecnologia da Informação para a Companhia Mineira de Açúcar e Álcool.
+            </p>
+        </div>
+
+        <div class="painel-direito">
+            <div class="login">
+                <h2>Alteração de Senha</h2>
+                <% if (typeof message == 'undefined') { %>
+                <form action="/usuarios/trocarSenha" method="POST" class="login-form">
+                    <input type="hidden" id="id" name="id" value="<%= data ? data.id : '' %>">
+                    <input type="hidden" id="code" name="code" value="<%= data ? data.code : '' %>">
+                    <div class="input-group">
+                        <input type="password" id="senha" name="senha" placeholder="Digite a nova senha" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="senha2" name="senha2" placeholder="Confirme a nova senha" required>
+                    </div>
+                    <button class="btn" type="submit">Salvar</button>
+                    <a href="/login">Voltar ao login</a>
+                </form>
+                <% } else { %>
+                    <h3><%= message %></h3>
+                    <a class="btn" href="/login">Entrar</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <script src="/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <% if (typeof error !== 'undefined') { %>
+        <script>
+            Swal.fire({
+                title: "<%= error.title %>",
+                html: "<%- error.message %>",
+                icon: "error",
+                confirmButtonColor: 'var(--primary)'
+            });
+        </script>
+    <% } %>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+npm init
+
+npm i ejs express nodemon
+
+criar a estrutura de pasta:
+    controllers
+    models
+    public
+        css
+        img
+        js
+    routes
+    server
+    views
+

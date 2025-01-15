@@ -1,0 +1,27 @@
+{
+  "name": "benchmarking.ui",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "datatables.net": "^2.1.8",
+    "datatables.net-dt": "^2.1.8",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
+    "jquery": "^3.7.1",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.9",
+    "sweetalert2": "^11.15.2"
+  }
+}
