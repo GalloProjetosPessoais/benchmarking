@@ -1,4 +1,12 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-<script src="/js/datatables.js"></script>
+
+<!-- Inclua um arquivo JS personalizado, se fornecido -->
+<% if (typeof customJs !== 'undefined' && customJs) { %>
+    <script src="<%= customJs %>"></script>
+<% } else { %>
+    <script src="/js/datatables.js"></script>
+<% } %>
+
+<script src="/js/delete.js"></script>

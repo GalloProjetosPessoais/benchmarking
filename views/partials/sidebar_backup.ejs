@@ -1,0 +1,75 @@
+<aside class="sidebar">
+    <div class="sidebar-content">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a href="/" class="sidebar-nav-link <%= title === 'Dashboard' ? 'active' : '' %>">
+                    <div><i class='bx bxs-home'></i></div>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <span class="sidebar-nav-link <%= title === 'Dados Agrícolas' ? 'active' : '' %>" onclick="toggleSubItems('dadosagricolas')">
+                    <div><i class="bx bxs-notepad"></i></div>
+                    <span>Dados Agrícolas</span>
+                </span>
+                <ul class="sidebar-submenu" id="dadosagricolas" style="display: none;">
+                    <li class="sidebar-nav-item">
+                        <a href="/safras" class="sidebar-nav-link">
+                            <div><i class="bx bx-calendar"></i></div>
+                            <span>Safras</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="/grupos" class="sidebar-nav-link">
+                            <div><i class="bx bxs-business"></i></div>
+                            <span>Grupos</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="/empresas" class="sidebar-nav-link">
+                            <div><i class="bx bx-building"></i></div>
+                            <span>Empresas</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/" class="sidebar-nav-link">
+                    <div><i class='bx bxs-pie-chart-alt-2'></i></div>
+                    <span>Relatórios</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/" class="sidebar-nav-link">
+                    <div><i class="bx bxs-bar-chart-alt-2"></i></div>
+                    <span>Comparativos</span>
+                </a>
+            </li>
+            <hr>
+            <% if (user.permissoes.some(p => p.modulo === 'Usuários' && p.acao.includes('1'))) { %>
+            <li class="sidebar-nav-item">
+                <a href="/usuarios" class="sidebar-nav-link <%= title === 'Usuários' ? 'active' : '' %>">
+                    <div><i class="bx bxs-user"></i></div>
+                    <span>Usuários</span>
+                </a>
+            </li>
+            <% } %>
+            <li class="sidebar-nav-item">
+                <a href="/" class="sidebar-nav-link">
+                    <div><i class="bx bx-support"></i></div>
+                    <span>Suporte</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/" class="sidebar-nav-link">
+                    <div><i class="bx bxs-cog"></i></div>
+                    <span>Configurações</span>
+                </a>
+            </li>
+        </ul>
+        <div class="sidebar-bottom">
+            <p>© 2025 • Direitos Reservados</p>
+            <p>Desenvolvido por <a href='http://hadare.com.br/' target="_blank">HADARE</a></p>
+        </div>
+    </div>
+</aside>

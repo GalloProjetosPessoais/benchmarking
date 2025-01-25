@@ -21,7 +21,27 @@ const postLogin = async (req, res) => {
       // const decoded = jwt.verify(data.result, 'Super-Teste-Ativar-Faca-Com-Que-Esse-Projeto-Comece-A-Funcionar');
       // const userId = decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
       const userData = await Usuarios.getUsuarioLogado(req, data.result);
-      res.cookie('authUser', userData.result, {
+      const user = userData.result;
+
+      const resultado = user.permissoes.reduce((acc, item) => {
+        // Encontrar o módulo no resultado acumulado
+        let moduloExistente = acc.find(el => el.modulo === item.modulo.nome);
+
+        // Se o módulo já existe, adicionar a ação ao campo `acao`
+        if (moduloExistente) {
+          moduloExistente.acao += item.acao.id.toString();
+        } else {
+          // Caso contrário, criar um novo módulo com a primeira ação
+          acc.push({
+            modulo: item.modulo.nome,
+            acao: item.acao.id.toString(),
+          });
+        }
+        return acc;
+      }, []);
+      user.permissoes = resultado;
+
+      res.cookie('authUser', user, {
         httpOnly: true,
         secure: true,
         sameSite: 'Strict',
@@ -71,40 +91,44 @@ const getUsuarios = async (req, res) => {
         title: 'Usuários',
         subtitle: 'Gerenciamento de Usuários',
         data: data.result,
-        js: './partials/datatablejs.ejs'
+        useDatatable: true
       });
     }
     else {
-      return res.redirect('/');
+      throw new Error(data.errorMessages?.join("<br>") || 'Erro ao Buscar Usuários');
     }
   } catch (error) {
-    console.error('Erro de acesso a Usuarios:', error);
+    req.session.error = { title: 'Problema ao Carregar Usuários', message: error };
+    console.error('Erro de acesso ao Usuário:', error);
+    return res.redirect('/');
   }
 };
 
-const getCreateUsuario = async (req, res, usuario = {}, error = null) => {
+const getCreateUsuario = async (req, res) => {
+  let usuario = req.session.usuarioData || {};
+  delete req.session.usuarioData;
   try {
     const perfis = await Usuarios.getPerfis(req);
     const grupos = await Grupos.getGrupos(req);
-
-    // Renderiza a página com os dados necessários
     return res.render('account/create', {
       title: 'Usuários',
       subtitle: 'Adicionar Conta',
       perfis: perfis.result || [],
       grupos: grupos.result || [],
       usuario,
-      error,
     });
   } catch (error) {
     console.error('Erro ao carregar perfis ou grupos:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao carregar os dados para a página. Tente novamente mais tarde.',
+    };
     return res.render('account/create', {
       title: 'Usuários',
       subtitle: 'Adicionar Conta',
       perfis: [],
       grupos: [],
       usuario,
-      error: { title: 'Problemas internos', message: 'Erro ao carregar dados para a página.' },
     });
   }
 }
@@ -112,26 +136,34 @@ const getCreateUsuario = async (req, res, usuario = {}, error = null) => {
 const postCreateUsuario = async (req, res) => {
   const usuario = req.body;
   try {
-    // Verifica se as senhas coincidem
     if (usuario.senha !== usuario.senha2) {
-      return getCreateUsuario(req, res, usuario, { title: 'Problemas no Registro', message: 'As senhas não coincidem!' });
+      req.session.usuarioData = usuario;
+      req.session.error = {
+        title: 'Problemas no Registro', message: 'As senhas não coincidem!'
+      };
+      return getCreateUsuario(req, res);
     }
     delete usuario.senha2;
-    // Tenta registrar o usuário
+
     const data = await Usuarios.registrarUsuario(req, usuario);
 
     if (data.statusCode === 201 && data.isSuccess) {
-      // Salva mensagem temporária para exibir no toast
-      req.session.tempData = { message: 'Usuário registrado com sucesso!' };
+      req.session.success = { title: 'Sucesso', message: 'Usuário registrado com sucesso!' };
       return res.redirect('/usuarios');
     }
-    // Exibe mensagens de erro retornadas pelo serviço
-    const errorMessage = data.errorMessages?.join("<br>") || 'Erro ao registrar o usuário.';
-    return getCreateUsuario(req, res, usuario, { title: 'Problemas no Registro', message: errorMessage });
+    req.session.error = {
+      title: 'Problemas no Cadastro',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Registrar Usuário.',
+    };
   } catch (error) {
     console.error('Erro ao processar a solicitação:', error);
-    return getCreateUsuario(req, res, usuario, { title: 'Problemas no Registro', message: 'Erro interno do servidor. Tente novamente mais tarde.' });
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
   }
+  req.session.usuarioData = usuario;
+  return getCreateUsuario(req, res);
 };
 
 const getConfirmUsuario = async (req, res) => {
@@ -157,22 +189,29 @@ const getDetailsUsuario = async (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao carregar perfis ou grupos:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
     return res.render('account/details', {
       title: 'Usuários',
       subtitle: 'Detalhes da Conta',
       usuario: {},
-      error: { title: 'Problemas internos', message: 'Erro ao carregar dados para a página.' },
     });
   }
 }
 
-const getEditUsuario = async (req, res, usuario = {}, error = null) => {
+const getEditUsuario = async (req, res) => {
   const { id } = req.params;
+  let usuario = req.session.usuarioData || {};
+  delete req.session.usuarioData;
   try {
     const perfis = await Usuarios.getPerfis(req);
     const grupos = await Grupos.getGrupos(req);
-    const data = await Usuarios.getUsuario(req, id);
-    const usuario = data.result;
+    if (usuario == null) {
+      const data = await Usuarios.getUsuario(req, id);
+      usuario = data.result;
+    }
 
     return res.render('account/edit', {
       title: 'Usuários',
@@ -180,17 +219,19 @@ const getEditUsuario = async (req, res, usuario = {}, error = null) => {
       perfis: perfis.result || [],
       grupos: grupos.result || [],
       usuario,
-      error,
     });
   } catch (error) {
     console.error('Erro ao carregar perfis ou grupos:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao carregar os dados para a página. Tente novamente mais tarde.',
+    };
     return res.render('account/edit', {
       title: 'Usuários',
       subtitle: 'Alterar Conta',
       perfis: [],
       grupos: [],
       usuario,
-      error: { title: 'Problemas internos', message: 'Erro ao carregar dados para a página.' },
     });
   }
 }
@@ -200,13 +241,14 @@ const deleteUsuario = async (req, res) => {
   try {
     const data = await Usuarios.deleteUsuario(req, id);
     if (data.isSuccess)
-      return res.status(200).json({ message: 'Usuário excluído com Sucesso!' });
+      req.session.success = { title: 'Usuário excluído com Sucesso!', message: 'A exclusão foi realizada com êxito.' };
     else
-      return res.status(500).json({ message: data.errorMessages?.join("<br>") });
+      throw new Error(data.errorMessages?.join("<br>") || 'Erro ao tentar Excluir Usuário');
   } catch (error) {
     console.error('Erro ao excluir usuário:', error);
-    return res.status(500).json({ message: 'Erro ao excluir usuário.' });
+    req.session.error = { title: "Erro ao Tentar Excluir a Usuário", message: error };
   }
+  return res.redirect('/usuarios')
 }
 
 const getRecuperarConta = async (req, res) => {

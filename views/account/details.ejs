@@ -22,8 +22,8 @@
         </div>
         <div class="row">
             <div class="form-group col-md-12 col-lg-4">
-                <label for="ultimaAlteracaoSenha">Perfil</label>
-                <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha" value="<%= usuario ? usuario.ultimaAlteracaoSenha : '' %>" readonly>
+                <label for="ultimaAlteracaoSenha">Última Alteração de Senha</label>
+                <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha" value="<%= usuario ? new Date(usuario.ultimaAlteracaoSenha).toLocaleDateString('pt-BR') : '' %>" readonly>
             </div>
             <div class="form-checked col-md-12 col-lg-4">
                 <input type="checkbox" id="ativo" name="ativo" checked="<%= usuario ? usuario.ativo : '' %>" disabled>

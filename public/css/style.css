@@ -97,7 +97,7 @@ body {
 
 .logo img {
     width: 160px;
-	padding: 20px 10px;
+	padding: 10px;
 }
 
 .user {
@@ -518,7 +518,21 @@ a.bx {
 	gap: 5px;
 }
 
-.btn:hover {
+.btn-sm {
+	background-color: var(--main-bg-color);
+    color: var(--dark-second-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    padding: 2px 10px;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn:hover, .btn-sm:hover {
 	color: var(--dark-color);
 }
 
@@ -581,6 +595,11 @@ a.bx {
 	margin-bottom: 10px;
 }
 
+.mx-10 {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 .g-10 {
 	gap: 10px;
 }
@@ -611,4 +630,36 @@ a.bx {
 	flex-direction: row;
 	align-items: center;
 	gap: 10px;
+}
+
+.text-primary {
+	color: var(--primary);
+}
+
+.text-danger {
+	color: var(--danger);
+}
+
+.text-info {
+	color: var(--info);
+}
+
+.text-warning {
+	color: var(--warning);
+}
+
+.d-flex-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.d-flex-column {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.fs-20 {
+	font-size: 20px;
 }

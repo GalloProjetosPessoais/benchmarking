@@ -26,8 +26,10 @@
                 <label for="ativo"><%= item.ativo ? 'Sim' : 'Não' %></label>
               </td>
               <td class="fit">
-                <a href="/safras/upsert/<%= item.id %>" class="bx bx-edit"></a>
-                <a href="javascript:void(0)" onclick="Delete('/safras/delete/<%= item.id %>')" title="Excluir" class="bx bxs-trash"></a>
+                <a href="/safras/empresas/<%= item.id %>" class="bx bxs-business" title="Gerenciar Empresas"></a>
+                <a href="/safras/periodos/<%= item.id %>" class="bx bx-calendar" title="Gerenciar Períodos"></a>
+                <a href="/safras/upsert/<%= item.id %>" class="bx bx-edit" title="Alterar Safra"></a>
+                <a href="javascript:void(0)" onclick="Delete('/safras/delete/<%= item.id %>')" title="Excluir Safra" class="bx bxs-trash"></a>
               </td>
             </tr>
             <% }); %>

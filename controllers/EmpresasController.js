@@ -9,40 +9,50 @@ const getEmpresas = async (req, res) => {
         title: 'Empresas',
         subtitle: 'Gerenciamento de Empresas',
         data: data.result,
-        js: './partials/datatablejs.ejs'
+        useDatatable: true
       });
     }
     else {
-      return res.redirect('/');
+      throw new Error(data.errorMessages?.join("<br>") || 'Erro ao Buscar Empresas');
     }
   } catch (error) {
-    console.error('Erro de acesso ao Empresas:', error);
+    req.session.error = { title: 'Problema ao Carregar Empresas', message: error };
+    console.error('Erro de acesso as Empresas:', error);
+    return res.redirect('/');
   }
 };
 
-const getUpsertEmpresa = async (req, res, empresa = {}, error = null) => {
+const getUpsertEmpresa = async (req, res) => {
   const { id } = req.params;
   const grupos = await Grupos.getGrupos(req);
+  let empresa = req.session.empresaData || {};
+  delete req.session.empresaData;
 
-  if (error == null) {
-    if (id == 0) {
-      empresa = {
-        id: 0,
-        nome: '',
-        grupoId: 0,
-        ativo: true,
+  if (!empresa.id && id == 0) {
+    empresa = {
+      id: 0,
+      nome: '',
+      grupoId: 0,
+      ativo: true,
+    }
+  } else if (!empresa.id) {
+    try {
+      const data = await Empresas.getEmpresa(req, id);
+      if (data.statusCode == 200 && data.isSuccess) {
+        empresa = data.result;
+      } else {
+        req.session.error = {
+          title: 'Problemas ao Buscar Empresa',
+          message: data.errorMessages?.join('<br>') || 'Erro desconhecido ao carregar os dados da Empresa.',
+        };
+        return res.redirect('/empresas');
       }
-    } else {
-      try {
-        const data = await Empresas.getEmpresa(req, id);
-        if (data.statusCode == 200 && data.isSuccess) {
-          empresa = data.result;
-        } else {
-          error = data.errorMessages?.join("<br>") || 'Erro ao Buscar Empresa';
-        }
-      } catch (error) {
-        error = { title: 'Problemas internos', message: 'Erro ao carregar dados para a página.' };
-      }
+    } catch (err) {
+      req.session.error = {
+        title: 'Erro Interno',
+        message: 'Falha ao carregar os dados para a página. Tente novamente mais tarde.',
+      };
+      return res.redirect('/empresas');
     }
   }
   return res.render('empresas/upsert', {
@@ -50,7 +60,6 @@ const getUpsertEmpresa = async (req, res, empresa = {}, error = null) => {
     subtitle: id == 0 ? 'Adicionar Empresa' : 'Alterar Empresa',
     empresa,
     grupos: grupos.result || [],
-    error,
   });
 }
 
@@ -59,34 +68,42 @@ const postUpsertEmpresa = async (req, res) => {
   const empresa = req.body;
   empresa.ativo = empresa.ativo === 'true';
   try {
-    const data = id == 0 ?
-      await Empresas.createEmpresa(req, empresa) :
-      await Empresas.editEmpresa(req, id, empresa);
+    const data = id == 0
+      ? await Empresas.createEmpresa(req, empresa)
+      : await Empresas.editEmpresa(req, id, empresa);
     if (data.isSuccess) {
-      req.session.tempData = { message: `Empresa ${id == 0 ? 'registrada' : 'alterada'} com sucesso!` };
+      req.session.tempData = { title: 'Sucesso', message: `Empresa ${id == 0 ? 'registrada' : 'alterada'} com sucesso!` };
       return res.redirect('/empresas');
     }
-    const errorMessage = data.errorMessages?.join("<br>") || 'Erro ao cadastrar Empresa.';
-    return getUpsertEmpresa(req, res, empresa, { title: 'Problemas no Cadastro', message: errorMessage });
+    req.session.error = {
+      title: 'Problemas no Cadastro',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Cadastrar Empresa.',
+    };
   } catch (error) {
     console.error('Erro ao processar a solicitação:', error);
-    return getCreateEmpresa(req, res, empresa, { title: 'Problemas no Cadastro', message: 'Erro interno do servidor. Tente novamente mais tarde.' });
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
   }
+  req.session.empresaData = empresa;
+  return res.redirect(`/empresas/upsert/${id}`);
 }
 
 const deleteEmpresa = async (req, res) => {
   const { id } = req.params;
   try {
-    // Exclua o registro do banco, usando seu ORM ou diretamente no banco de dados
     const data = await Empresas.deleteEmpresa(req, id);
     if (data.isSuccess)
-      return res.status(200).json({ message: 'Empresa excluído com Sucesso!' });
+      req.session.success = { title: 'Empresa excluída com Sucesso!', message: 'A exclusão foi realizada com êxito.' };
     else
-      return res.status(500).json({ message: data.errorMessages?.join("<br>") });
+      throw new Error(data.errorMessages?.join("<br>") || 'Erro ao tentar Excluir Safra');
   } catch (error) {
     console.error('Erro ao excluir empresa:', error);
-    return res.status(500).json({ message: 'Erro ao excluir empresa.' });
+    req.session.error = { title: "Erro ao Tentar Excluir a Empresa", message: error };
   }
+  return res.redirect('/empresas');
+
 }
 
 module.exports = {

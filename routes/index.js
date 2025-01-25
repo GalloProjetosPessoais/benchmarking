@@ -7,6 +7,8 @@ const AccountController = require('../controllers/AccountController');
 const GruposController = require('../controllers/GruposController');
 const EmpresasController = require('../controllers/EmpresasController');
 const SafrasController = require('../controllers/SafrasController');
+const PeriodosController = require('../controllers/PeriodosController');
+const EmpresasSafrasController = require('../controllers/EmpresasSafrasController');
 
 // Rotas que NÃO exigem autenticação
 routes.get(`/login`, AccountController.getLogin);
@@ -48,6 +50,12 @@ routes.get(`/safras`, autenticar, SafrasController.getSafras);
 routes.get(`/safras/upsert/:id`, autenticar, SafrasController.getUpsertSafra);
 routes.post(`/safras/upsert/:id`, autenticar, SafrasController.postUpsertSafra);
 routes.delete(`/safras/delete/:id`, autenticar, SafrasController.deleteSafra);
+// Periodos e empresas da Safra
+routes.get(`/safras/periodos/:id`, autenticar, PeriodosController.getPeriodosSafra);
+routes.get(`/safras/empresas/:id`, autenticar, EmpresasSafrasController.getEmpresasSafra);
+
+// Gerar Periodos
+routes.post(`/periodos/gerar/:id`, autenticar, PeriodosController.postGerarPeriodos);
 
 
 module.exports = routes;

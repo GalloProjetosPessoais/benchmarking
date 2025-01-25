@@ -1,102 +1,24 @@
 const server = require('../server/index');
+const url = 'safras';
 
 const getSafras = async (req) => {
-    const fetch = (await import('node-fetch')).default;
-    const authToken = req.cookies.authToken;
-    try {
-        const response = await fetch(`${server.baseUrl}/safras`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-            },
-            agent: server.agent,
-        });
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Erro ao buscar safras:', error);
-    }
+    return await server.get(req.cookies.authToken, `${url}`);
 }
 
 const getSafra = async (req, id) => {
-    const fetch = (await import('node-fetch')).default;
-    const authToken = req.cookies.authToken;
-    try {
-        const response = await fetch(`${server.baseUrl}/safras/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-            },
-            agent: server.agent,
-        });
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Erro ao buscar safra:', error);
-    }
+    return await server.get(req.cookies.authToken, `${url}/${id}`);
 }
 
 const createSafra = async (req, safra) => {
-    const fetch = (await import('node-fetch')).default;
-    const authToken = req.cookies.authToken;
-    try {
-        const response = await fetch(`${server.baseUrl}/safras`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-            },
-            body: JSON.stringify(safra),
-            agent: server.agent,
-        });
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Erro ao cadastrar safra:', error);
-        throw new Error('Falha ao conectar à API.');
-    }
+    return await server.post(req.cookies.authToken, `${url}`, safra);
 };
 
 const editSafra = async (req, id, safra) => {
-    const fetch = (await import('node-fetch')).default;
-    const authToken = req.cookies.authToken;
-    try {
-        const response = await fetch(`${server.baseUrl}/safras/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-            },
-            body: JSON.stringify(safra),
-            agent: server.agent,
-        });
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Erro ao alterar safra:', error);
-        throw new Error('Falha ao conectar à API.');
-    }
+    return await server.put(req.cookies.authToken, `${url}/${id}`, safra);
 };
 
 const deleteSafra = async (req, id) => {
-    const fetch = (await import('node-fetch')).default;
-    const authToken = req.cookies.authToken;
-    try {
-        const response = await fetch(`${server.baseUrl}/safras/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-            },
-            agent: server.agent,
-        });
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Erro ao excluir safra:', error);
-    }
+    return await server.del(req.cookies.authToken, `${url}/${id}`);
 }
 
 module.exports = {
