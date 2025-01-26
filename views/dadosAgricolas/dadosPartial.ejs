@@ -1,0 +1,83 @@
+<div class="row mt-10">
+    <div class="col-sm-12 bg-secondary">
+
+        <form id="form-dados-agricolas">
+            <div class="row">
+                <h2 class="col-12">Dados Agrícolas</h2>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Moagem Realizada (t)</label>
+                    <input type="text" id="moagemRealizado" name="moagemRealizado" placeholder="Toneladas (t)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Realizado (%)</label>
+                    <input type="text" id="realizado" name="realizado" placeholder="Porcentagem (%)" disabled>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Realizado Cana Própria (%)</label>
+                    <input type="text" id="realizadoCanaPropria" name="realizadoCanaPropria" placeholder="Porcentagem (%)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Realizado Cana Fornecedor (%)</label>
+                    <input type="text" id="realizadoCanaFornecedor" name="realizadoCanaFornecedor" placeholder="Porcentagem (%)" disabled>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">ATR Dia (kg/t)</label>
+                    <input type="text" id="aTRDia" name="aTRDia" placeholder="Quilograma/Tonelada (kg/t)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">ATR Acumulado (kg/t)</label>
+                    <input type="text" id="aTRAcumulado" name="aTRAcumulado" placeholder="Quilograma/Tonelada (kg/t)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">TCH Estimado (t/ha)</label>
+                    <input type="text" id="tCHEstimado" name="tCHEstimado" placeholder="Tonelada/Hectare (t/ha)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">TCH Realizado (t/ha)</label>
+                    <input type="text" id="tCHRealizado" name="tCHRealizado" placeholder="Tonelada/Hectare (t/ha)" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Idade Média (a)</label>
+                    <input type="text" id="idadeMedia" name="idadeMedia" placeholder="Anos" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Chuva Mês (mm)</label>
+                    <input type="text" id="chuvaMes" name="chuvaMes" placeholder="Milímetros (mm)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Chuva Acumulada</label>
+                    <input type="text" id="chuvaAcumulada" name="chuvaAcumulada" placeholder="Milímetros (mm)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Índice de Infestação Final (%)(I.I.F.)</label>
+                    <input type="text" id="indiceInfestacaoFinal" name="indiceInfestacaoFinal" placeholder="Porcentagem (%)" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Impureza Mineral (kg/t)</label>
+                    <input type="text" id="impurezaMineral" name="impurezaMineral" placeholder="Quilograma/Tonelada (kg/t)" required>
+                </div>
+                <div class="form-group col-sm-12 col-md-4 col-lg-3">
+                    <label for="nome">Impureza Vegetal (kg/t)</label>
+                    <input type="text" id="impurezaVegetal" name="impurezaVegetal" placeholder="Quilograma/Tonelada (kg/t)" required>
+                </div>
+            </div>
+
+            <div class="row my-20 px-10 g-10">
+                <button type="submit" class="btn btn-primary">
+                    <i class='bx bx-save'></i> Salvar Dados Agrícolas
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

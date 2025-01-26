@@ -1,98 +1,88 @@
-const Ambientes = require('../server/ambientes');
-const Empresas = require('../server/empresas');
+const Safras = require('../server/safras');
 const Grupos = require('../server/grupos');
+const Ambientes = require('../server/ambientes');
 
-const getAmbientes = async (req, res) => {
+const getDados = async (req, res) => {
   try {
-    const data = await Ambientes.getAmbientes(req);
-    if (data.statusCode === 200 && data.isSuccess) {
-      return res.render('dadosAgricolas/index', {
-        title: 'Dados Agrícolas',
-        subtitle: 'Gerenciamento de Dados',
-        data: data.result,
-        useDatatable: true
-      });
-    }
-    else {
-      return res.redirect('/');
-    }
+    const safras = await Safras.getSafras(req);
+    const grupos = await Grupos.getGrupos(req);
+    return res.render('dadosAgricolas/index', {
+      title: 'Dados Agrícolas',
+      subtitle: 'Gerenciamento de Dados',
+      safras: safras.result,
+      grupos: grupos.result,
+      empresas: {},
+      js: '/js/dados-Agricolas.js'
+    });
   } catch (error) {
+    req.session.error = { title: 'Problema ao Carregar Dados', message: error };
     console.error('Erro de acesso:', error);
+    return res.redirect('/');
   }
 };
 
-// const getUpsertEmpresa = async (req, res, empresa = {}, error = null) => {
-//   const { id } = req.params;
-//   const grupos = await Grupos.getGrupos(req);
+const saveAmbiente = async (req, res) => {
+  const ambiente = req.body;
+  try {
+    // Verifica se já existe um ambiente para a safra e empresa
+    const response = await Ambientes.getAmbientesProSafraEmpresa(req, ambiente.safraId, ambiente.empresaId);
+    let result;
+    if (response.isSuccess && response.result) {
+      // Alteração
+      ambiente.Id = response.result.id;
+      result = await Ambientes.editAmbiente(req, response.result.id, ambiente);
+    } else {
+      // Cadastro
+      result = await Ambientes.createAmbiente(req, ambiente);
+    }
 
-//   if (error == null) {
-//     if (id == 0) {
-//       empresa = {
-//         id: 0,
-//         nome: '',
-//         grupoId: 0,
-//         ativo: true,
-//       }
-//     } else {
-//       try {
-//         const data = await Empresas.getEmpresa(req, id);
-//         if (data.statusCode == 200 && data.isSuccess) {
-//           empresa = data.result;
-//         } else {
-//           error = data.errorMessages?.join("<br>") || 'Erro ao Buscar Empresa';
-//         }
-//       } catch (error) {
-//         error = { title: 'Problemas internos', message: 'Erro ao carregar dados para a página.' };
-//       }
-//     }
-//   }
-//   return res.render('empresas/upsert', {
-//     title: 'Empresas',
-//     subtitle: id == 0 ? 'Adicionar Empresa' : 'Alterar Empresa',
-//     empresa,
-//     grupos: grupos.result || [],
-//     error,
-//   });
-// }
+    if (result.isSuccess) {
+      return res.status(200).json({ message: 'Ambiente de Produção salvo com sucesso!' });
+    } else {
+      return res.status(400).json({ message: 'Falha ao salvar o Ambiente de Produção.' });
+    }
+  } catch (error) {
+    console.error('Erro ao salvar Ambiente de Produção:', error);
+    return res.status(500).json({ message: 'Erro interno ao salvar o Ambiente de Produção.' });
+  }
+};
 
-// const postUpsertEmpresa = async (req, res) => {
-//   const { id } = req.params;
-//   const empresa = req.body;
-//   empresa.ativo = empresa.ativo === 'true';
-//   try {
-//     const data = id == 0 ?
-//       await Empresas.createEmpresa(req, empresa) :
-//       await Empresas.editEmpresa(req, id, empresa);
-//     if (data.isSuccess) {
-//       req.session.tempData = { message: `Empresa ${id == 0 ? 'registrada' : 'alterada'} com sucesso!` };
-//       return res.redirect('/empresas');
-//     }
-//     const errorMessage = data.errorMessages?.join("<br>") || 'Erro ao cadastrar Empresa.';
-//     return getUpsertEmpresa(req, res, empresa, { title: 'Problemas no Cadastro', message: errorMessage });
-//   } catch (error) {
-//     console.error('Erro ao processar a solicitação:', error);
-//     return getCreateEmpresa(req, res, empresa, { title: 'Problemas no Cadastro', message: 'Erro interno do servidor. Tente novamente mais tarde.' });
-//   }
-// }
+const getAmbienteProducaoPartial = async (req, res) => {
+  const { safraId, empresaId, safraAno } = req.query;
+  try {
+    if (!safraId || !empresaId) {
+      return res.status(400).send('Parâmetros inválidos: safraId e empresaId são obrigatórios.');
+    }
+    const response = await Ambientes.getAmbientesProSafraEmpresa(req, safraId, empresaId);
+    const ambiente = response.isSuccess ? response.result : null;
+    // Formatar a data, se existir
+    if (ambiente && ambiente.inicioSafra) {
+      ambiente.inicioSafra = formatDateForInput(ambiente.inicioSafra);
+    }
 
-// const deleteEmpresa = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     // Exclua o registro do banco, usando seu ORM ou diretamente no banco de dados
-//     const data = await Empresas.deleteEmpresa(req, id);
-//     if (data.isSuccess)
-//       return res.status(200).json({ message: 'Empresa excluído com Sucesso!' });
-//     else
-//       return res.status(500).json({ message: data.errorMessages?.join("<br>") });
-//   } catch (error) {
-//     console.error('Erro ao excluir empresa:', error);
-//     return res.status(500).json({ message: 'Erro ao excluir empresa.' });
-//   }
-// }
+    return res.render('dadosAgricolas/ambientePartial', {
+      layout: false,
+      ambiente,
+      safraAno,
+    });
+  } catch (error) {
+    console.error('Erro ao carregar a partial ambiente-producao:', error);
+    return res.status(500).send('Erro interno ao carregar a partial.');
+  }
+};
+
+const getDadosAgricolasPartial = async (req, res) => {
+  return res.render('dadosAgricolas/dadosPartial', { layout: false });
+};
 
 module.exports = {
-  getAmbientes,
-  // getUpsertEmpresa,
-  // postUpsertEmpresa,
-  // deleteEmpresa,
+  getDados,
+  saveAmbiente,
+  getAmbienteProducaoPartial,
+  getDadosAgricolasPartial
+};
+
+const formatDateForInput = (dateString) => {
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0]; 
 };

@@ -1,0 +1,22 @@
+<div class="row">
+    <form class="col-sm-12 bg-secondary" method="post" action="/periodos/gerar/<%= safra.id %>">
+        <h3>A Safra de <%= safra.ano %>, ainda não possui períodos gerados!</h3>
+        <h4 class="mt-10">Use o formulário abaixo para geração dos períodos</h4>
+        <input type="hidden" id="anoSafra" name="anoSafra" value="<%= safra.ano %>">
+        <div class="row mt-10">
+            <div class="form-group col-12 px-0">
+                <label for="dataInicial">Data Inicial</label>
+                <input type="date" id="dataInicial" name="dataInicial" style="width: 300px;"
+                    min="<%= safra.ano %>-01-01" max="<%= safra.ano %>-12-31" value="<%= safra.ano %>-01-01" required>
+            </div>
+        </div>
+        <div class="row my-10 g-10">
+            <button class="btn btn-primary mt-10" type="submit">
+                <i class='bx bx-plus-circle'></i> Gerar Períodos
+            </button>
+            <a class="btn btn-danger mt-10" href="/safras">
+                <i class='bx bx-x'></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>

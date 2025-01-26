@@ -17,7 +17,7 @@
             <% } %>
             <% if (user.permissoes.some(p => p.modulo === 'DadosAgricolas' && p.acao.includes('1'))) { %>
                 <li class="sidebar-nav-item">
-                    <a href="/" class="sidebar-nav-link <%- title === 'Dados Agrícolas' ? 'active' : '' %>">
+                    <a href="/dados" class="sidebar-nav-link <%- title === 'Dados Agrícolas' ? 'active' : '' %>">
                         <div><i class="bx bxs-notepad"></i></div>
                         <span>Dados Agrícolas</span>
                     </a>

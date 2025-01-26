@@ -103,12 +103,27 @@ const deleteEmpresa = async (req, res) => {
     req.session.error = { title: "Erro ao Tentar Excluir a Empresa", message: error };
   }
   return res.redirect('/empresas');
-
 }
+
+
+const getDadosEmpresasPorGrupo = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const empresas = await Empresas.getEmpresaPorGrupo(req, id);
+    if (empresas.isSuccess) {
+      return res.json(empresas.result);
+    }
+    res.status(400).json({ message: 'Erro ao buscar empresas do grupo.' });
+  } catch (error) {
+    console.error('Erro ao buscar empresas do grupo:', error);
+    res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+};
 
 module.exports = {
   getEmpresas,
   getUpsertEmpresa,
   postUpsertEmpresa,
   deleteEmpresa,
+  getDadosEmpresasPorGrupo
 };

@@ -9,6 +9,7 @@ const EmpresasController = require('../controllers/EmpresasController');
 const SafrasController = require('../controllers/SafrasController');
 const PeriodosController = require('../controllers/PeriodosController');
 const EmpresasSafrasController = require('../controllers/EmpresasSafrasController');
+const DadosAgricolasController = require('../controllers/DadosAgricolasController');
 
 // Rotas que NÃO exigem autenticação
 routes.get(`/login`, AccountController.getLogin);
@@ -57,5 +58,18 @@ routes.get(`/safras/empresas/:id`, autenticar, EmpresasSafrasController.getEmpre
 // Gerar Periodos
 routes.post(`/periodos/gerar/:id`, autenticar, PeriodosController.postGerarPeriodos);
 
+
+//  Dados Agrícolas
+routes.get(`/dados`, autenticar, DadosAgricolasController.getDados);
+routes.post('/ambientes', autenticar, DadosAgricolasController.saveAmbiente);
+
+
+// Rotas de retorno de dados
+routes.get('/buscar/empresaGrupo/:id', EmpresasController.getDadosEmpresasPorGrupo);
+routes.get('/buscar/periodosSafra/:id', PeriodosController.getDadosPeriodosPorSafra);
+
+// Rotas de partials
+routes.get('/partials/ambiente-producao', DadosAgricolasController.getAmbienteProducaoPartial);
+routes.get('/partials/dados-agricolas', DadosAgricolasController.getDadosAgricolasPartial);
 
 module.exports = routes;

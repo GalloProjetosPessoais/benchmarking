@@ -44,7 +44,23 @@ const postGerarPeriodos = async (req, res) => {
     }
 }
 
+
+const getDadosPeriodosPorSafra = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const periodos = await Periodos.getPeriodosPorSafra(req, id);
+    if (periodos.isSuccess) {
+      return res.json(periodos.result);
+    }
+    res.status(400).json({ message: 'Erro ao buscar períodos da safra.' });
+  } catch (error) {
+    console.error('Erro ao buscar períodos da safra:', error);
+    res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+};
+
 module.exports = {
   getPeriodosSafra,
   postGerarPeriodos,
+  getDadosPeriodosPorSafra
 };

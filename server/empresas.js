@@ -9,6 +9,10 @@ const getEmpresa = async (req, id) => {
     return await server.get(req.cookies.authToken, `${url}/${id}`);
 }
 
+const getEmpresaPorGrupo = async (req, id) => {
+    return await server.get(req.cookies.authToken, `${url}/grupo/${id}`);
+}
+
 const createEmpresa = async (req, empresa) => {
     return await server.post(req.cookies.authToken, `${url}`, empresa);
 };
@@ -24,6 +28,7 @@ const deleteEmpresa = async (req, id) => {
 module.exports = {
     getEmpresas,
     getEmpresa,
+    getEmpresaPorGrupo,
     createEmpresa,
     editEmpresa,
     deleteEmpresa

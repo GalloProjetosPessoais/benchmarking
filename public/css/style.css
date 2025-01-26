@@ -18,6 +18,7 @@ body {
 	color: var(--main-color);
     transition: background 0.3s ease;
     font-family: "Urbanist", sans-serif;
+	overflow-y: scroll;
 }
 
 .light .logo-dark, .light .light-icon {
@@ -590,14 +591,31 @@ a.bx {
 	margin-top: 10px;
 }
 
-.my-10 {
-	margin-top: 10px;
+.mt-20 {
+	margin-top: 20px;
+}
+
+.mb-10 {
 	margin-bottom: 10px;
+}
+
+.mb-20 {
+	margin-bottom: 20px;
 }
 
 .mx-10 {
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+.my-10 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.my-20 {
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .g-10 {
@@ -662,4 +680,17 @@ a.bx {
 
 .fs-20 {
 	font-size: 20px;
+}
+
+.ambientes {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	width: 100%;
+	padding: 0 10px;
+	padding-bottom: 15px;
+	border: solid 4px var(--main-bg-color);
+	border-radius: 5px;
 }
