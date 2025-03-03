@@ -1,40 +1,44 @@
 <div class="row">
-
   <a class="btn btn-primary" href="/grupos/upsert/0">
-    <i class='bx bx-plus-circle'></i>
+    <i class="bx bx-plus-circle"></i>
     Adicionar Grupo
   </a>
-
 </div>
 <div class="row mt-10">
   <div class="col-sm-12 bg-secondary">
     <% if (data) { %>
-      <table id="table" style="width: 100%;">
-        <thead>
-          <th>Nome</th>
-          <th>Ativo</th>
-          <th>Ações</th>
-        </thead>
-        <tbody>
-          <% data.forEach(item=> { %>
-            <tr>
-              <td>
-                <%= item.descricao %>
-              </td>
-              <td>
-                <input type="checkbox" id="ativo" name="ativo" <%= item.ativo ? 'checked' : 'unchecked' %> disabled>
-                <label for="ativo"><%= item.ativo ? 'Sim' : 'Não' %></label>
-              </td>
-              <td class="fit">
-                <a href="/grupos/upsert/<%= item.id %>" class="bx bx-edit"></a>
-                <a href="javascript:void(0)" onclick="Delete('/grupos/delete/<%= item.id %>')" title="Excluir" class="bx bxs-trash"></a>
-              </td>
-            </tr>
-            <% }); %>
-        </tbody>
-      </table>
-      <% } else { %>
-        <p>Sem dados para exibir</p>
-        <% } %>
+    <table id="table" class="display d-none" style="width: 100%">
+      <thead>
+        <th>Nome</th>
+        <th>Ativo</th>
+        <th>Ações</th>
+      </thead>
+      <tbody>
+        <% data.forEach(item=> { %>
+        <tr>
+          <td><%= item.descricao %></td>
+          <td>
+            <% if (item.ativo) { %>
+            <i class="bx bxs-check-circle fs-20 text-primary" alt="Ativo"></i>
+            <% } else { %>
+            <i class="bx bxs-x-circle fs-20 text-warning" alt="Desativado"></i>
+            <% } %>
+          </td>
+          <td class="fit">
+            <a href="/grupos/upsert/<%= item.id %>" class="bx bx-edit"></a>
+            <a
+              href="javascript:void(0)"
+              onclick="Delete('/grupos/delete/<%= item.id %>')"
+              title="Excluir"
+              class="bx bxs-trash"
+            ></a>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+    <p>Sem dados para exibir</p>
+    <% } %>
   </div>
 </div>

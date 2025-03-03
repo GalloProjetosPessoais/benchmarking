@@ -1,48 +1,53 @@
 <div class="row">
-
-    <a class="btn btn-primary" href="/usuarios/create">
-      <i class='bx bx-plus-circle'></i>
-      Adicionar Usuário
-    </a>
-
+  <a class="btn btn-primary" href="/usuarios/create">
+    <i class="bx bx-plus-circle"></i>
+    Adicionar Usuário
+  </a>
 </div>
 <div class="row mt-10">
   <div class="col-sm-12 bg-secondary">
     <% if (data) { %>
-      <table id="table" style="width: 100%;">
-        <thead>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Grupo</th>
-          <th>Perfil</th>
-          <th>Ações</th>
-        </thead>
-        <tbody>
-          <% data.forEach(item=> { %>
-            <tr>
-              <td>
-                <%= item.nome %>
-              </td>
-              <td>
-                <%= item.email %>
-              </td>
-              <td>
-                <%= item.grupoNome %>
-              </td>
-              <td>
-                <%= item.perfil ? item.perfil : 'Não definido' %>
-              </td>
-              <td class="fit">
-                <a href="/usuarios/edit/<%= item.id %>" class="bx bx-edit"></a>
-                <a href="/usuarios/details/<%= item.id %>" class="bx bx-detail"></a>
-                <a href="javascript:void(0)" onclick="Delete('/usuarios/delete/<%= item.id %>')" title="Excluir" class="bx bxs-trash"></a>
-              </td>
-            </tr>
-            <% }); %>
-        </tbody>
-      </table>
-      <% } else { %>
-        <p>Sem dados para exibir</p>
-        <% } %>
+    <table id="table" class="display d-none" style="width: 100%">
+      <thead>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Grupo</th>
+        <th>Telefone/Celular:</th>
+        <th>Perfil</th>
+        <th>Ativo</th>
+        <th>Ações</th>
+      </thead>
+      <tbody>
+        <% data.forEach(item=> { %>
+        <tr>
+          <td><%= item.nome %></td>
+          <td><%= item.email %></td>
+          <td><%= item.grupoNome %></td>
+          <td><%= item.fone %></td>
+          <td><%= item.perfil ? item.perfil : 'Não definido' %></td>
+          <td>
+            <% if (item.ativo) { %>
+            <i class="bx bxs-check-circle fs-20 text-primary" alt="Ativo"></i>
+            <% } else { %>
+            <i class="bx bxs-x-circle fs-20 text-warning" alt="Desativado"></i>
+            <% } %>
+          </td>
+          <td class="fit">
+            <a href="/usuarios/edit/<%= item.id %>" class="bx bx-edit"></a>
+            <a href="/usuarios/details/<%= item.id %>" class="bx bx-detail"></a>
+            <a
+              href="javascript:void(0)"
+              onclick="Delete('/usuarios/delete/<%= item.id %>')"
+              title="Excluir"
+              class="bx bxs-trash"
+            ></a>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+    <p>Sem dados para exibir</p>
+    <% } %>
   </div>
 </div>

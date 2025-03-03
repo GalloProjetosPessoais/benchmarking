@@ -31,6 +31,24 @@ document.addEventListener('DOMContentLoaded', () => {
         { orderable: false, width: '50px', targets: -1 },
         { targets: '_all', className: 'dt-head-left dt-body-left' },
       ],
+      layout: {
+        topStart: {
+            buttons: [
+              { extend: 'copy', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
+              { extend: 'csv', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
+              { extend: 'excel', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
+              { extend: 'pdf', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
+              { extend: 'print', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
+              'colvis'
+            ],
+        }
+      }
+    });
+
+    // Evento disparado quando a tabela termina de ser inicializada
+    dataTable.on('init', function () {
+      tableElement.classList.remove('d-none');
+      dataTable.columns.adjust().draw();
     });
   }
 });

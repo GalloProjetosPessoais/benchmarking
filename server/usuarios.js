@@ -37,7 +37,7 @@ const getPerfis = async (req) => {
 }
 
 const registrarUsuario = async (req, registro) => {
-    return await server.post(req.cookies.authToken, `${url}/registro`, registro);
+    return await server.apiCallFormData('POST', req.cookies.authToken, `${url}/registro`, registro);
 };
 
 const confirmarUsuario = async (req, id, code) => {
@@ -47,6 +47,10 @@ const confirmarUsuario = async (req, id, code) => {
     }
     return await server.post(req.cookies.authToken, `${url}/confirmarRegistro`, confirmar);
 }
+
+const editUsuario = async (req, id, usuario) => {
+    return await server.apiCallFormData('PUT', req.cookies.authToken, `${url}/${id}`, usuario);
+};
 
 const deleteUsuario = async (req, id) => {
     return await server.del(req.cookies.authToken, `${url}/${id}`);
@@ -65,6 +69,10 @@ const trocarSenha = async (req, reset) => {
     return await server.post(req.cookies.authToken, `${url}/resetarSenha`, values);
 }
 
+const editarPerfilUsuario = async (req, id, usuario) => {
+    return await server.apiCallFormData('PUT', req.cookies.authToken, `${url}/perfil/${id}`, usuario);
+};
+
 module.exports = {
     verificarAutenticacao,
     autenticarUsuario,
@@ -75,7 +83,9 @@ module.exports = {
     getPerfis,
     registrarUsuario,
     confirmarUsuario,
+    editUsuario,
     deleteUsuario,
     recuperarContaUsuario,
     trocarSenha,
+    editarPerfilUsuario,
 };

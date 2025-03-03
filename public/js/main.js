@@ -28,39 +28,37 @@ function getCookie(cname) {
   return ""
 }
 
-window.onload = () => {
-  loadTheme();
-  loadSidebar();
-}
+loadTheme();
+loadSidebar();
 
 function loadTheme() {
   var theme = getCookie(themeCookieName);
-  body.classList.add(theme === "" ? themeLight : theme)
+  document.documentElement.classList.add(theme === "" ? themeLight : theme)
 }
 
 function switchTheme() {
-  if (body.classList.contains(themeLight)) {
-    body.classList.remove(themeLight)
-    body.classList.add(themeDark)
+  if (document.documentElement.classList.contains(themeLight)) {
+    document.documentElement.classList.remove(themeLight)
+    document.documentElement.classList.add(themeDark)
     setCookie(themeCookieName, themeDark, 30)
   } else {
-    body.classList.remove(themeDark)
-    body.classList.add(themeLight)
+    document.documentElement.classList.remove(themeDark)
+    document.documentElement.classList.add(themeLight)
     setCookie(themeCookieName, themeLight, 30)
   }
 }
 
 function loadSidebar() {
   var sidebar = getCookie(sidebarCookieName);
-  if (sidebar == '')
-    collapseSidebar();
-  else
-    styleSidebar();
+  if (window.innerWidth >= 768 && sidebar !== '') {
+    document.documentElement.classList.add('sidebar-expand');
+  }
+  styleSidebar();
 }
 
 function collapseSidebar() {
-  body.classList.toggle('sidebar-expand');
-  if (document.body.classList.contains('sidebar-expand')) {
+  document.documentElement.classList.toggle('sidebar-expand');
+  if (document.documentElement.classList.contains('sidebar-expand')) {
     setCookie(sidebarCookieName, 'sidebar-expand', 30);
   } else {
     setCookie(sidebarCookieName, '', 30);
@@ -70,7 +68,7 @@ function collapseSidebar() {
 
 function styleSidebar() {
   let icon = document.querySelector('#sbIcon');
-  if (document.body.classList.contains('sidebar-expand')) {
+  if (document.documentElement.classList.contains('sidebar-expand')) {
     icon.classList.add('bx-menu');
     icon.classList.remove('bx-menu-alt-left');
     document.querySelector('.sidebar-bottom').style.display = 'flex';
@@ -133,19 +131,4 @@ if (checkboxes != null) {
       checkbox.value = checkbox.checked ? 'true' : 'false';
     });
   });
-}
-
-
-function formatDate(date) {
-  var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-
-  if (month.length < 2)
-      month = '0' + month;
-  if (day.length < 2)
-      day = '0' + day;
-
-  return [day, month, year].join('/');
 }

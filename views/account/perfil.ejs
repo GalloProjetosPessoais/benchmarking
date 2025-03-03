@@ -1,0 +1,45 @@
+<div class="row">
+    <form class="col-sm-12 bg-secondary" method="post" action="/usuarios/perfil/<%= usuario.id %>" enctype="multipart/form-data">
+        <input type="hidden" id="id" name="id" value="<%= usuario.id %>" >
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                <img id="foto-avatar" src="<%= usuario.foto != null ? usuario.foto : '/img/nophoto.png' %>" alt="Foto do usuário" title="Selecionar imagem">
+                <input type="file" id="arquivoFoto" name="arquivoFoto" accept="image/*" hidden>
+            </div>
+            <div class="form-group col-sm-12 col-md-8 col-lg-10 p-0">
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" value="<%= usuario ? usuario.nome : '' %>" required>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="fone">Telefone/Celular</label>
+                        <input type="text" id="fone" name="fone" value="<%= usuario ? usuario.fone : '' %>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <input type="hidden" id="grupoId" name="grupoId" value="<%= usuario ? usuario.grupoId : '' %>">
+                        <label for="grupoNome">Grupo</label>
+                        <input type="text" id="grupoNome" name="grupoNome" value="<%= usuario ? usuario.grupoNome : '' %>"
+                            disabled>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="<%= usuario ? usuario.email : '' %>"
+                            disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-10 px-10 g-10">
+            <button class="btn btn-primary mt-10" type="submit">
+                <i class='bx bxs-save'></i> Salvar
+            </button>
+            <a class="btn btn-danger mt-10" href="/">
+                <i class='bx bx-x'></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>

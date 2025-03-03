@@ -1,37 +1,65 @@
 <div class="row">
     <form class="col-sm-12 bg-secondary" method="post" action="/usuarios/create">
         <div class="row">
-            <div class="form-group col-md-12 col-lg-6">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" value="<%= usuario ? usuario.nome : '' %>" readonly>
+            <div class="form-group col-sm-12 col-md-8 col-lg-10 p-0">
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" value="<%= usuario ? usuario.nome : '' %>" disabled>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="<%= usuario ? usuario.email : '' %>"
+                            disabled>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="grupo">Grupo</label>
+                        <input type="text" id="grupo" name="grupo" value="<%= usuario ? usuario.grupoNome : '' %>"
+                            disabled>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                        <label for="fone">Telefone/Celular</label>
+                        <input type="text" id="fone" name="fone" value="<%= usuario ? usuario.fone : '' %>" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="perfil">Perfil</label>
+                        <input type="text" id="perfil" name="perfil" value="<%= usuario ? usuario.perfil : '' %>"
+                            disabled>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="ultimaAlteracaoSenha">Última Alteração de Senha</label>
+                        <% if (usuario.ultimaAlteracaoSenha=='0001-01-01T00:00:00' ) { %>
+                            <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha" disabled>
+                            <% } else { %>
+                                <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha"
+                                    value="<%= new Date(usuario.ultimaAlteracaoSenha).toLocaleDateString('pt-BR') %>"
+                                    disabled>
+                                <% } %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-checked col-sm-12 col-md-6 col-lg-6">
+                        <input type="checkbox" id="ativo" name="ativo" disabled
+                            value=<%= usuario.ativo %> <%= usuario.ativo ? 'checked' : 'unchecked' %>>
+                        <label for="ativo">Ativo</label>
+                    </div>
+                    <div class="form-checked col-sm-12 col-md-6 col-lg-6">
+                        <input type="checkbox" id="bloqueado" name="bloqueado" disabled
+                            value=<%= usuario.bloqueado %> <%= usuario.bloqueado ? 'checked' : 'unchecked' %>>
+                        <label for="bloqueado">Bloqueado</label>
+                    </div>
+                </div>
             </div>
-            <div class="form-group col-md-12 col-lg-6">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<%= usuario ? usuario.email : '' %>" readonly>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-12 col-lg-6">
-                <label for="grupo">Grupo</label>
-                <input type="text" id="grupo" name="grupo" value="<%= usuario ? usuario.grupoNome : '' %>" readonly>
-            </div>
-            <div class="form-group col-md-12 col-lg-6">
-                <label for="perfil">Perfil</label>
-                <input type="text" id="perfil" name="perfil" value="<%= usuario ? usuario.perfil : '' %>" readonly>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-12 col-lg-4">
-                <label for="ultimaAlteracaoSenha">Última Alteração de Senha</label>
-                <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha" value="<%= usuario ? new Date(usuario.ultimaAlteracaoSenha).toLocaleDateString('pt-BR') : '' %>" readonly>
-            </div>
-            <div class="form-checked col-md-12 col-lg-4">
-                <input type="checkbox" id="ativo" name="ativo" checked="<%= usuario ? usuario.ativo : '' %>" disabled>
-                <label for="ativo">Ativo</label>
-            </div>
-            <div class="form-checked col-md-12 col-lg-4">
-                <input type="checkbox" id="bloqueado" name="bloqueado" checked="<%= usuario ? usuario.bloqueado : '' %>" disabled>
-                <label for="bloqueado">Bloqueado</label>
+            <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                <label>Foto</label>
+                <img id="foto-avatar" src="<%= usuario.foto != null ? usuario.foto : '/img/nophoto.png' %>"
+                    alt="Foto do usuário" title="Selecionar imagem">
+                <input type="file" id="arquivoFoto" name="arquivoFoto" accept="image/*" hidden>
             </div>
         </div>
 

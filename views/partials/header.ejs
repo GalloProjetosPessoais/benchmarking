@@ -1,73 +1,83 @@
 <!-- navbar -->
 <header class="navbar">
-    <!-- nav left -->
-    <ul class="navbar-nav">
-        <li class="nav-item logo">
-            <a href="/">
-                <img src="/img/logos/logo.png" alt="Logo CMAA" class="logo-dark">
-                <img src="/img/logos/logo.png" alt="Logo CMAA" class="logo-light">
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link">
-                <i id="sbIcon" class="bx bx-menu" onclick="collapseSidebar()"></i>
-            </a>
-        </li>
-        <li class="nav-item breadcrumb">
-            <h2><%= title %></h2>
-            <h4><%= subtitle %></h4>
-        </li>
-    </ul>
-    <!-- end nav left -->
+  <!-- nav left -->
+  <ul class="navbar-nav">
+    <li class="nav-item logo">
+      <a href="/">
+        <img src="/img/logos-cmaa/cmaa-verde.png" alt="Logo CMAA" />
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">
+        <i id="sbIcon" class="bx bx-menu" onclick="collapseSidebar()"></i>
+      </a>
+    </li>
+    <li class="nav-item breadcrumb">
+      <h2><%= title %></h2>
+      <h4><%= subtitle %></h4>
+    </li>
+  </ul>
+  <!-- end nav left -->
 
-    <!-- nav right -->
-    <ul class="navbar-nav nav-right">
-        <li class="nav-item mode">
-            <a class="nav-link" href="#" onclick="switchTheme()">
-                <i class="bx bx-moon dark-icon"></i>
-                <i class="bx bx-sun light-icon"></i>
-            </a>
-        </li>
+  <!-- nav right -->
+  <ul class="navbar-nav nav-right">
+    <li class="nav-item mode">
+      <a class="nav-link" href="#" onclick="switchTheme()">
+        <i class="bx bx-moon dark-icon"></i>
+        <i class="bx bx-sun light-icon"></i>
+      </a>
+    </li>
 
-        <li class="nav-item user-wrapper">
-            <div class="user dropdown dropdown-toggle" data-toggle="user-menu">
-                <div class="user-area">
-                    <img src="/img/nophoto.png" alt="User image">
-                    <div class="user-data">
-                        <b><%= user.nome %></b>
-                        <span><%= user.perfil %></span>
-                    </div>
-                </div>
-                <ul id="user-menu" class="dropdown-menu">
-                    <li class="dropdown-menu-item">
-                        <a class="dropdown-menu-link">
-                            <div>
-                                <i class='bx bx-user-circle'></i>
-                            </div>
-                            <span>Perfil</span>
-                        </a>
-                    </li>
-                    <li class="dropdown-menu-item">
-                        <a href="#" class="dropdown-menu-link">
-                            <div>
-                                <i class='bx bx-cog'></i>
-                            </div>
-                            <span>Configurações</span>
-                        </a>
-                    </li>
-                    <hr>
-                    <li class="dropdown-menu-item">
-                        <form action="/logout" method="post" class="dropdown-menu-link" onclick="this.submit();">
-                            <div>
-                                <i class='bx bx-log-out-circle'></i>
-                            </div>
-                            <span>Sair</span>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-    <!-- end nav right -->
+    <li class="nav-item user-wrapper">
+      <div class="user dropdown dropdown-toggle" data-toggle="user-menu">
+        <div class="user-area">
+          <img
+            src="<%= user.foto != null ? user.foto : '/img/nophoto.png' %>"
+            alt="User image"
+          />
+          <div class="user-data">
+            <b><%= user.nome %></b>
+            <span><%= user.perfil %></span>
+          </div>
+        </div>
+        <ul id="user-menu" class="dropdown-menu">
+          <li class="dropdown-menu-item">
+            <a
+              href="/usuarios/perfil/<%- user.id %>"
+              class="dropdown-menu-link"
+            >
+              <div>
+                <i class="bx bx-user-circle"></i>
+              </div>
+              <span>Perfil</span>
+            </a>
+          </li>
+          <li class="dropdown-menu-item">
+            <a href="#" class="dropdown-menu-link">
+              <div>
+                <i class="bx bx-cog"></i>
+              </div>
+              <span>Configurações</span>
+            </a>
+          </li>
+          <hr />
+          <li class="dropdown-menu-item">
+            <form
+              action="/logout"
+              method="post"
+              class="dropdown-menu-link"
+              onclick="this.submit();"
+            >
+              <div>
+                <i class="bx bx-log-out-circle"></i>
+              </div>
+              <span>Sair</span>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+  <!-- end nav right -->
 </header>
 <!-- end navbar -->

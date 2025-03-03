@@ -1,8 +1,11 @@
 //const jwt = require('jsonwebtoken');
 const Usuarios = require('../server/usuarios');
 const Grupos = require('../server/grupos');
+const Utils = require('../utils/utils');
 
 const getLogin = (req, res) => {
+  res.clearCookie('authToken');
+  res.clearCookie('authUser');
   return res.render('account/login', { layout: false });
 };
 
@@ -87,11 +90,15 @@ const getUsuarios = async (req, res) => {
   try {
     const data = await Usuarios.getUsuarios(req);
     if (data.statusCode === 200 && data.isSuccess) {
+      const data2 = data.result.map(item => ({
+        ...item,
+        fone: item.fone != null ? Utils.formatPhone(item.fone) : ''
+      }));
       return res.render('account/index', {
         title: 'Usuários',
         subtitle: 'Gerenciamento de Usuários',
-        data: data.result,
-        useDatatable: true
+        data: data2,
+        useDatatable: true,
       });
     }
     else {
@@ -114,8 +121,9 @@ const getCreateUsuario = async (req, res) => {
       title: 'Usuários',
       subtitle: 'Adicionar Conta',
       perfis: perfis.result || [],
-      grupos: grupos.result || [],
+      grupos: grupos.result.sort((a, b) => a.descricao.localeCompare(b.descricao)) || [],
       usuario,
+      js: '/js/usuarios.js'
     });
   } catch (error) {
     console.error('Erro ao carregar perfis ou grupos:', error);
@@ -129,12 +137,14 @@ const getCreateUsuario = async (req, res) => {
       perfis: [],
       grupos: [],
       usuario,
+      js: '/js/usuarios.js'
     });
   }
 }
 
 const postCreateUsuario = async (req, res) => {
   const usuario = req.body;
+  const arquivoFoto = req.file;
   try {
     if (usuario.senha !== usuario.senha2) {
       req.session.usuarioData = usuario;
@@ -145,7 +155,21 @@ const postCreateUsuario = async (req, res) => {
     }
     delete usuario.senha2;
 
-    const data = await Usuarios.registrarUsuario(req, usuario);
+    // Criando um FormData corretamente no Node.js
+    const formData = new FormData();
+
+    // Adiciona os campos do usuário ao FormData
+    Object.keys(usuario).forEach(key => {
+      formData.append(key, usuario[key]);
+    });
+
+    // Se houver um arquivo, adiciona corretamente ao FormData
+    if (arquivoFoto) {
+      const blob = new Blob([arquivoFoto.buffer], { type: arquivoFoto.mimetype });
+      formData.append('arquivoFoto', blob, arquivoFoto.originalname);
+    }
+
+    const data = await Usuarios.registrarUsuario(req, formData);
 
     if (data.statusCode === 201 && data.isSuccess) {
       req.session.success = { title: 'Sucesso', message: 'Usuário registrado com sucesso!' };
@@ -182,6 +206,7 @@ const getDetailsUsuario = async (req, res) => {
   try {
     const data = await Usuarios.getUsuario(req, id);
     const usuario = data.result;
+    usuario.fone = usuario.fone != null ? Utils.formatPhone(usuario.fone) : '';
     return res.render('account/details', {
       title: 'Usuários',
       subtitle: 'Detalhes da Conta',
@@ -208,17 +233,17 @@ const getEditUsuario = async (req, res) => {
   try {
     const perfis = await Usuarios.getPerfis(req);
     const grupos = await Grupos.getGrupos(req);
-    if (usuario == null) {
+    if (!usuario.id) {
       const data = await Usuarios.getUsuario(req, id);
       usuario = data.result;
     }
-
     return res.render('account/edit', {
       title: 'Usuários',
       subtitle: 'Alterar Conta',
       perfis: perfis.result || [],
-      grupos: grupos.result || [],
+      grupos: grupos.result.sort((a, b) => a.descricao.localeCompare(b.descricao)) || [],
       usuario,
+      js: '/js/usuarios.js'
     });
   } catch (error) {
     console.error('Erro ao carregar perfis ou grupos:', error);
@@ -232,9 +257,44 @@ const getEditUsuario = async (req, res) => {
       perfis: [],
       grupos: [],
       usuario,
+      js: '/js/usuarios.js'
     });
   }
 }
+
+const postEditUsuario = async (req, res) => {
+  const { id } = req.params;
+  const usuario = req.body;
+  const arquivoFoto = req.file;
+  try {
+    const formData = new FormData();
+    Object.keys(usuario).forEach(key => {
+      formData.append(key, usuario[key]);
+    });
+    if (arquivoFoto) {
+      const blob = new Blob([arquivoFoto.buffer], { type: arquivoFoto.mimetype });
+      formData.append('arquivoFoto', blob, arquivoFoto.originalname);
+    }
+    const data = await Usuarios.editUsuario(req, id, formData);
+
+    if (data.statusCode === 204 && data.isSuccess) {
+      req.session.success = { title: 'Sucesso', message: 'Usuário atualizado com sucesso!' };
+      return res.redirect('/usuarios');
+    }
+    req.session.error = {
+      title: 'Problemas ao Atualizar Usuário',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Atualizar Usuário.',
+    };
+  } catch (error) {
+    console.error('Erro ao processar a solicitação:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
+  }
+  req.session.usuarioData = usuario;
+  return getPerfilUsuario(req, res);
+};
 
 const deleteUsuario = async (req, res) => {
   const { id } = req.params;
@@ -291,6 +351,65 @@ const postTrocarSenha = async (req, res) => {
 }
 
 
+const getPerfilUsuario = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Usuarios.getUsuario(req, id);
+    const usuario = data.result;
+    return res.render('account/perfil', {
+      title: 'Usuários',
+      subtitle: 'Perfil da Conta',
+      usuario,
+      js: '/js/usuarios.js'
+    });
+  } catch (error) {
+    console.error('Erro ao carregar perfis ou grupos:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
+    return res.render('account/perfil', {
+      title: 'Usuários',
+      subtitle: 'Perfil da Conta',
+      usuario: {},
+    });
+  }
+}
+
+const postPerfilUsuario = async (req, res) => {
+  const { id } = req.params;
+  const usuario = req.body;
+  const arquivoFoto = req.file;
+  try {
+    const formData = new FormData();
+    Object.keys(usuario).forEach(key => {
+      formData.append(key, usuario[key]);
+    });
+    if (arquivoFoto) {
+      const blob = new Blob([arquivoFoto.buffer], { type: arquivoFoto.mimetype });
+      formData.append('arquivoFoto', blob, arquivoFoto.originalname);
+    }
+    const data = await Usuarios.editarPerfilUsuario(req, id, formData);
+
+    if (data.statusCode === 204 && data.isSuccess) {
+      req.session.success = { title: 'Sucesso', message: 'Perfil editado com sucesso!' };
+      return res.redirect('/usuarios');
+    }
+    req.session.error = {
+      title: 'Problemas ao Editar Perfil',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Editar Perfil de Usuário.',
+    };
+  } catch (error) {
+    console.error('Erro ao processar a solicitação:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
+  }
+  req.session.usuarioData = usuario;
+  return getPerfilUsuario(req, res);
+};
+
 module.exports = {
   getLogin,
   postLogin,
@@ -300,7 +419,10 @@ module.exports = {
   postCreateUsuario,
   getConfirmUsuario,
   getDetailsUsuario,
+  getPerfilUsuario,
+  postPerfilUsuario,
   getEditUsuario,
+  postEditUsuario,
   deleteUsuario,
   getRecuperarConta,
   postRecuperarConta,

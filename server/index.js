@@ -1,4 +1,5 @@
 // Agente HTTPS que ignora a verificação de certificados
+const { METHODS } = require('http');
 const https = require('https');
 const agent = new https.Agent({
   rejectUnauthorized: false, // Permite certificados autoassinados
@@ -28,11 +29,29 @@ const apiCall = async (method, token, url, data = null) => {
     if (method == 'GET')
       type = 'Buscar Dados'
     else
-      if (method == 'POST')
+      if (method == 'POST' || method == 'PUT')
         type = 'Salvar Dados'
       else
         type = 'Excluir Dados'
     console.error(`Erro ao ${type}`, error);
+  }
+}
+
+const apiCallFormData = async (method, token, url, data = null) => {
+  const fetch = (await import('node-fetch')).default;
+  try {
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+    };
+    const response = await fetch(`${baseUrl}/${url}`, {
+      method: method,
+      headers: headers,
+      body: data,
+      agent: agent,
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Erro ao Salvar Dados', error);
   }
 }
 
@@ -42,6 +61,10 @@ const get = async (token, url) => {
 
 const post = async (token, url, data) => {
     return await apiCall('POST', token, `${url}`, data);
+};
+
+const postFormData = async (token, url, data) => {
+  return await apiPostFormData(token, `${url}`, data);
 };
 
 const put = async (token, url, data) => {
@@ -59,6 +82,7 @@ module.exports = {
   apiCall,
   get,
   post,
+  apiCallFormData,
   put,
   del,
 };

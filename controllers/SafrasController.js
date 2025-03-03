@@ -8,7 +8,8 @@ const getSafras = async (req, res) => {
         title: 'Planejamento',
         subtitle: 'Gerenciamento de Safras',
         data: data.result,
-        useDatatable: true
+        useDatatable: true,
+        customJs: '/js/datatables-safras.js'
       });
     }
     else {
@@ -100,10 +101,36 @@ const deleteSafra = async (req, res) => {
   return res.redirect('/safras');
 }
 
+const ativarSafra = async(req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Safras.getSafra(req, id);
+    const safra = data.result;
+    safra.ativo = !safra.ativo;
+    const edit = await Safras.editSafra(req, id, safra);
+    if (edit.isSuccess) {
+      req.session.success = { title: 'Sucesso', message: `Safra alterada com sucesso!` };
+      return res.redirect('/safras');
+    }
+    req.session.error = {
+      title: 'Problemas ao Alterar',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Alterar Safra.',
+    };
+  } catch (error) {
+    console.error('Erro ao processar a solicitação:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
+  }
+  return res.redirect(`/safras`);
+}
+
 
 module.exports = {
   getSafras,
   getUpsertSafra,
   postUpsertSafra,
   deleteSafra,
+  ativarSafra,
 };

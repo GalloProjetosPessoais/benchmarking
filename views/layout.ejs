@@ -1,67 +1,72 @@
-<!DOCTYPE html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Benchmarking CMAA - <%= typeof title !=='undefined' ? ' - ' + title : ''
+      %>
+    </title>
+    <link rel="stylesheet" href="/css/cores.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="/img/fav-ico/favicon.ico"
+      type="image/x-icon"
+    />
+    <% if (typeof css !=='undefined' ) { %> <% if (Array.isArray(css)) { %> <%
+    css.forEach(file => { %>
+    <link rel="stylesheet" href="<%= file %>" />
+    <% }) %> <% } else if (css) { %>
+    <link rel="stylesheet" href="<%= css %>" />
+    <% } %> <% } %>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GENXR <%= typeof title !=='undefined' ? ' - ' + title : '' %>
-  </title>
-  <link rel="stylesheet" href="/css/cores.css">
-  <link rel="stylesheet" href="/css/style.css">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <link rel="shortcut icon" href="/img/fav-ico/favicon.ico" type="image/x-icon">
-</head>
+  <body>
+    <%- include('./partials/header.ejs', { title: typeof title !=='undefined' ?
+    title : '' , subtitle: typeof subtitle !=='undefined' ? subtitle : '' ,
+    user: typeof user !=='undefined' ? user : '' }) %>
 
-<body class="sidebar-expand">
-  <%- include('./partials/header.ejs',
-    { title: typeof title !=='undefined' ? title : '',
-      subtitle: typeof subtitle !=='undefined' ? subtitle : '',
-      user: typeof user !=='undefined' ? user : '' 
-    })
-  %>
+    <main>
+      <%- include('./partials/sidebar.ejs', { user: typeof user !=='undefined' ?
+      user : '' }); %>
 
-  <main>
-    <%- include('./partials/sidebar.ejs', { user: typeof user !=='undefined' ? user : '' }); %>
+      <div class="wrapper"><%- body %></div>
+    </main>
 
-    <div class="wrapper">
-      <%- body %>
-    </div>
-  </main>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script src="/js/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <% if (session.success) { %>
+    <% if (session.success) { %>
     <script>
       Swal.fire({
         icon: "success",
-        title: '<%= session.success.title %>',
-        html: '<%= session.success.message %>',
+        title: "<%- session.success.title %>",
+        html: "<%- session.success.message %>",
         timer: 3000,
-        confirmButtonColor: 'var(--primary)'
+        confirmButtonColor: "var(--primary)",
       });
     </script>
-    <% delete session.success; %>
-  <% } %>
-  <% if (session.error) { %>
+    <% delete session.success; %> <% } %> <% if (session.error) { %>
     <script>
       Swal.fire({
-        title: "<%= session.error.title %>",
-        html: "<%= session.error.message %>",
+        title: "<%- session.error.title %>",
+        html: "<%- session.error.message %>",
         icon: "error",
-        confirmButtonColor: 'var(--primary)'
+        confirmButtonColor: "var(--primary)",
       });
     </script>
-    <% delete session.error; %>
-  <% } %>
-
-  <% if (typeof useDatatable !=='undefined' && useDatatable) { %>
-    <%- include('./partials/datatablejs.ejs') %>
-  <% } %>
-
-  <% if (typeof js !== 'undefined') { %>
+    <% delete session.error; %> <% } %> <% if (typeof useDatatable
+    !=='undefined' && useDatatable) { %> <%-
+    include('./partials/datatablejs.ejs') %> <% } %> <% if (typeof js
+    !=='undefined' ) { %> <% if (typeof js !== 'undefined') { %> <% if
+    (Array.isArray(js)) { %> <% js.forEach(file => { %>
+    <script src="<%= file %>"></script>
+    <% }) %> <% } else if (js) { %>
     <script src="<%= js %>"></script>
-  <% } %>
-
-</body>
+    <% } %> <% } %> <% } %>
+  </body>
 </html>

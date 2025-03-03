@@ -1,22 +1,21 @@
-<div class="row">
-  <!-- <a class="btn btn-primary" href="/periodos/0">
+<!-- <div class="row">
+  <a class="btn btn-primary" href="/periodos/0">
     <i class='bx bx-plus-circle'></i>
     Gerar Períodos
-  </a> -->
+  </a> 
   <a class="btn btn-primary" href="/periodos/0">
     <i class='bx bx-check-double'></i>
     Ativar/Desativar Todos
   </a>
-</div>
+</div> -->
 
-<div class="row mt-10">
+<div class="row">
   <div class="col-sm-12 bg-secondary">
-
     <% if (data.length==0) { %>
-      <p></p>
+    <p></p>
     <% } %>
 
-    <table id="table" style="width: 100%;">
+    <table id="table" class="display" style="width: 100%">
       <thead>
         <th>Grupo</th>
         <th>Empresa</th>
@@ -24,39 +23,39 @@
         <th>Data Inicial</th>
         <th>Data Final</th>
         <th>Ativo</th>
+        <th>Ação</th>
       </thead>
       <tbody>
         <% data.forEach(item=> { %>
-          <tr>
-            <td>
-              <%= item.grupo %>
-            </td>
-            <td>
-              <%= item.empresa %>
-            </td>
-            <td>
-              <%= item.anoSafra %>
-            </td>
-            <td>
-              <%= new Date(item.dataInicio).toLocaleDateString('pt-BR') %>
-            </td>
-            <td>
-              <%= new Date(item.dataFim).toLocaleDateString('pt-BR') %>
-            </td>
-            <td>
-              <% if (item.ativo) { %>
-                <div class="d-flex-row">
-                  <i class="bx bxs-check-circle fs-20 text-primary"></i>
-                  <a class="btn-sm btn-danger mx-10" href="/empresasSafras/desativar/<%= item.id %>">Desativar</a>
-                </div>
-              <% } else { %>
-                <div class="d-flex-row">
-                  <i class="bx bxs-x-circle fs-20 text-warning"></i>
-                  <a class="btn-sm btn-primary mx-10" href="/empresasSafras/ativar/<%= item.id %>">Ativar</a>
-                </div>
-              <% } %>
-            </td>
-          </tr>
+        <tr>
+          <td><%= item.grupo %></td>
+          <td><%= item.empresa %></td>
+          <td><%= item.anoSafra %></td>
+          <td><%= new Date(item.dataInicio).toLocaleDateString('pt-BR') %></td>
+          <td><%= new Date(item.dataFim).toLocaleDateString('pt-BR') %></td>
+          <td>
+            <% if (item.ativo) { %>
+            <i class="bx bxs-check-circle fs-20 text-primary"></i>
+            <% } else { %>
+            <i class="bx bxs-x-circle fs-20 text-warning"></i>
+            <% } %>
+          </td>
+          <td>
+            <% if (item.ativo) { %>
+            <a
+              class="btn-sm btn-danger mx-10"
+              href="/empresasSafras/desativar/<%= item.id %>"
+              >Desativar</a
+            >
+            <% } else { %>
+            <a
+              class="btn-sm btn-primary mx-10"
+              href="/empresasSafras/ativar/<%= item.id %>"
+              >Ativar</a
+            >
+            <% } %>
+          </td>
+        </tr>
         <% }); %>
       </tbody>
     </table>

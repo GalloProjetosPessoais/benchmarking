@@ -40,7 +40,7 @@
                 </li>
             <% } %>
             <li class="sidebar-nav-item">
-                <a href="/" class="sidebar-nav-link <%- title === 'Relatórios' ? 'active' : '' %>">
+                <a href="/relatorios" class="sidebar-nav-link <%- title === 'Relatórios' ? 'active' : '' %>">
                     <div><i class='bx bxs-pie-chart-alt-2'></i></div>
                     <span>Relatórios</span>
                 </a>
@@ -51,8 +51,8 @@
                     <span>Comparativos</span>
                 </a>
             </li>
-            <hr>
             <% if (user.permissoes.some(p => p.modulo === 'Usuários' && p.acao.includes('1'))) { %>
+            <hr>
             <li class="sidebar-nav-item">
                 <a href="/usuarios" class="sidebar-nav-link <%- title === 'Usuários' ? 'active' : '' %>">
                     <div><i class="bx bxs-user"></i></div>

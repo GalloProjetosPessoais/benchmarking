@@ -59,8 +59,47 @@ const getDadosPeriodosPorSafra = async (req, res) => {
   }
 };
 
+const deletePeriodo = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Periodos.deletePeriodo(req, id);
+    if (data.isSuccess)
+      req.session.success = { title: 'Período excluído com Sucesso!', message: 'A exclusão foi realizada com êxito.' };
+    else
+      throw new Error(data.errorMessages?.join("<br>") || 'Erro ao tentar Excluir Período');
+  } catch (error) {
+    console.error('Erro ao excluir safra:', error);
+    req.session.error = { title: "Erro ao Tentar Excluir a Período", message: error };
+  }
+  return res.redirect(`/safras/periodos/${periodo.safraId}`);
+}
+
+const ativarPeriodo = async (req, res) => {
+  const { id } = req.params;
+  const periodo = await Periodos.getPeriodo(req, id);
+  try {
+      const data = await Periodos.ativarPeriodo(req, id);
+      if (data.isSuccess) {
+        req.session.success = { title: 'Sucesso', message: `Período ativado com sucesso!` };
+      } else {
+        req.session.error = {
+          title: 'Problemas ao ativar',
+          message: data.errorMessages?.join('<br>') || 'Erro ao ativar período.',
+        };
+      }
+      return res.redirect(`/safras/periodos/${periodo.result.safraId}`);
+    } catch (error) {
+      req.session.error = { title: 'Problema ao Ativar Empresas Safras', message: error };
+      console.error('Erro de acesso a Empresas Safras:', error);
+      return res.redirect(`/safras/empresas/${periodo.result.safraId}`);
+    }
+}
+
+
 module.exports = {
   getPeriodosSafra,
   postGerarPeriodos,
-  getDadosPeriodosPorSafra
+  getDadosPeriodosPorSafra,
+  deletePeriodo,
+  ativarPeriodo,
 };
