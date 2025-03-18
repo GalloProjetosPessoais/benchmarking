@@ -7,10 +7,13 @@
 	box-sizing: border-box;
 }
 
+html {
+	min-height: 100vh;
+}
+
 html,
 body {
 	width: 100%;
-	min-height: 100vh;
 	font-feature-settings: normal;
 	font-variation-settings: normal;
 }
@@ -346,7 +349,7 @@ body {
 
 .sidebar-bottom {
 	position: absolute;
-	bottom: 125px;
+	bottom: 100px;
 	left: 0px;
 	color: var(--main-color);
 	width: 100%;
@@ -737,6 +740,11 @@ a.bx {
 	padding-right: 10px;
 }
 
+.px-20 {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
 .py-0 {
 	padding-top: 0;
 	padding-bottom: 0;
@@ -773,6 +781,10 @@ a.bx {
 	margin-bottom: 20px;
 }
 
+.w-100 {
+	width: 100%;
+}
+
 .g-10 {
 	gap: 10px;
 }
@@ -795,7 +807,7 @@ a.bx {
 	border-radius: 5px;
 	/* margin-bottom: 1rem; */
 	transition: background 0.3s ease, color 0.3s ease;
-	background-color: var(--second-bg-color);
+	background-color: var(--main-bg-color);
 	color: var(--main-color);
 }
 
@@ -864,7 +876,7 @@ a.bx {
 }
 
 input:disabled, input:read-only {
-	background-color: var(--main-bg-color) !important;
+	background-color: var(--second-bg-color) !important;
 }
 
 .box-button {
@@ -882,4 +894,49 @@ input:disabled, input:read-only {
 
 .d-none {
 	display: none;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Escurece a tela */
+    z-index: 99; /* Atrás do loader */
+}
+
+.loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 100;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    border: 30px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 30px solid var(--verde-escuro);
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

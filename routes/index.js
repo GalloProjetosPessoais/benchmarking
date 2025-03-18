@@ -24,6 +24,7 @@ const PeriodosController = require("../controllers/PeriodosController");
 const EmpresasSafrasController = require("../controllers/EmpresasSafrasController");
 const DadosAgricolasController = require("../controllers/DadosAgricolasController");
 const RelatoriosController = require("../controllers/RelatoriosController");
+const ComparativosController = require("../controllers/ComparativosController");
 
 // Rotas que NÃO exigem autenticação
 routes.get(`/login`, AccountController.getLogin);
@@ -164,6 +165,10 @@ routes.get(
   "/buscar/periodosSafra/:id",
   PeriodosController.getDadosPeriodosPorSafra
 );
+routes.get(
+  "/buscar/periodosSafraEmpresa/:safraId/:empresaId",
+  EmpresasSafrasController.getPeriodosPorSafraEmpresa
+);
 
 // Rotas de partials
 routes.get(
@@ -174,9 +179,17 @@ routes.get(
   "/partials/dados-agricolas",
   DadosAgricolasController.getDadosAgricolasPartial
 );
-routes.get("/partials/graficos", RelatoriosController.getRelatoriosPartial);
 
 // Rotas Relatorios
 routes.get(`/relatorios`, autenticar, RelatoriosController.getRelatorios);
+routes.get("/relatorios/dados", RelatoriosController.getRelatoriosData);
+
+// Rotas Comparativo
+routes.get(`/comparativos`, autenticar, ComparativosController.getComparativos);
+routes.get(
+  `/comparativos/dados`,
+  autenticar,
+  ComparativosController.getComparativosData
+);
 
 module.exports = routes;

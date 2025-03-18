@@ -1,3 +1,4 @@
+<% let isReadOnly = user.perfil != 'Administrador' && dados ? true : false; %>
 <div class="row mt-10">
   <div class="col-sm-12 bg-secondary">
     <form id="form-dados-agricolas" method="post">
@@ -20,40 +21,48 @@
         value="<%= ambiente.moagemReestimada %>"
       />
       <div class="row">
-        <h2 class="col-12">Dados Agrícolas</h2>
-      </div>
-      <div class="row">
+        <h2 class="px-10 mt-10 w-100">Dados Agrícolas</h2>
+
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Moagem Realizada (t)</label>
-          <input type="text" id="moagemRealizado" name="moagemRealizado"
-          value="<%= dados ? dados.moagemRealizado : '' %>"
-          placeholder="Toneladas (t)" required <%= dados ? 'readonly' : '' %> >
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="moagemRealizado" name="moagemRealizado" value="<%= dados ?
+          dados.moagemRealizado.toLocaleString('pt-BR', { minimumFractionDigits:
+          2 }) : '' %>" placeholder="Toneladas (t)" required <%= isReadOnly ?
+          'readonly' : '' %> >
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Realizado (%)</label>
           <input
             type="text"
+            class="formatted-number"
+            inputmode="decimal"
             id="realizado"
             name="realizado"
-            value="<%= dados ? dados.realizado : '' %>"
+            value="<%= dados ? dados.realizado.toLocaleString('pt-BR', { minimumFractionDigits:
+              2 }) : '' %>"
             placeholder="Porcentagem (%)"
             readonly
           />
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Realizado Cana Própria (%)</label>
-          <input type="text" id="realizadoCanaPropria"
-          name="realizadoCanaPropria" value="<%= dados ?
-          dados.realizadoCanaPropria : '' %>" placeholder="Porcentagem (%)"
-          required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="realizadoCanaPropria" name="realizadoCanaPropria" value="<%= dados
+          ? dados.realizadoCanaPropria.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2 }) : '' %>" placeholder="Porcentagem (%)"
+          required <%= isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Realizado Cana Fornecedor (%)</label>
           <input
             type="text"
+            class="formatted-number"
+            inputmode="decimal"
             id="realizadoCanaFornecedor"
             name="realizadoCanaFornecedor"
-            value="<%= dados ? dados.realizadoCanaFornecedor : '' %>"
+            value="<%= dados ? dados.realizadoCanaFornecedor.toLocaleString('pt-BR', { minimumFractionDigits:
+              2 }) : '' %>"
             placeholder="Porcentagem (%)"
             readonly
           />
@@ -63,78 +72,97 @@
       <div class="row">
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">ATR Dia (kg/t)</label>
-          <input type="text" id="atrDia" name="atrDia" value="<%= dados ?
-          dados.atrDia : '' %>" placeholder="Quilograma/Tonelada (kg/t)"
-          required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="atrDia" name="atrDia" value="<%= dados ?
+          dados.atrDia.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) :
+          '' %>" placeholder="Quilograma/Tonelada (kg/t)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">ATR Acumulado (kg/t)</label>
-          <input type="text" id="atrAcumulado" name="atrAcumulado" value="<%=
-          dados ? dados.atrAcumulado : '' %>" placeholder="Quilograma/Tonelada
-          (kg/t)" required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="atrAcumulado" name="atrAcumulado" value="<%= dados ?
+          dados.atrAcumulado.toLocaleString('pt-BR', { minimumFractionDigits: 2
+          }) : '' %>" placeholder="Quilograma/Tonelada (kg/t)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">TCH Estimado (t/ha)</label>
-          <input type="text" id="tchEstimado" name="tchEstimado" value="<%=
-          dados ? dados.tchEstimado : '' %>" placeholder="Tonelada/Hectare
-          (t/ha)" required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="tchEstimado" name="tchEstimado" value="<%= dados ?
+          dados.tchEstimado.toLocaleString('pt-BR', { minimumFractionDigits: 2
+          }) : '' %>" placeholder="Tonelada/Hectare (t/ha)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">TCH Realizado (t/ha)</label>
-          <input type="text" id="tchRealizado" name="tchRealizado" value="<%=
-          dados ? dados.tchRealizado : '' %>" placeholder="Tonelada/Hectare
-          (t/ha)" required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="tchRealizado" name="tchRealizado" value="<%= dados ?
+          dados.tchRealizado.toLocaleString('pt-BR', { minimumFractionDigits: 2
+          }) : '' %>" placeholder="Tonelada/Hectare (t/ha)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Idade Média (a)</label>
-          <input type="text" id="idadeMedia" name="idadeMedia" value="<%= dados
-          ? dados.idadeMedia : '' %>" placeholder="Anos" required <%= dados ?
-          'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="idadeMedia" name="idadeMedia" value="<%= dados ?
+          dados.idadeMedia.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+          : '' %>" placeholder="Anos" required <%= isReadOnly ? 'readonly' : ''
+          %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Chuva Mês (mm)</label>
-          <input type="text" id="chuvaMes" name="chuvaMes" value="<%= dados ?
-          dados.chuvaMes : '' %>" placeholder="Milímetros (mm)" required <%=
-          dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="chuvaMes" name="chuvaMes" value="<%= dados ?
+          dados.chuvaMes.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) :
+          '' %>" placeholder="Milímetros (mm)" required <%= isReadOnly ?
+          'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Chuva Acumulada</label>
-          <input type="text" id="chuvaAcumulada" name="chuvaAcumulada"
-          value="<%= dados ? dados.chuvaAcumulada : '' %>"
-          placeholder="Milímetros (mm)" required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="chuvaAcumulada" name="chuvaAcumulada" value="<%= dados ?
+          dados.chuvaAcumulada.toLocaleString('pt-BR', { minimumFractionDigits:
+          2 }) : '' %>" placeholder="Milímetros (mm)" required <%= isReadOnly ?
+          'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Índice de Infestação Final (%)(I.I.F.)</label>
-          <input type="text" id="indiceInfestacaoFinal"
-          name="indiceInfestacaoFinal" value="<%= dados ?
-          dados.indiceInfestacaoFinal : '' %>" placeholder="Porcentagem (%)"
-          required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="indiceInfestacaoFinal" name="indiceInfestacaoFinal" value="<%=
+          dados ? dados.indiceInfestacaoFinal.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2 }) : '' %>" placeholder="Porcentagem (%)"
+          required <%= isReadOnly ? 'readonly' : '' %>>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Impureza Mineral (kg/t)</label>
-          <input type="text" id="impurezaMineral" name="impurezaMineral"
-          value="<%= dados ? dados.impurezaMineral : '' %>"
-          placeholder="Quilograma/Tonelada (kg/t)" required <%= dados ?
-          'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="impurezaMineral" name="impurezaMineral" value="<%= dados ?
+          dados.impurezaMineral.toLocaleString('pt-BR', { minimumFractionDigits:
+          2 }) : '' %>" placeholder="Quilograma/Tonelada (kg/t)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Impureza Vegetal (kg/t)</label>
-          <input type="text" id="impurezaVegetal" name="impurezaVegetal"
-          value="<%= dados ? dados.impurezaVegetal : '' %>"
-          placeholder="Quilograma/Tonelada (kg/t)" required <%= dados ?
-          'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="impurezaVegetal" name="impurezaVegetal" value="<%= dados ?
+          dados.impurezaVegetal.toLocaleString('pt-BR', { minimumFractionDigits:
+          2 }) : '' %>" placeholder="Quilograma/Tonelada (kg/t)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Pureza (kg/t)</label>
-          <input type="text" id="pureza" name="pureza" value="<%= dados ?
-          dados.pureza : '' %>" placeholder="Quilograma/Tonelada (kg/t)"
-          required <%= dados ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="pureza" name="pureza" value="<%= dados ?
+          dados.pureza.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) :
+          '' %>" placeholder="Quilograma/Tonelada (kg/t)" required <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
       </div>
 

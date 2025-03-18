@@ -1,0 +1,42 @@
+<div class="row bg-secondary">
+  <div class="col-sm-12 bg-secondary">
+    <div class="row">
+      <div class="form-group col-sm-12 col-md-12 col-lg-6">
+        <label for="gruposSelect">Grupo</label>
+        <select id="gruposSelect" name="gruposSelect">
+          <option value="" disabled selected>Selecione um Grupo</option>
+          <% if (grupos && grupos.length> 0) { %> <% grupos.forEach(grupo=> { %>
+          <option value="<%= grupo.id %>"><%= grupo.descricao %></option>
+          <% }); %> <% } %>
+        </select>
+      </div>
+      <div class="form-group col-sm-12 col-md-12 col-lg-6">
+        <label for="safrasSelect">Safra</label>
+        <select
+          id="safrasSelect"
+          name="safras[]"
+          class="js-example-basic-multiple form-control"
+          multiple="multiple"
+        >
+          <% if (safras && safras.length> 0) { %> <% safras.forEach(safra=> { %>
+          <option value="<%= safra.id %>"><%= safra.ano %></option>
+          <% }); %> <% } %>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-10 d-none" id="periodos">
+  <div class="col-sm-12 bg-secondary">
+    <h3 class="mb-10 px-10">Períodos de Safras</h3>
+    <div id="periodosContainer" class="row p-0"></div>
+  </div>
+</div>
+
+<div class="row mt-10 d-none" id="tabela">
+  <div class="col-sm-12 bg-secondary px-20">
+    <h3 class="mb-10">Comparativo de Dados Agrícolas</h3>
+    <div id="tabelaComparativoContainer" class="w-100 mb-20"></div>
+  </div>
+</div>

@@ -19,6 +19,8 @@
   </head>
 
   <body>
+    <div class="overlay"></div>
+    <div class="loader"></div>
     <div class="container">
       <div class="painel-esquerdo">
         <div class="logo">
@@ -77,6 +79,7 @@
       </div>
     </div>
     <script src="/js/theme.js"></script>
+    <script src="/js/loading.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <% if (typeof error !== 'undefined') { %>
     <script>
@@ -86,6 +89,7 @@
         icon: "error",
         confirmButtonColor: "var(--primary)",
       });
+      toogleLoading();
     </script>
     <% } %>
   </body>

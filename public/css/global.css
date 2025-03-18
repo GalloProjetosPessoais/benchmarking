@@ -1,71 +1,5 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap');
-
-* {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Poppins", serif;
-  font-style: normal;
-  padding: 10px;
-  background-color: #d1d1d1;
-}
-
-.container {
-  position: relative;
-  margin: 0 auto;
-  width: 900%;
-  max-width: 1600px;
-  padding: 30px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-form
-{
-  width: 50%;
-}
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-} */
-
-/* select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid hsl(0, 0%, 87%);
-  border-radius: 4px;
-}
-
-.select2-container {
-  width: 100% !important; 
-}
-
-.select2-container--default .select2-selection--multiple {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-} */
-
 .select2 {
 	width: 100%;
-	padding: 0.5rem;
 	border: 1px solid var(--cinza-claro);
 	border-radius: 5px;
 	transition: background 0.3s ease, color 0.3s ease;
@@ -79,9 +13,14 @@ label {
 	color: #000;
 }
 
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  border: solid 1px var(--main-color);
+}
+
 .select2-results__options {
   background-color: var(--second-bg-color);
 	color: var(--main-color);
+  font-size: 14px;
 }
 
 .select2-container--default .select2-results__option--selected {
@@ -91,6 +30,10 @@ label {
 
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
   background-color: var(--primary);
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__clear {
+  color: var(--main-color);
 }
 
 #dados
@@ -133,7 +76,7 @@ label {
   width: 100%;
   border-collapse: collapse;
   font-family: 'Poppins', sans-serif;
-  background: #790e0e;
+  background: #f1f1f1;
   border-radius: 8px;
   overflow: hidden;
   color: #000;
@@ -173,6 +116,25 @@ label {
   padding: 12px;
   text-align: right;
   border-top: 2px solid #ddd;
+}
+
+.graficoTitulo {
+  text-align: center;
+  padding: 10px 0;
+  margin-bottom: 15px;
+  margin-top: 30px;
+  background-color: var(--verde-claro);
+  color: var(--texto-claro);
+  border-radius: 10px;
+}
+
+.grafico {
+  width: 100%;
+  background: var(--main-bg-color);
+  color: var(--main-color);
+  border-radius: 10px;
+  border: 1px solid var(--verde-claro);
+  padding-bottom: 10px;
 }
 
 .indice-idea-container {
@@ -242,4 +204,109 @@ label {
   #dados {
       font-size: 14px;
   }
+}
+
+
+
+
+
+/* Estilização geral da tabela */
+.comparativo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border: 1px solid #fff;
+}
+
+/* Cabeçalho superior com nome do grupo */
+.comparativo-table thead .grupo-nome th, .grupo-nome {
+  background-color: #0c5724;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.grupo-nome {
+  border: 1px solid #fff;
+  font-size: 18px;
+}
+
+/* Linha do cabeçalho principal */
+.comparativo-table thead tr:first-child th {
+  background-color: #0c5724;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #fff;
+}
+
+/* Estilização do cabeçalho das colunas */
+.comparativo-table thead th {
+  background-color: #1b783a;
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #fff;
+}
+
+/* 🔹 Ajusta a largura das duas primeiras colunas */
+.comparativo-table th:first-child,
+.comparativo-table td:first-child,
+.comparativo-table th:nth-child(2),
+.comparativo-table td:nth-child(2) {
+  width: 220px; /* Define largura igual para as duas primeiras colunas */
+}
+
+/* 🔹 Faz com que as outras colunas ocupem o restante do espaço */
+.comparativo-table th:nth-child(n+3),
+.comparativo-table td:nth-child(n+3) {
+  width: auto;
+}
+.comparativo-table tbody {
+  color: #000;
+}
+/* Linhas alternadas para destacar os dados */
+.comparativo-table tbody tr:nth-child(even) {
+  background-color: #d4e7ce;
+}
+
+/* Linhas padrão */
+.comparativo-table tbody tr:nth-child(odd) {
+  background-color: #f0f8eb;
+}
+
+/* Células da tabela */
+.comparativo-table th, .comparativo-table td {
+  padding: 6px;
+  text-align: center;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+/* Ajuste para a primeira coluna (indicador) */
+.comparativo-table tbody th {
+  background-color: #b2d3a8;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Ajuste para a segunda coluna (medidas) */
+.comparativo-table tbody td:nth-child(2) {
+  font-style: italic;
+}
+
+/* Remover borda direita da última coluna */
+.comparativo-table thead th:last-child,
+.comparativo-table tbody td:last-child {
+  border-right: none;
+}
+
+/* 🔹 Efeito hover discreto */
+.comparativo-table tbody tr:hover {
+  background-color: #cbe6c2; /* Tom levemente mais escuro ao passar o mouse */
+  transition: background-color 0.2s ease-in-out;
 }

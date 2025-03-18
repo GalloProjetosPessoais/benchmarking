@@ -87,217 +87,71 @@ async function carregarEmpresasNaTabela(periodoId, tabela) {
   }
 }
 
-function calcularTAH(tchRealizado, atrAcumulado) {
-  // (TCH * ATR ) / 1000
-  return (tchRealizado * atrAcumulado) / 1000;
+async function carregarGraficos(periodoId) {
+  const empresasSelecionadas = $("#empresasSelect").val();
+
+  let url = `/relatorios/dados?periodoId=${periodoId}`;
+  // if (empresasSelecionadas && empresasSelecionadas.length > 0) {
+  //   url += `&empresaId=${empresasSelecionadas.join(",")}`;
+  // }
+
+  const dados = await fetchData(url);
+  if (dados) {
+    // Filtra apenas as empresas que estão na lista selecionada (se houver seleção)
+    const dadosFiltrados = empresasSelecionadas?.length
+      ? dados.dados.filter((d) =>
+          empresasSelecionadas.includes(String(d.empresaId))
+        )
+      : dados.dados;
+
+    const empresas = dadosFiltrados.map((d) => d.nomeEmpresa);
+    const impurezaMineral = dadosFiltrados.map((d) =>
+      parseFloat(d.impurezaMineral)
+    );
+    const impurezaVegetal = dadosFiltrados.map((d) =>
+      parseFloat(d.impurezaVegetal)
+    );
+    const pureza = dadosFiltrados.map((d) => parseFloat(d.pureza));
+
+    const idea = dadosFiltrados.map((d) =>
+      calcularIDEA(d.tchRealizado, d.atrAcumulado, d.idadeMedia)
+    );
+
+    const mediaMineral = parseFloat(dados.mediaImpurezaMineral);
+    const mediaVegetal = parseFloat(dados.mediaImpurezaVegetal);
+    const mediaPureza = parseFloat(dados.mediaPureza);
+    const mediaIdea =
+      idea.length > 0
+        ? idea.reduce((acc, val) => acc + val, 0) / idea.length
+        : 0;
+
+    atualizarGrafico("graficoIDEA", "Índice IDEA", empresas, idea, mediaIdea);
+    atualizarGrafico(
+      "graficoImpurezasMineral",
+      "Impureza Mineral",
+      empresas,
+      impurezaMineral,
+      mediaMineral
+    );
+    atualizarGrafico(
+      "graficoImpurezasVegetal",
+      "Impureza Vegetal",
+      empresas,
+      impurezaVegetal,
+      mediaVegetal
+    );
+    atualizarGrafico("graficoPureza", "Pureza", empresas, pureza, mediaPureza);
+  } else {
+    atualizarGrafico("graficoIDEA", "Índice IDEA", [], [], 0);
+    atualizarGrafico("graficoImpurezasMineral", "Impureza Mineral", [], [], 0);
+    atualizarGrafico("graficoImpurezasVegetal", "Impureza Vegetal", [], [], 0);
+    atualizarGrafico("graficoPureza", "Pureza", [], [], 0);
+  }
 }
 
 function calcularIDEA(tchRealizado, atrAcumulado, idadeMedia) {
   // TCH REA + (ATR AC X 0,67) + (Idade Média X 10)
   return tchRealizado + atrAcumulado * 0.67 + idadeMedia * 10;
-}
-
-async function carregarGraficos(periodoId) {
-  const empresasSelecionadas = $("#empresasSelect").val();
-
-  let url = `/relatorios/dados?periodoId=${periodoId}`;
-
-  const dados = await fetchData(url);
-  if (dados == null) {
-    document.getElementById("graficos").classList.add("d-none");
-    document.getElementById("nada").classList.remove("d-none");
-    return;
-  }
-
-  document.getElementById("nada").classList.add("d-none");
-  document.querySelector("#graficos").classList.remove("d-none");
-  // Filtra apenas as empresas que estão na lista selecionada (se houver seleção)
-  const dadosFiltrados = empresasSelecionadas?.length
-    ? dados.dados.filter((d) =>
-        empresasSelecionadas.includes(String(d.empresaId))
-      )
-    : dados.dados;
-
-  // Valores dos gráficos
-  const empresas = dadosFiltrados.map((d) => d.nomeEmpresa);
-
-  const atrDia = dadosFiltrados.map((d) => parseFloat(d.atrDia));
-  const atrAcumulado = dadosFiltrados.map((d) => parseFloat(d.atrAcumulado));
-
-  const tah = dadosFiltrados.map((d) =>
-    calcularTAH(d.tchRealizado, d.atrAcumulado)
-  );
-  const indiceInfestacaoFinal = dadosFiltrados.map((d) =>
-    parseFloat(d.indiceInfestacaoFinal)
-  );
-  const chuvaAcumulada = dadosFiltrados.map((d) =>
-    parseFloat(d.chuvaAcumulada)
-  );
-  const idea = dadosFiltrados.map((d) =>
-    calcularIDEA(d.tchRealizado, d.atrAcumulado, d.idadeMedia)
-  );
-  const impurezaMineral = dadosFiltrados.map((d) =>
-    parseFloat(d.impurezaMineral)
-  );
-  const impurezaVegetal = dadosFiltrados.map((d) =>
-    parseFloat(d.impurezaVegetal)
-  );
-  const pureza = dadosFiltrados.map((d) => parseFloat(d.pureza));
-
-  // Médias dos gráficos
-  const mediaAtrAcumulado = parseFloat(dados.mediaAtrAcumulado);
-  const mediaTAH =
-    tah.length > 0 ? tah.reduce((acc, val) => acc + val, 0) / tah.length : 0;
-  const mediaIndiceInfestacao = parseFloat(dados.mediaIndiceInfestacao);
-  const mediaChuvaAcumulada = parseFloat(dados.mediaChuvaAcumulada);
-  const mediaIdea =
-    idea.length > 0 ? idea.reduce((acc, val) => acc + val, 0) / idea.length : 0;
-  const mediaMineral = parseFloat(dados.mediaImpurezaMineral);
-  const mediaVegetal = parseFloat(dados.mediaImpurezaVegetal);
-  const mediaPureza = parseFloat(dados.mediaPureza);
-
-  atualizarGrafico(
-    "graficoATR",
-    ["ATR Dia", "ATR Acumulado"],
-    [atrDia, atrAcumulado],
-    ["green", "darkgreen"],
-    empresas,
-    mediaAtrAcumulado,
-    "ATR Médio",
-    "ATR, kg/t",
-    1
-  );
-
-  atualizarGrafico(
-    "graficoTAH",
-    ["TAH"],
-    [tah],
-    ["green"],
-    empresas,
-    mediaTAH,
-    "Média TAH",
-    "t/ha",
-    1
-  );
-  atualizarGrafico(
-    "graficoIndiceInfestacao",
-    ["Índice de Infestação Final"],
-    [indiceInfestacaoFinal],
-    ["green"],
-    empresas,
-    mediaIndiceInfestacao,
-    "Média do Índice de Infestação Final",
-    "Brocas, %",
-    2
-  );
-  atualizarGrafico(
-    "graficoChuvaAcumulada",
-    ["Chuva Acumulada"],
-    [chuvaAcumulada],
-    ["green"],
-    empresas,
-    mediaChuvaAcumulada,
-    "Média de Chuva Acumulada",
-    "Precipitação, mm",
-    0
-  );
-  atualizarGrafico(
-    "graficoIDEA",
-    ["IDEA"],
-    [idea],
-    ["green"],
-    empresas,
-    mediaIdea,
-    "Média IDEA",
-    "",
-    0
-  );
-  atualizarGrafico(
-    "graficoImpurezasMineral",
-    ["Impureza Mineral"],
-    [impurezaMineral],
-    ["green"],
-    empresas,
-    mediaMineral,
-    "Média de Impureza Mineral",
-    "Impureza Mineral (kg/t)",
-    2
-  );
-  atualizarGrafico(
-    "graficoImpurezasVegetal",
-    ["Impureza Vegetal"],
-    [impurezaVegetal],
-    ["green"],
-    empresas,
-    mediaVegetal,
-    "Média da Impureza Vegetal",
-    "Impureza Vegetal (kg/t)",
-    2
-  );
-  atualizarGrafico(
-    "graficoPureza",
-    ["Pureza"],
-    [pureza],
-    ["green"],
-    empresas,
-    mediaPureza,
-    "Média de Pureza",
-    "Pureza (kg/t)",
-    2
-  );
-  // } else {
-  //   atualizarGrafico(
-  //     "graficoTAH",
-  //     ["TAH"],
-  //     [],
-  //     ["green"],
-  //     [],
-  //     0,
-  //     "Média TAH",
-  //     "t/ha"
-  //   );
-  //   atualizarGrafico(
-  //     "graficoChuvaAcumulada",
-  //     ["Chuva Acumulada"],
-  //     [],
-  //     ["green"],
-  //     [],
-  //     0,
-  //     "Média de Chuva Acumulada",
-  //     "Precipitação, mm"
-  //   );
-  //   atualizarGrafico("graficoIDEA", "IDEA", "", [], [], 0);
-  //   atualizarGrafico(
-  //     "graficoImpurezasMineral",
-  //     ["Impureza Mineral"],
-  //     [],
-  //     ["green"],
-  //     [],
-  //     0,
-  //     "Média de Impureza Mineral",
-  //     "Impureza Mineral (kg/t)"
-  //   );
-  //   atualizarGrafico(
-  //     "graficoImpurezasVegetal",
-  //     ["Impureza Vegetal"],
-  //     [],
-  //     ["green"],
-  //     [],
-  //     0,
-  //     "Média de Impureza Vegetal",
-  //     "Impureza Vegetal (kg/t)"
-  //   );
-  //   atualizarGrafico(
-  //     "graficoPureza",
-  //     ["Pureza"],
-  //     [],
-  //     ["green"],
-  //     [],
-  //     0,
-  //     "Média de Pureza",
-  //     "Pureza (kg/t)"
-  //   );
-  // }
 }
 
 $("#empresasSelect").on("change", function () {
@@ -309,17 +163,9 @@ $("#empresasSelect").on("change", function () {
 
 let chartInstances = {};
 
-function atualizarGrafico(
-  canvasId,
-  dataLabels,
-  dataValues,
-  dataColors,
-  labels,
-  mediaValue,
-  mediaLabel,
-  legend,
-  decimalPoints = 0
-) {
+function atualizarGrafico(canvasId, label, labels, data, media) {
+  document.querySelector("#graficos").classList.remove("d-none");
+
   let mediaId = `media-${canvasId}`;
   let mediaElement = document.getElementById(mediaId);
   if (mediaElement) {
@@ -333,13 +179,7 @@ function atualizarGrafico(
   mediaContainer.style.fontSize = "14px";
   mediaContainer.style.fontWeight = "bold";
   mediaContainer.style.marginBottom = "5px";
-  mediaContainer.textContent = `${mediaLabel}: ${mediaValue.toLocaleString(
-    "pt-BR",
-    {
-      minimumFractionDigits: decimalPoints,
-      maximumFractionDigits: decimalPoints,
-    }
-  )}`;
+  mediaContainer.textContent = `Média de ${label}: ${media.toFixed(2)}`;
 
   canvasElement.parentNode.insertBefore(mediaContainer, canvasElement);
 
@@ -350,53 +190,40 @@ function atualizarGrafico(
 
   const ctx = canvasElement.getContext("2d");
   Chart.register(ChartDataLabels);
-
-  let datasets = [];
-
-  // **Adiciona os conjuntos de dados dinâmicos**
-  dataLabels.forEach((label, index) => {
-    datasets.push({
-      label: label,
-      data: dataValues[index],
-      backgroundColor: dataColors[index],
-      datalabels: {
-        anchor: "start",
-        align: "end",
-        color: "#c3cfc3",
-        font: {
-          weight: "bold",
-          size: 12,
-        },
-        rotation: 270,
-        formatter: (value) =>
-          value.toLocaleString("pt-BR", {
-            minimumFractionDigits: decimalPoints,
-            maximumFractionDigits: decimalPoints,
-          }),
-      },
-    });
-  });
-
-  // **Linha da média única**
-  datasets.push({
-    label: mediaLabel,
-    data: Array(dataValues[0].length).fill(mediaValue),
-    type: "line",
-    borderColor: "red",
-    borderWidth: 2,
-    borderDash: [5, 5],
-    fill: false,
-    pointStyle: "circle",
-    pointRadius: 4,
-    pointBackgroundColor: "red",
-    datalabels: { display: false },
-  });
-
   chartInstances[canvasId] = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
-      datasets: datasets,
+      datasets: [
+        {
+          label: label,
+          data: data,
+          backgroundColor: "green",
+          datalabels: {
+            anchor: "end",
+            align: "top",
+            color: "gray",
+            font: {
+              weight: "bold",
+              size: 12,
+            },
+            formatter: (value) => value.toFixed(2),
+          },
+        },
+        {
+          label: `Média ${label}`,
+          data: Array(labels.length).fill(media),
+          type: "line",
+          borderColor: "red",
+          borderWidth: 2,
+          borderDash: [5, 5],
+          fill: false,
+          pointStyle: "circle",
+          pointRadius: 4,
+          pointBackgroundColor: "red",
+          datalabels: { display: false },
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -417,10 +244,10 @@ function atualizarGrafico(
         },
         y: {
           beginAtZero: true,
-          suggestedMax: Math.max(...dataValues.flat()) * 1.2,
+          suggestedMax: Math.max(...data) * 1.2,
           title: {
             display: true,
-            text: legend,
+            text: "(kg/t)",
             font: {
               size: 14,
             },

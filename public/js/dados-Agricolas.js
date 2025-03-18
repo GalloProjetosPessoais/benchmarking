@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("#grupoId")
     .addEventListener("change", async (event) => {
       const grupoId = event.target.value;
+      if (!grupoId) return;
       try {
         const response = await fetch(`/buscar/empresaGrupo/${grupoId}`);
         if (!response.ok) throw new Error("Erro ao buscar empresas.");
@@ -19,11 +20,22 @@ document.addEventListener("DOMContentLoaded", () => {
           option.textContent = empresa.nome;
           empresaSelect.appendChild(option);
         });
+        const container = document.getElementById("partial-container");
+        container.innerHTML = "";
       } catch (error) {
         console.error("Erro ao buscar empresas:", error);
         alert("Erro ao carregar empresas. Tente novamente.");
       }
+      const grupoSafras = document.getElementById("safraId");
+      if (grupoSafras) {
+        grupoSafras.dispatchEvent(new Event("change"));
+      }
     });
+
+  const grupoSelect = document.getElementById("grupoId");
+  if (grupoSelect) {
+    grupoSelect.dispatchEvent(new Event("change"));
+  }
 
   // Filtro de periodos por safra
   document
@@ -31,7 +43,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("change", async (event) => {
       const safraId = event.target.value;
       try {
-        const response = await fetch(`/buscar/periodosSafra/${safraId}`);
+        const empresaId = document.getElementById("empresaId").value;
+        let response;
+        if (empresaId)
+          response = await fetch(
+            `/buscar/periodosSafraEmpresa/${safraId}/${empresaId}`
+          );
+        else response = await fetch(`/buscar/periodosSafra/${safraId}`);
         if (!response.ok) throw new Error("Erro ao buscar períodos.");
 
         const periodos = await response.json();
@@ -41,15 +59,16 @@ document.addEventListener("DOMContentLoaded", () => {
         periodoSelect.innerHTML =
           '<option value="" disabled selected>Selecione um Período</option>';
         periodos.forEach((periodo) => {
-          if (periodo.ativo) {
-            const dataInicio = new Date(periodo.dataInicio).toLocaleDateString(
+          let p;
+          if (empresaId) p = periodo.periodoSafra;
+          else p = periodo;
+          if (empresaId ? periodo.ativo : p.ativo) {
+            const dataInicio = new Date(p.dataInicio).toLocaleDateString(
               "pt-BR"
             );
-            const dataFim = new Date(periodo.dataFim).toLocaleDateString(
-              "pt-BR"
-            );
+            const dataFim = new Date(p.dataFim).toLocaleDateString("pt-BR");
             const option = document.createElement("option");
-            option.value = periodo.id;
+            option.value = p.id;
             option.textContent = `${dataInicio} - ${dataFim}`;
             periodoSelect.appendChild(option);
           }
@@ -58,6 +77,18 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Erro ao buscar periodos:", error);
         alert("Erro ao carregar períodos. Tente novamente.");
       }
+    });
+
+  const grupoSafras = document.getElementById("safraId");
+  if (grupoSafras) {
+    grupoSafras.dispatchEvent(new Event("change"));
+  }
+
+  document
+    .querySelector("#empresaId")
+    .addEventListener("change", async (event) => {
+      const container = document.getElementById("partial-container");
+      container.innerHTML = "";
     });
 
   // Carregar o ambiente de produção
@@ -155,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!validarSomaAmbientes()) {
         return;
       }
+      formatarNumeros();
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
       data.safraId = document.getElementById("safraId").value;
@@ -176,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
             text: result.message || "Ambiente de Produção salvo com sucesso!",
             confirmButtonColor: "var(--primary)",
           });
-          // Recarregar ou limpar o formulário
         } else {
           Swal.fire({
             icon: "error",
@@ -185,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             confirmButtonColor: "var(--primary)",
           });
         }
+        document.querySelector("#ambiente").dispatchEvent(new Event("click"));
       } catch (error) {
         //console.error('Erro ao salvar Ambiente de Produção:', error);
         Swal.fire({
@@ -197,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (form.id == "form-dados-agricolas") {
+      formatarNumeros();
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
       data.periodoSafraId = document.getElementById("periodoId").value;
@@ -226,6 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
             confirmButtonColor: "var(--primary)",
           });
         }
+        document.querySelector("#dados").dispatchEvent(new Event("click"));
       } catch (error) {
         //console.error('Erro ao salvar Dados Agrícolas:', error);
         Swal.fire({
@@ -237,42 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-
-  function calcularRealizado() {
-    const moagemRealizada =
-      parseFloat(document.getElementById("moagemRealizado").value) || 0;
-    const moagemEstimada =
-      parseFloat(document.getElementById("moagemEstimada").value) || 0;
-    const moagemReestimada =
-      parseFloat(document.getElementById("moagemReestimada").value) || null;
-
-    // Definir a base de comparação: Se houver moagemReestimada, usá-la; caso contrário, usar moagemEstimada
-    const base = moagemReestimada !== null ? moagemReestimada : moagemEstimada;
-
-    // Evitar divisão por zero
-    if (base === 0) {
-      document.getElementById("realizado").value = 0;
-      return;
-    }
-
-    // Cálculo da porcentagem
-    const realizado = (moagemRealizada / base) * 100;
-
-    // Atualiza o input com o valor formatado
-    document.getElementById("realizado").value = realizado.toFixed(2);
-  }
-
-  function calcularCanaFornecedor() {
-    const realizadoCanaPropria =
-      parseFloat(document.getElementById("realizadoCanaPropria").value) || 0;
-
-    if (realizadoCanaPropria === 0)
-      document.getElementById("realizadoCanaFornecedor").value = 0;
-
-    const realizadoCanaFornecedor = 100 - realizadoCanaPropria;
-    document.getElementById("realizadoCanaFornecedor").value =
-      realizadoCanaFornecedor;
-  }
 
   function validarSomaAmbientes() {
     // Seleciona os inputs
@@ -301,5 +299,89 @@ document.addEventListener("DOMContentLoaded", () => {
       return false;
     }
     return true;
+  }
+
+  // ➜ Aplica a formatação enquanto o usuário digita
+  document.addEventListener("input", (event) => {
+    if (!event.target.classList.contains("formatted-number")) return;
+
+    let rawValue = event.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+    let numericValue = parseFloat(rawValue) / 100; // Mantém 2 casas decimais
+
+    if (!isNaN(numericValue)) {
+      event.target.value = numericValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
+  });
+
+  // ➜ Converte os valores antes de enviar ao backend
+  function formatarNumeros() {
+    document.querySelectorAll(".formatted-number").forEach((input) => {
+      input.value = limparNumero(input.value);
+    });
+  }
+
+  let timeout; // Evita que a formatação aconteça no meio da digitação
+
+  function limparNumero(valor) {
+    if (!valor || valor.trim() === "") return 0;
+
+    // Remove pontos de milhar e troca a vírgula pelo ponto decimal
+    valor = valor.replace(/\./g, "").replace(",", ".");
+
+    let numero = parseFloat(valor);
+    return isNaN(numero) ? 0 : numero;
+  }
+
+  function formatarNumero(valor) {
+    return valor.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
+  function calcularRealizado() {
+    clearTimeout(timeout); // Evita cálculos repetidos
+
+    timeout = setTimeout(() => {
+      let moagemRealizadaInput = document.getElementById("moagemRealizado");
+
+      // 🔥 Captura SEM aplicar formatação no meio da digitação
+      let moagemRealizada = limparNumero(moagemRealizadaInput.value);
+      let moagemEstimada =
+        limparNumero(document.getElementById("moagemEstimada").value) || 0;
+      let moagemReestimada =
+        limparNumero(document.getElementById("moagemReestimada").value) || 0;
+
+      const base = moagemReestimada > 0 ? moagemReestimada : moagemEstimada;
+
+      if (!base || base === 0) {
+        document.getElementById("realizado").value = "0,00";
+        return;
+      }
+
+      const realizado = (moagemRealizada / base) * 100;
+      document.getElementById("realizado").value = formatarNumero(realizado);
+    }, 300); // Aguarda 300ms antes de calcular (evita erros ao digitar)
+  }
+
+  function calcularCanaFornecedor() {
+    clearTimeout(timeout); // Evita cálculos repetidos
+
+    timeout = setTimeout(() => {
+      let realizadoCanaPropria =
+        limparNumero(document.getElementById("realizadoCanaPropria").value) ||
+        0;
+
+      if (realizadoCanaPropria === 0)
+        document.getElementById("realizadoCanaFornecedor").value = 0;
+
+      const realizadoCanaFornecedor = 100.0 - realizadoCanaPropria;
+      document.getElementById("realizadoCanaFornecedor").value = formatarNumero(
+        realizadoCanaFornecedor
+      );
+    }, 300); // Aguarda 300ms antes de calcular (evita erros ao digitar)
   }
 });

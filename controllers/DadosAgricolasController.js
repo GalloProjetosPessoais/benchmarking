@@ -63,12 +63,13 @@ const saveAmbiente = async (req, res) => {
       ambiente.empresaId
     );
     let result;
+    if (ambiente.moagemReestimada == "") ambiente.moagemReestimada = null;
+    //    console.log(ambiente);
     if (response.isSuccess && response.result) {
       // Alteração
       ambiente.Id = response.result.id;
       result = await Ambientes.editAmbiente(req, response.result.id, ambiente);
     } else {
-      if (ambiente.moagemReestimada == "") delete ambiente.moagemReestimada;
       // Cadastro
       result = await Ambientes.createAmbiente(req, ambiente);
     }
@@ -132,6 +133,7 @@ const saveDados = async (req, res) => {
       dados.ambienteProducaoId
     );
     let result;
+
     if (response.isSuccess && response.result) {
       // Alteração
       dados.Id = response.result.id;

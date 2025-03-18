@@ -1,6 +1,5 @@
 const Safras = require("../server/safras");
 const Grupos = require("../server/grupos");
-const Ambientes = require("../server/ambientes");
 const Dados = require("../server/dadosAgricolas");
 
 const getRelatorios = async (req, res) => {
@@ -31,7 +30,7 @@ const getRelatorios = async (req, res) => {
   }
 };
 
-const getRelatoriosPartial = async (req, res) => {
+const getRelatoriosData = async (req, res) => {
   const { periodoId, grupoId, empresaId } = req.query;
   try {
     if (!periodoId) {
@@ -50,20 +49,57 @@ const getRelatoriosPartial = async (req, res) => {
         periodoId,
         empresaId
       );
+    const dados = {
+      dados: response.result,
+      mediaAtrAcumulado: response.result.length
+        ? response.result.reduce(
+            (acc, item) => acc + (item.atrAcumulado || 0),
+            0
+          ) / response.result.length
+        : 0,
+      mediaIndiceInfestacao: response.result.length
+        ? response.result.reduce(
+            (acc, item) => acc + (item.indiceInfestacaoFinal || 0),
+            0
+          ) / response.result.length
+        : 0,
+      mediaChuvaAcumulada: response.result.length
+        ? response.result.reduce(
+            (acc, item) => acc + (item.chuvaAcumulada || 0),
+            0
+          ) / response.result.length
+        : 0,
+      mediaImpurezaVegetal: response.result.length
+        ? response.result.reduce(
+            (acc, item) => acc + (item.impurezaVegetal || 0),
+            0
+          ) / response.result.length
+        : 0,
+      mediaImpurezaMineral: response.result.length
+        ? response.result.reduce(
+            (acc, item) => acc + (item.impurezaMineral || 0),
+            0
+          ) / response.result.length
+        : 0,
+      mediaPureza: response.result.length
+        ? response.result.reduce((acc, item) => acc + (item.pureza || 0), 0) /
+          response.result.length
+        : 0,
+    };
 
-    const dados = response.isSuccess ? response.result : null;
-    console.log(dados);
-    return res.render("relatorios/graficos", {
-      layout: false,
-      dados,
-    });
+    if (response.isSuccess) {
+      return res.json(dados);
+    }
+    return res
+      .status(400)
+      .json({ message: "Erro ao buscar dados do período." });
   } catch (error) {
-    console.error("Erro ao carregar a partial relatórios:", error);
-    return res.status(500).send("Erro interno ao carregar a partial.");
+    //console.error("Erro ao buscar dados do período:", error);
+    res.status(500).json({ message: "Erro interno do servidor." });
   }
 };
 
 module.exports = {
   getRelatorios,
-  getRelatoriosPartial,
+  getRelatoriosData,
 };

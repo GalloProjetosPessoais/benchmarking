@@ -13,3 +13,4 @@ criar a estrutura de pasta:
     server
     views
 
+npm run dev

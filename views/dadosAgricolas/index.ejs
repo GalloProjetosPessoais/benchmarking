@@ -1,55 +1,56 @@
 <div class="row">
-    <div class="col-sm-12 bg-secondary">
-        <div class="row">
-            <div class="form-group col-sm-12 col-md-12 col-lg-6">
-                <label for="safraId">Safra</label>
-                <select id="safraId" name="safraId">
-                    <option value="" disabled selected>Selecione uma Safra</option>
-                    <% if (safras && safras.length> 0) { %>
-                        <% safras.forEach(safra=> { %>
-                            <option value="<%= safra.id %>">
-                                <%= safra.ano %>
-                            </option>
-                        <% }); %>
-                    <% } %>
-                </select>
-            </div>
-            <div class="form-group col-sm-12 col-md-12 col-lg-6">
-                <label for="periodoId">Período</label>
-                <select id="periodoId" name="periodoId">
-                    <option value="" disabled selected>Selecione um Período</option>
-                </select>
-            </div>
-            <div class="form-group col-sm-12 col-md-12 col-lg-6">
-                <label for="grupoId">Grupo</label>
-                <select id="grupoId" name="grupoId">
-                    <option value="" disabled selected>Selecione um Grupo</option>
-                    <% if (grupos && grupos.length> 0) { %>
-                        <% grupos.forEach(grupo=> { %>
-                            <option value="<%= grupo.id %>">
-                                <%= grupo.descricao %>
-                            </option>
-                        <% }); %>
-                    <% } %>
-                </select>
-            </div>
-            <div class="form-group col-sm-12 col-md-12 col-lg-6">
-                <label for="empresaId">Empresa</label>
-                <select id="empresaId" name="empresaId">
-                    <option value="" disabled selected>Selecione uma Empresa</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="box-button">
-            <button id="ambiente" class="btn btn-info mt-10" type="button">
-                <i class='bx bx-table'></i> Ambiente de Produção
-            </button>
-            <button id="dados" class="btn btn-info mt-10" type="button">
-                <i class='bx bx-receipt'></i> Dados Agrícolas
-            </button>
-        </div>
+  <div class="col-sm-12 bg-secondary">
+    <div class="row">
+      <div class="form-group col-sm-12 col-md-12 col-lg-6">
+        <label for="grupoId">Grupo</label>
+        <select id="grupoId" name="grupoId">
+          <% if (grupos && grupos.length === 1) { %>
+          <option value="<%= grupos[0].id %>" selected>
+            <%= grupos[0].descricao %>
+          </option>
+          <% } else { %>
+          <option value="" disabled selected>Selecione um Grupo</option>
+          <% grupos.forEach(grupo => { %>
+          <option value="<%= grupo.id %>"><%= grupo.descricao %></option>
+          <% }); %> <% } %>
+        </select>
+      </div>
+      <div class="form-group col-sm-12 col-md-12 col-lg-6">
+        <label for="empresaId">Empresa</label>
+        <select id="empresaId" name="empresaId">
+          <option value="" disabled selected>Selecione uma Empresa</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-12 col-md-12 col-lg-6">
+        <label for="safraId">Safra</label>
+        <select id="safraId" name="safraId">
+          <option value="" disabled>Selecione uma Safra</option>
+          <% if (safras && safras.length > 0) { %> <% let primeiraAtiva = true;
+          %> <% safras.forEach(safra => { %> <% if (safra.ativo &&
+          primeiraAtiva) { %>
+          <option value="<%= safra.id %>" selected><%= safra.ano %></option>
+          <% primeiraAtiva = false; %> <% } else { %>
+          <option value="<%= safra.id %>"><%= safra.ano %></option>
+          <% } %> <% }); %> <% } %>
+        </select>
+      </div>
+      <div class="form-group col-sm-12 col-md-12 col-lg-6">
+        <label for="periodoId">Período</label>
+        <select id="periodoId" name="periodoId">
+          <option value="" disabled selected>Selecione um Período</option>
+        </select>
+      </div>
     </div>
+
+    <div class="box-button">
+      <button id="ambiente" class="btn btn-info mt-10" type="button">
+        <i class="bx bx-table"></i> Ambiente de Produção
+      </button>
+      <button id="dados" class="btn btn-info mt-10" type="button">
+        <i class="bx bx-receipt"></i> Dados Agrícolas
+      </button>
+    </div>
+  </div>
 </div>
 
 <div id="partial-container"></div>

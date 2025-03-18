@@ -1,72 +1,87 @@
+<% let isReadOnly = user.perfil != 'Administrador' && ambiente ? true : false;
+%> <% let today = new Date(); let currentYear = today.getFullYear(); let
+todayFormatted = today.toISOString().slice(5, 10); let isLeapYear = (year) =>
+(year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0); if (todayFormatted
+=== "02-29" && !isLeapYear(safraAno)) { todayFormatted = "02-28"; } %>
+
 <div class="row mt-10">
   <div class="col-sm-12 bg-secondary">
     <form id="form-ambiente-producao" method="post">
       <div class="row">
-        <h2 class="col-12">Ambiente de Produção</h2>
-      </div>
-      <div class="row">
+        <h2 class="px-10 mt-10 w-100">Ambiente de Produção</h2>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="nome">Início da Safra</label>
           <input type="date" id="inicioSafra" name="inicioSafra" required
-          value="<%= ambiente ? ambiente.inicioSafra : safraAno+'-01-01' %>"
-          min="<%= safraAno %>-01-01" max="<%= safraAno %>-12-31" <%= ambiente ?
-          'readonly' : '' %> />
+          value="<%= ambiente ? ambiente.inicioSafra : safraAno + '-' +
+          todayFormatted %>" min="<%= safraAno %>-01-01" max="<%= safraAno
+          %>-12-31" <%= isReadOnly ? 'readonly' : '' %> />
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="moagemEstimada">Moagem Estimada</label>
-          <input type="number" id="moagemEstimada" name="moagemEstimada"
-          value="<%= ambiente ? ambiente.moagemEstimada : '' %>" required
-          placeholder="Toneladas (t)" <%= ambiente ? 'readonly' : '' %>>
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="moagemEstimada" name="moagemEstimada" value="<%= ambiente ?
+          ambiente.moagemEstimada.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2 }) : '' %>" placeholder="Toneladas (t)" <%=
+          isReadOnly ? 'readonly' : '' %>>
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="moagemReestimada">Moagem Reestimada</label>
           <input
-            type="number"
+            type="text"
+            class="formatted-number"
+            inputmode="decimal"
             id="moagemReestimada"
             name="moagemReestimada"
-            value="<%= ambiente ? ambiente.moagemReestimada : '' %>"
+            value="<%= ambiente && ambiente.moagemReestimada ? ambiente.moagemReestimada.toLocaleString('pt-BR', {
+              minimumFractionDigits: 2 }) : '' %>"
             placeholder="Toneladas (t)"
           />
         </div>
         <div class="form-group col-sm-12 col-md-4 col-lg-3">
           <label for="altitude">Altitude Média</label>
-          <input type="number" id="altitude" name="altitude" value="<%= ambiente
-          ? ambiente.altitude : '' %>" required <%= ambiente ? 'readonly' : ''
-          %> />
+          <input type="text" class="formatted-number" inputmode="decimal"
+          id="altitude" name="altitude" value="<%= ambiente ?
+          ambiente.altitude.toLocaleString('pt-BR', { minimumFractionDigits: 2
+          }) : '' %>" required <%= isReadOnly ? 'readonly' : '' %> />
         </div>
       </div>
-      <div class="row px-10">
+      <div class="row">
         <fieldset class="ambientes mt-10">
           <legend class="my-10">Ambientes</legend>
           <div class="form-group">
             <label for="nome">A</label>
-            <input type="text" id="ambienteA" name="ambienteA" value="<%=
-            ambiente ? ambiente.ambienteA : '' %>" required <%= ambiente ?
-            'readonly' : '' %> />
+            <input type="text" class="formatted-number" inputmode="decimal"
+            id="ambienteA" name="ambienteA" value="<%= ambiente ?
+            ambiente.ambienteA.toLocaleString('pt-BR', { minimumFractionDigits:
+            2 }) : '' %>" required <%= isReadOnly ? 'readonly' : '' %> />
           </div>
           <div class="form-group">
             <label for="nome">B</label>
-            <input type="text" id="ambienteB" name="ambienteB" value="<%=
-            ambiente ? ambiente.ambienteB : '' %>" required <%= ambiente ?
-            'readonly' : '' %> />
+            <input type="text" class="formatted-number" inputmode="decimal"
+            id="ambienteB" name="ambienteB" value="<%= ambiente ?
+            ambiente.ambienteB.toLocaleString('pt-BR', { minimumFractionDigits:
+            2 }) : '' %>" required <%= isReadOnly ? 'readonly' : '' %> />
           </div>
           <div class="form-group">
             <label for="nome">C</label>
-            <input type="text" id="ambienteC" name="ambienteC" value="<%=
-            ambiente ? ambiente.ambienteC : '' %>" required <%= ambiente ?
-            'readonly' : '' %> />
+            <input type="text" class="formatted-number" inputmode="decimal"
+            id="ambienteC" name="ambienteC" value="<%= ambiente ?
+            ambiente.ambienteC.toLocaleString('pt-BR', { minimumFractionDigits:
+            2 }) : '' %>" required <%= isReadOnly ? 'readonly' : '' %> />
           </div>
           <div class="form-group">
             <label for="nome">D</label>
-            <input type="text" id="ambienteD" name="ambienteD" value="<%=
-            ambiente ? ambiente.ambienteD : '' %>" required <%= ambiente ?
-            'readonly' : '' %> />
+            <input type="text" class="formatted-number" inputmode="decimal"
+            id="ambienteD" name="ambienteD" value="<%= ambiente ?
+            ambiente.ambienteD.toLocaleString('pt-BR', { minimumFractionDigits:
+            2 }) : '' %>" required <%= isReadOnly ? 'readonly' : '' %> />
           </div>
           <div class="form-group">
             <label for="nome">E</label>
-            <input type="text" id="ambienteE" name="ambienteE" value="<%=
-            ambiente ? ambiente.ambienteE : '' %>" required <%= ambiente ?
-            'readonly' : '' %> />
+            <input type="text" class="formatted-number" inputmode="decimal"
+            id="ambienteE" name="ambienteE" value="<%= ambiente ?
+            ambiente.ambienteE.toLocaleString('pt-BR', { minimumFractionDigits:
+            2 }) : '' %>" required <%= isReadOnly ? 'readonly' : '' %> />
           </div>
         </fieldset>
       </div>
