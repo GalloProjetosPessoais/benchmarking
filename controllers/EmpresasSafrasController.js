@@ -14,6 +14,7 @@ const getEmpresasSafra = async (req, res) => {
         subtitle: `Gerenciamento de Períodos da Safra ${data.result.ano}`,
         data: periodos.result,
         useDatatable: true,
+        customJs: "/js/datatables-planejamento.js",
       });
     } else {
       throw new Error(

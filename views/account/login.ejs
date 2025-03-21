@@ -36,7 +36,7 @@
       <div class="painel-direito">
         <div class="login">
           <h2>Acesso ao Sistema</h2>
-          <form action="/login" method="POST" class="login-form">
+          <form action="/login" method="POST" class="login-form" onsubmit="showLoading()">
             <div class="input-group">
               <input
                 type="text"
@@ -66,13 +66,13 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <% if (typeof error !== 'undefined') { %>
     <script>
+      hideLoading();
       Swal.fire({
         title: "<%= error.title %>",
         html: "<%- error.message %>",
         icon: "error",
         confirmButtonColor: "var(--primary)",
       });
-      toogleLoading();
     </script>
     <% } %>
   </body>

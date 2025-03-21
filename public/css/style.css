@@ -904,6 +904,7 @@ input:disabled, input:read-only {
     height: 100%;
     background: rgba(0, 0, 0, 0.5); /* Escurece a tela */
     z-index: 99; /* Atrás do loader */
+	display: none;
 }
 
 .loader {
@@ -919,6 +920,7 @@ input:disabled, input:read-only {
     border-top: 30px solid var(--verde-escuro);
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
+	display: none;
 }
 
 @-webkit-keyframes spin {

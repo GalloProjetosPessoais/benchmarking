@@ -46,7 +46,6 @@ const postLogin = async (req, res) => {
         return acc;
       }, []);
       user.permissoes = resultado;
-      //      console.log(user);
       res.cookie("authUser", user, {
         httpOnly: true,
         secure: true,
@@ -178,23 +177,14 @@ const postCreateUsuario = async (req, res) => {
     }
     delete usuario.senha2;
 
-    // Criando um FormData corretamente no Node.js
-    const formData = new FormData();
+    // Monta os dados do usuário
+    const usuarioAtualizado = { ...usuario };
 
-    // Adiciona os campos do usuário ao FormData
-    Object.keys(usuario).forEach((key) => {
-      formData.append(key, usuario[key]);
-    });
-
-    // Se houver um arquivo, adiciona corretamente ao FormData
+    // Se um arquivo foi enviado, armazena o caminho relativo no banco
     if (arquivoFoto) {
-      const blob = new Blob([arquivoFoto.buffer], {
-        type: arquivoFoto.mimetype,
-      });
-      formData.append("arquivoFoto", blob, arquivoFoto.originalname);
+      usuarioAtualizado.foto = `/img/usuarios/${arquivoFoto.filename}`;
     }
-
-    const data = await Usuarios.registrarUsuario(req, formData);
+    const data = await Usuarios.registrarUsuario(req, usuarioAtualizado);
 
     if (data.statusCode === 201 && data.isSuccess) {
       req.session.success = {
@@ -306,17 +296,13 @@ const postEditUsuario = async (req, res) => {
   const usuario = req.body;
   const arquivoFoto = req.file;
   try {
-    const formData = new FormData();
-    Object.keys(usuario).forEach((key) => {
-      formData.append(key, usuario[key]);
-    });
+    // Monta os dados do usuário
+    const usuarioAtualizado = { ...usuario };
+    // Se um arquivo foi enviado, armazena o caminho relativo no banco
     if (arquivoFoto) {
-      const blob = new Blob([arquivoFoto.buffer], {
-        type: arquivoFoto.mimetype,
-      });
-      formData.append("arquivoFoto", blob, arquivoFoto.originalname);
+      usuarioAtualizado.foto = `/img/usuarios/${arquivoFoto.filename}`;
     }
-    const data = await Usuarios.editUsuario(req, id, formData);
+    const data = await Usuarios.editUsuario(req, id, usuarioAtualizado);
 
     if (data.statusCode === 204 && data.isSuccess) {
       req.session.success = {
@@ -456,22 +442,62 @@ const getPerfilUsuario = async (req, res) => {
   }
 };
 
+// const postPerfilUsuario = async (req, res) => {
+//   const { id } = req.params;
+//   const usuario = req.body;
+//   const arquivoFoto = req.file;
+//   try {
+//     const formData = new FormData();
+//     Object.keys(usuario).forEach((key) => {
+//       formData.append(key, usuario[key]);
+//     });
+//     if (arquivoFoto) {
+//       const blob = new Blob([arquivoFoto.buffer], {
+//         type: arquivoFoto.mimetype,
+//       });
+//       formData.append("arquivoFoto", blob, arquivoFoto.originalname);
+//     }
+//     const data = await Usuarios.editarPerfilUsuario(req, id, formData);
+
+//     if (data.statusCode === 204 && data.isSuccess) {
+//       req.session.success = {
+//         title: "Sucesso",
+//         message: "Perfil editado com sucesso!",
+//       };
+//       return res.redirect("/");
+//     }
+//     req.session.error = {
+//       title: "Problemas ao Editar Perfil",
+//       message:
+//         data.errorMessages?.join("<br>") || "Erro ao Editar Perfil de Usuário.",
+//     };
+//   } catch (error) {
+//     console.error("Erro ao processar a solicitação:", error);
+//     req.session.error = {
+//       title: "Erro Interno",
+//       message: "Falha ao processar a solicitação. Tente novamente mais tarde.",
+//     };
+//   }
+//   req.session.usuarioData = usuario;
+//   return getPerfilUsuario(req, res);
+// };
+
 const postPerfilUsuario = async (req, res) => {
   const { id } = req.params;
   const usuario = req.body;
-  const arquivoFoto = req.file;
+  const arquivoFoto = req.file; // O arquivo salvo no servidor
+
   try {
-    const formData = new FormData();
-    Object.keys(usuario).forEach((key) => {
-      formData.append(key, usuario[key]);
-    });
+    // Monta os dados do usuário
+    const usuarioAtualizado = { ...usuario };
+
+    // Se um arquivo foi enviado, armazena o caminho relativo no banco
     if (arquivoFoto) {
-      const blob = new Blob([arquivoFoto.buffer], {
-        type: arquivoFoto.mimetype,
-      });
-      formData.append("arquivoFoto", blob, arquivoFoto.originalname);
+      usuarioAtualizado.foto = `/img/usuarios/${arquivoFoto.filename}`;
     }
-    const data = await Usuarios.editarPerfilUsuario(req, id, formData);
+    // Atualiza no banco
+
+    const data = await Usuarios.editarPerfilUsuario(req, id, usuarioAtualizado);
 
     if (data.statusCode === 204 && data.isSuccess) {
       req.session.success = {
@@ -480,6 +506,7 @@ const postPerfilUsuario = async (req, res) => {
       };
       return res.redirect("/");
     }
+
     req.session.error = {
       title: "Problemas ao Editar Perfil",
       message:
@@ -492,6 +519,7 @@ const postPerfilUsuario = async (req, res) => {
       message: "Falha ao processar a solicitação. Tente novamente mais tarde.",
     };
   }
+
   req.session.usuarioData = usuario;
   return getPerfilUsuario(req, res);
 };

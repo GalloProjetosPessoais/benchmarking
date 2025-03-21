@@ -26,6 +26,8 @@
   </head>
 
   <body>
+    <div class="overlay"></div>
+    <div class="loader"></div>
     <%- include('./partials/header.ejs', { title: typeof title !=='undefined' ?
     title : '' , subtitle: typeof subtitle !=='undefined' ? subtitle : '' ,
     user: typeof user !=='undefined' ? user : '' }) %>
@@ -39,6 +41,7 @@
 
     <script src="/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/loading.js"></script>
 
     <% if (session.success) { %>
     <script>

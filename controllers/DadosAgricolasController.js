@@ -64,6 +64,7 @@ const saveAmbiente = async (req, res) => {
     );
     let result;
     if (ambiente.moagemReestimada == "") ambiente.moagemReestimada = null;
+    if (ambiente.terminoSafra == "") ambiente.terminoSafra = null;
     //    console.log(ambiente);
     if (response.isSuccess && response.result) {
       // Alteração

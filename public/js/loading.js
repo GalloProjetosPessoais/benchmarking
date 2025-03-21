@@ -4,15 +4,18 @@ function toggleLoading() {
   let overlay = document.querySelector(".overlay");
 
   let isHidden = loader.style.display === "none";
+  console.log(loader);
 
   loader.style.display = isHidden ? "block" : "none";
   overlay.style.display = isHidden ? "block" : "none";
 }
 
-document.querySelector("form").addEventListener("submit", function () {
-  toggleLoading();
-});
+function showLoading() {
+  document.querySelector(".overlay").style.display = "block";
+  document.querySelector(".loader").style.display = "block";
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-  toggleLoading();
-});
+function hideLoading() {
+  document.querySelector(".overlay").style.display = "none";
+  document.querySelector(".loader").style.display = "none";
+}

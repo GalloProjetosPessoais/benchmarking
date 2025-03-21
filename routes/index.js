@@ -1,17 +1,41 @@
 const routes = require("express").Router();
 const multer = require("multer");
+const path = require("path");
 
 const attachUser = require("../middlewares/attachUser");
 const autenticar = require("../middlewares/auth");
 
-// Configure multer for file uploads
-const storage = multer.memoryStorage(); // Usa a memória em vez do disco
+// Configuração do armazenamento no disco
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "..", "public", "img", "usuarios")); // Define o local de armazenamento
+  },
+  filename: (req, file, cb) => {
+    const extensao = path.extname(file.originalname);
+    const nomeArquivo = `${Date.now()}-${Math.round(
+      Math.random() * 1e9
+    )}${extensao}`;
+    cb(null, nomeArquivo); // Gera um nome único para evitar sobrescrita
+  },
+});
+
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB
   fileFilter: (req, file, cb) => {
-    //console.log("Recebendo arquivo:", file); // Verifica se o arquivo está chegando
-    cb(null, true);
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      return cb(
+        new Error("Apenas imagens (jpeg, jpg, png, gif) são permitidas!")
+      );
+    }
   },
 });
 

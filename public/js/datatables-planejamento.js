@@ -25,6 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
           ],
         }
       },
+      stateSave: true, // Salva automaticamente o estado do DataTables
+      stateSaveCallback: function (settings, data) {
+        localStorage.setItem("DataTables_empresasSafras", JSON.stringify(data));
+      },
+      stateLoadCallback: function (settings) {
+        return JSON.parse(localStorage.getItem("DataTables_empresasSafras"));
+      },
     });
 
     // Evento disparado quando a tabela termina de ser inicializada

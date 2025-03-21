@@ -1,5 +1,5 @@
 <div class="row">
-    <form class="col-sm-12 bg-secondary" method="post" action="/usuarios/edit/<%= usuario.id %>" enctype="multipart/form-data">
+    <form class="col-sm-12 bg-secondary" method="post" action="/usuarios/edit/<%= usuario.id %>" enctype="multipart/form-data" onsubmit="toggleLoading()">
         <input type="hidden" id="id" name="id" value="<%= usuario.id %>" >
         <div class="row">
             <div class="form-group col-sm-12 col-md-8 col-lg-10 p-0">
@@ -53,6 +53,7 @@
             <div class="form-group col-sm-12 col-md-4 col-lg-2">
                 <label>Foto</label>
                 <img id="foto-avatar" src="<%= usuario.foto != null ? usuario.foto : '/img/nophoto.png' %>" alt="Foto do usuário" title="Selecionar imagem">
+                <input type="hidden" id="foto" name="foto" value="<%= usuario ? usuario.foto : '' %>">
                 <input type="file" id="arquivoFoto" name="arquivoFoto" accept="image/*" hidden>
             </div>
         </div>
