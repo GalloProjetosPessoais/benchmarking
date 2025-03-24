@@ -79,14 +79,20 @@
             </div>
             <div class="form-group col-sm-12 col-md-6 col-lg-5">
               <label for="observacao">Observação</label>
-              <select id="observacao" name="observacao" required <%= isReadOnly ? 'readonly' : '' %>>
-                <option value="ATR Geral / TCH Geral" <%= ambiente && ambiente.observacao === "ATR Geral / TCH Geral" ? "selected" : "" %>>ATR Geral / TCH Geral</option>
-                <option value="ATR Geral / TCH Fornecedor" <%= ambiente && ambiente.observacao === "ATR Geral / TCH Fornecedor" ? "selected" : "" %>>ATR Geral / TCH Fornecedor</option>
-                <option value="ATR Geral / TCH Próprio" <%= ambiente && ambiente.observacao === "ATR Geral / TCH Próprio" ? "selected" : "" %>>ATR Geral / TCH Próprio</option>
-                <option value="ATR Fornecedor / TCH Fornecedor" <%= ambiente && ambiente.observacao === "ATR Fornecedor / TCH Fornecedor" ? "selected" : "" %>>ATR Fornecedor / TCH Fornecedor</option>
+              <select id="observacao" name="observacao" required <%=isReadOnly ? 'readonly' : '' %>>
+                <option value="ATR Geral / TCH Geral" <%=ambiente && ambiente.observacao==="ATR Geral / TCH Geral"
+                  ? "selected" : "" %>>ATR Geral / TCH Geral</option>
+                <option value="ATR Geral / TCH Fornecedor" <%=ambiente &&
+                  ambiente.observacao==="ATR Geral / TCH Fornecedor" ? "selected" : "" %>>ATR Geral / TCH Fornecedor
+                </option>
+                <option value="ATR Geral / TCH Próprio" <%=ambiente && ambiente.observacao==="ATR Geral / TCH Próprio"
+                  ? "selected" : "" %>>ATR Geral / TCH Próprio</option>
+                <option value="ATR Fornecedor / TCH Fornecedor" <%=ambiente &&
+                  ambiente.observacao==="ATR Fornecedor / TCH Fornecedor" ? "selected" : "" %>>ATR Fornecedor / TCH
+                  Fornecedor</option>
               </select>
             </div>
-           
+
           </div>
           <div class="row my-20 px-10 g-10">
             <button type="submit" class="btn btn-primary">

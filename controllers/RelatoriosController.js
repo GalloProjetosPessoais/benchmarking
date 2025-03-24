@@ -86,7 +86,6 @@ const getRelatoriosData = async (req, res) => {
           response.result.length
         : 0,
     };
-
     if (response.isSuccess) {
       return res.json(dados);
     }

@@ -33,32 +33,110 @@
   <div class="row">
     <div class="col-sm-12 bg-secondary">
       <div class="row">
-        <!-- <div class="col-sm-12 col-md-12 col-lg-12 py-0 mb-10">
-          <button id="gerarPdf" class="btn btn-primary">Gerar PDF</button>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-12" id="relatorio">
-          <label for="dados">Dados Agrícolas:</label>
-          <table id="dados" class="mt-10 display">
-            <thead>
-              <tr>
-                <th>Empresa</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot></tfoot>
-          </table>
-        </div> -->
+
         <div id="nada" class="w-100 d-none">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <h2 class="graficoTitulo" style="margin-top: 0">
+            <h2 class="graficoTitulo" style="margin-top: 0 !important">
               Nenhum dado encontrado.
             </h2>
           </div>
         </div>
 
         <div id="graficos" class="w-100 d-none">
+          <div class="col-sm-12 col-md-12 col-lg-12" id="relatorio">
+            <h2 class="graficoTitulo" style="margin-top: 0 !important">Dados Agrícolas</h2>
+            <table id="dados" class="display">
+              <thead>
+                <tr>
+                  <th rowspan="2">Usina</th>
+                  <th rowspan="2">Início Safra</th>
+                  <th rowspan="2">Moagem Acu. (t)</th>
+                  <th rowspan="2">% Realizado</th>
+                  <th rowspan="2">ATR Dia (KG/T)</th>
+                  <th rowspan="2">ATR Acu. (KG/T)</th>
+                  <th rowspan="2">TCH Est.</th>
+                  <th rowspan="2">TCH Real.</th>
+                  <th rowspan="2">TCH Var. (%)</th>
+                  <th rowspan="2">Idade Média</th>
+                  <th rowspan="2">Índice IDEA</th>
+                  <th rowspan="2">I.I.F. (%)</th>
+                  <th rowspan="2">Ind. Pluv. (mm)</th>
+                  <th rowspan="2">Pureza (%)</th>
+                  <th rowspan="2">Altitude (m)</th>
+                  <th colspan="5">Ambiente de Produção</th>
+                  <th rowspan="2">Observação</th>
+                </tr>
+        
+                <tr>
+                  <th>A</th>
+                  <th>B</th>
+                  <th>C</th>
+                  <th>D</th>
+                  <th>E</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+              <tfoot class="d-none">
+                <tr>
+                  <th colspan="2">TOTAIS</th>
+                  <th id="totalMoagem" class="text-center"></th>
+                  <th></th>
+                  <th id="totalATR_Dia" class="text-center"></th>
+                  <th id="totalATR_Acumulado" class="text-center"></th>
+                  <th id="totalTCH_Estimado" class="text-center"></th>
+                  <th id="totalTCH_Realizado" class="text-center"></th>
+                  <th id="totalTCH_Variacao" class="text-center"></th>
+                  <th id="totalIdadeMedia" class="text-center"></th>
+                  <th id="totalIndiceIdea" class="text-center"></th>
+                  <th id="totalIIF" class="text-center"></th>
+                  <th id="totalChuva" class="text-center"></th>
+                  <th id="totalPureza" class="text-center"></th>
+                  <th id="totalAltitude" class="text-center"></th>
+                  <th colspan="5"></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoProducao">
+            <h2 class="graficoTitulo">
+              Produção Estimada X Produção Reestimada
+            </h2>
+            <canvas
+              class="grafico"
+              id="graficoProducao"
+              width="400"
+              height="200"
+            ></canvas>
+          </div>
+
+          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoProducaoAcumulada">
+            <h2 class="graficoTitulo">
+              Produção Acumulada
+            </h2>
+            <canvas
+              class="grafico"
+              id="graficoProducaoAcumulada"
+              width="400"
+              height="200"
+            ></canvas>
+          </div>
+
+          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoTCH">
+            <h2 class="graficoTitulo">
+              TCH Estimado X TCH Realizado
+            </h2>
+            <canvas
+              class="grafico"
+              id="graficoTCH"
+              width="400"
+              height="200"
+            ></canvas>
+          </div>
+          
           <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoATR">
-            <h2 class="graficoTitulo" style="margin-top: 0">
+            <h2 class="graficoTitulo">
               ATR Médio Acumulado
             </h2>
             <canvas

@@ -67,56 +67,92 @@
 }
 
 
-#relatorio {
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+/* ---------- ESTILO DA TABELA ---------- */
 
 #dados {
-  width: 100%;
   border-collapse: collapse;
   font-family: 'Poppins', sans-serif;
-  background: #f1f1f1;
-  border-radius: 8px;
-  overflow: hidden;
-  color: #000;
+  font-size: 12px; /* Fonte reduzida */
+  /* color: #000; */
+  text-align: center; /* Centralizando todo o conteúdo */
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  background: var(--main-bg-color);
+  color: var(--main-color);
+  border-radius: 10px;
+  border: 1px solid var(--verde-claro);
+  padding: 10px 20px;
 }
 
+/* ---------- CABEÇALHO DA TABELA ---------- */
 #dados thead {
-  background: #f1f1f1;
-  font-size: 16px;
+  background: #165B22;
+  color: white;
+  font-size: 9px;
   text-transform: uppercase;
 }
 
 #dados thead th {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 2px solid #ddd;
+  padding: 9px;
+  text-align: center;
+  border-bottom: 2px solid white;
 }
 
+/* ---------- CORPO DA TABELA ---------- */
+#dados tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+#dados tbody tr:nth-child(even) {
+  background-color: rgb(219, 234, 183);
+}
+
+/* Removendo efeitos de transição e hover */
 #dados tbody tr {
-  border-bottom: 1px solid #eee;
-  transition: background 0.3s ease;
+  color: black;
 }
 
-#dados tbody tr:hover {
-  background: #eaeaea;
-}
-
+/* ---------- CÉLULAS DA TABELA ---------- */
 #dados tbody td {
-  padding: 10px;
+  padding: 8px;
+  border: 1px solid white;
+  text-align: center;
+  font-size: 10px;
 }
 
+/* ---------- TOTALIZADOR DA TABELA ---------- */
 #dados tfoot {
-  background: #f1f1f1;
+  background: rgb(175, 212, 151);
+  color: rgb(0, 0, 0);
+  font-size: 12px;
   font-weight: bold;
 }
 
 #dados tfoot th {
-  padding: 12px;
-  text-align: right;
-  border-top: 2px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  border-top: 2px solid white;
 }
+
+/* ---------- AJUSTES PARA RESPONSIVIDADE ---------- */
+@media (max-width: 1200px) {
+  body {
+    font-size: 10px;
+  }
+
+  #dados {
+    font-size: 9px;
+  }
+
+  #dados thead th,
+  #dados tbody td {
+    padding: 6px;
+  }
+}
+
+
+
 
 .graficoTitulo {
   text-align: center;
@@ -310,3 +346,4 @@
   background-color: #cbe6c2; /* Tom levemente mais escuro ao passar o mouse */
   transition: background-color 0.2s ease-in-out;
 }
+
