@@ -99,17 +99,18 @@ const deletePeriodo = async (req, res) => {
 
 const ativarPeriodo = async (req, res) => {
   const { id } = req.params;
+  const { status } = req.params;
   const periodo = await Periodos.getPeriodo(req, id);
   try {
-    const data = await Periodos.ativarPeriodo(req, id);
+    const data = await Periodos.ativarPeriodo(req, id, status);
     if (data.isSuccess) {
       req.session.success = {
         title: "Sucesso",
-        message: `Período ativado com sucesso!`,
+        message: `Período ${status == 'true' ? 'ativado' : 'desativado'} com sucesso!`,
       };
     } else {
       req.session.error = {
-        title: "Problemas ao ativar",
+        title: `Problemas ao ${status == 'true' ? 'ativar' : 'desativar'}`,
         message: data.errorMessages?.join("<br>") || "Erro ao ativar período.",
       };
     }

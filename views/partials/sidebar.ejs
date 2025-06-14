@@ -1,98 +1,69 @@
-<% if (typeof title =='undefined') return; %>
+<% if (typeof title=='undefined' ) return; %>
 <aside class="sidebar">
   <div class="sidebar-content">
     <ul class="sidebar-nav">
       <li class="sidebar-nav-item">
-        <a
-          href="/"
-          class="sidebar-nav-link <%- title === 'Dashboard' ? 'active' : '' %>"
-        >
+        <a href="/" class="sidebar-nav-link <%- title === 'Dashboard' ? 'active' : '' %>">
           <div><i class="bx bxs-home"></i></div>
           <span>Dashboard</span>
         </a>
       </li>
-      <% if (user.permissoes.some(p => p.modulo === 'PeriodosSafras' &&
-      p.acao.includes('1'))) { %>
+      <% if (user.permissoes.some(p=> p.modulo === 'Planejamento' && p.acao.includes('2'))) { %>
+        <li class="sidebar-nav-item">
+          <a href="/safras" class="sidebar-nav-link <%- title === 'Planejamento' ? 'active' : '' %>">
+            <div><i class="bx bx-calendar"></i></div>
+            <span>Planejamento</span>
+          </a>
+        </li>
+      <% } %>
       <li class="sidebar-nav-item">
-        <a
-          href="/safras"
-          class="sidebar-nav-link <%- title === 'Planejamento' ? 'active' : '' %>"
-        >
-          <div><i class="bx bx-calendar"></i></div>
-          <span>Planejamento</span>
-        </a>
-      </li>
-      <% } %> <% if (user.permissoes.some(p => p.modulo === 'DadosAgricolas' &&
-      p.acao.includes('1'))) { %>
-      <li class="sidebar-nav-item">
-        <a
-          href="/dados"
-          class="sidebar-nav-link <%- title === 'Dados Agrícolas' ? 'active' : '' %>"
-        >
+        <a href="/dados" class="sidebar-nav-link <%- title === 'Dados Agrícolas' ? 'active' : '' %>">
           <div><i class="bx bxs-notepad"></i></div>
           <span>Dados Agrícolas</span>
         </a>
       </li>
-      <% } %> <% if (user.permissoes.some(p => p.modulo === 'Grupos' &&
-      p.acao.includes('1'))) { %>
-      <li class="sidebar-nav-item">
-        <a
-          href="/grupos"
-          class="sidebar-nav-link <%- title === 'Grupos' ? 'active' : '' %>"
-        >
-          <div><i class="bx bxs-business"></i></div>
-          <span>Grupos</span>
-        </a>
-      </li>
-      <% } %> <% if (user.permissoes.some(p => p.modulo === 'Empresas' &&
-      p.acao.includes('1'))) { %>
-      <li class="sidebar-nav-item">
-        <a
-          href="/empresas"
-          class="sidebar-nav-link <%- title === 'Empresas' ? 'active' : '' %>"
-        >
-          <div><i class="bx bx-building"></i></div>
-          <span>Empresas</span>
-        </a>
-      </li>
+      <% if (user.permissoes.some(p=> p.modulo === 'Grupos' && p.acao.includes('2'))) { %>
+        <li class="sidebar-nav-item">
+          <a href="/grupos" class="sidebar-nav-link <%- title === 'Grupos' ? 'active' : '' %>">
+            <div><i class="bx bxs-business"></i></div>
+            <span>Grupos</span>
+          </a>
+        </li>
+      <% } %>
+      <% if (user.permissoes.some(p=> p.modulo === 'Empresas' && p.acao.includes('2'))) { %>
+        <li class="sidebar-nav-item">
+          <a href="/empresas" class="sidebar-nav-link <%- title === 'Empresas' ? 'active' : '' %>">
+            <div><i class="bx bx-building"></i></div>
+            <span>Empresas</span>
+          </a>
+        </li>
       <% } %>
       <li class="sidebar-nav-item">
-        <a
-          href="/relatorios"
-          class="sidebar-nav-link <%- title === 'Relatórios' ? 'active' : '' %>"
-        >
+        <a href="/relatorios" class="sidebar-nav-link <%- title === 'Relatórios' ? 'active' : '' %>">
           <div><i class="bx bxs-pie-chart-alt-2"></i></div>
           <span>Relatórios</span>
         </a>
       </li>
       <li class="sidebar-nav-item">
-        <a
-          href="/comparativos"
-          class="sidebar-nav-link <%- title === 'Comparativos' ? 'active' : '' %>"
-        >
+        <a href="/comparativos" class="sidebar-nav-link <%- title === 'Comparativos' ? 'active' : '' %>">
           <div><i class="bx bxs-bar-chart-alt-2"></i></div>
           <span>Comparativos</span>
         </a>
       </li>
-      <% if (user.permissoes.some(p => p.modulo === 'Usuários' &&
-      p.acao.includes('1'))) { %>
-      <hr />
-      <li class="sidebar-nav-item">
-        <a
-          href="/usuarios"
-          class="sidebar-nav-link <%- title === 'Usuários' ? 'active' : '' %>"
-        >
-          <div><i class="bx bxs-user"></i></div>
-          <span>Usuários</span>
-        </a>
-      </li>
+      <% if (user.permissoes.some(p=> p.modulo === 'Usuários' && p.acao.includes('2'))) { %>
+        <hr />
+        <li class="sidebar-nav-item">
+          <a href="/usuarios" class="sidebar-nav-link <%- title === 'Usuários' ? 'active' : '' %>">
+            <div><i class="bx bxs-user"></i></div>
+            <span>Usuários</span>
+          </a>
+        </li>
       <% } %>
     </ul>
     <div class="sidebar-bottom">
       <p>© 2025 • Direitos Reservados</p>
       <p>
-        Desenvolvido por
-        <a href="http://hadare.com.br/" target="_blank">HADARE</a>
+        Desenvolvido por <a href="http://hadare.com.br/" target="_blank">HADARE</a>
       </p>
     </div>
   </div>

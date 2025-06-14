@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const tableElement = document.getElementById('table');
 
   if (tableElement) {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     const dataTable = new DataTable(tableElement, {
       pageLength: 50,
       lengthMenu: [5, 10, 25, 50, 100],
@@ -28,18 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       columnDefs: [
         { type: 'date-br', targets: [0, 1] },
-        { orderable: false, width: '50px', targets: -1 },
+        { orderable: false, width: '50px', targets: [-1, -2], className: 'dt-head-center dt-body-center' },
         { targets: '_all', className: 'dt-head-left dt-body-left' },
       ],
+      responsive: !isMobile,
+      scrollX: isMobile,
       layout: {
-        topStart: {
+        topStart: 'pageLength', // Seletor de registros por página (esquerda)
+        topEnd: 'search',       // Campo de pesquisa (direita)
+        top2Start: {
             buttons: [
               { extend: 'copy', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'csv', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'excel', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'pdf', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'print', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
-              'colvis'
+              { extend: 'colvis', text: "Campos" }
             ],
         }
       }

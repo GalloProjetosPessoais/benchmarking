@@ -64,14 +64,14 @@
           <td class="fit">
             <% if (item.ativo) { %>
             <a
-              class="btn-sm btn-danger mx-10"
-              href="/periodos/ativar/<%= item.id %>"
+              class="btn-sm btn-danger w-100"
+              href="/periodos/ativar/<%= item.id %>/false"
               >Desativar</a
             >
             <% } else { %>
             <a
-              class="btn-sm btn-primary mx-10"
-              href="/periodos/ativar/<%= item.id %>"
+              class="btn-sm btn-primary w-100"
+              href="/periodos/ativar/<%= item.id %>/true"
               >Ativar</a
             >
             <% } %>

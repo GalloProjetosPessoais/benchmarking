@@ -29,6 +29,10 @@ const editDados = async (req, id, data) => {
     return await server.put(req.cookies.authToken, `${url}/${id}`, data);
 };
 
+const deleteDados = async (req, id) => {
+    return await server.del(req.cookies.authToken, `${url}/${id}`);
+};
+
 module.exports = {
     getDados,
     getDadosPorPeriodo,
@@ -37,5 +41,6 @@ module.exports = {
     getDadosPorPeriodoAmbiente,
     createDados,
     editDados,
+    deleteDados,
 };
 

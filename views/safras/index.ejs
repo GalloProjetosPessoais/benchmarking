@@ -1,13 +1,15 @@
-<div class="row">
-  <a class="btn btn-primary" href="/safras/upsert/0">
-    <i class="bx bx-plus-circle"></i>
-    Adicionar Safra
-  </a>
-</div>
+<% if (user.permissoes.some(p=> p.modulo === 'Safras' && p.acao.includes('1'))) { %>
+  <div class="row">
+    <a class="btn btn-primary" href="/safras/upsert/0">
+      <i class="bx bx-plus-circle"></i>
+      Adicionar Safra
+    </a>
+  </div>
+<% } %>
 <div class="row mt-10">
   <div class="col-sm-12 bg-secondary">
     <% if (data) { %>
-    <table id="table" class="display d-none" style="width: 100%">
+    <table id="table" class="display d-none w-100">
       <thead>
         <th>Ano</th>
         <th>Ativo</th>
@@ -25,40 +27,28 @@
             <% } %>
           </td>
           <td class="fit">
-            <a
-              href="/safras/empresas/<%= item.id %>"
-              class="bx bxs-business"
-              title="Gerenciar Empresas"
-            ></a>
-            <a
-              href="/safras/periodos/<%= item.id %>"
-              class="bx bx-calendar"
-              title="Gerenciar Períodos"
-            ></a>
-            <!-- <a
-              href="/safras/upsert/<%= item.id %>"
-              class="bx bx-edit"
-              title="Alterar Safra"
-            ></a> -->
+            <% if (user.permissoes.some(p=> p.modulo === 'EmpresasSafras' && p.acao.includes('2'))) { %>
+              <a href="/safras/empresas/<%= item.id %>" class="bx bxs-business" title="Gerenciar Empresas"></a>
+            <% } %>
+            <% if (user.permissoes.some(p=> p.modulo === 'PeriodosSafras' && p.acao.includes('2'))) { %>
+              <a href="/safras/periodos/<%= item.id %>" class="bx bx-calendar" title="Gerenciar Períodos"></a>
+            <% } %>
             <% if (item.ativo) { %>
             <a
-              class="btn-sm btn-danger mx-10"
+              class="btn-sm btn-danger"
               href="/safras/ativar/<%= item.id %>"
               >Desativar</a
             >
             <% } else { %>
             <a
-              class="btn-sm btn-primary mx-10"
+              class="btn-sm btn-primary"
               href="/safras/ativar/<%= item.id %>"
               >Ativar</a
             >
             <% } %>
-            <a
-              href="javascript:void(0)"
-              onclick="Delete('/safras/delete/<%= item.id %>')"
-              title="Excluir Safra"
-              class="bx bxs-trash"
-            ></a>
+            <% if (user.permissoes.some(p=> p.modulo === 'Safras' && p.acao.includes('4'))) { %>
+              <a href="javascript:void(0)" onclick="Delete('/safras/delete/<%= item.id %>')" title="Excluir Safra" class="bx bxs-trash"></a>
+            <% } %>
           </td>
         </tr>
         <% }); %>

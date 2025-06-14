@@ -126,9 +126,38 @@ const getPeriodosPorSafraEmpresa = async (req, res) => {
   }
 };
 
+const ativarEmpresasPeriodo = async (req, res) => {
+  const ids = req.body;
+  safraId = ids.safra;
+  delete ids.safra;
+  try {
+    const data = await EmpresasSafra.activateEmpresaSafra(req, ids);
+    if (data.isSuccess) {
+      req.session.success = {
+        title: "Sucesso",
+        message: `Empresas Selecionadas Ativadas com sucesso!`,
+      };
+    } else {
+      req.session.error = {
+        title: "Problemas ao Ativar",
+        message:
+          data.errorMessages?.join("<br>") || "Erro ao Ativar Empresas Selecionadas.",
+      };
+    }
+    return res.json({ redirectUrl: `/safras/empresas/${safraId}` });
+  } catch (error) {
+    console.error("Erro ao buscar períodos da safra:", error);
+    res.status(500).json({ message: "Erro interno do servidor." });
+  }
+};
+
+
+
+
 module.exports = {
   getEmpresasSafra,
   ativarEmpresaPeriodo,
   desativarEmpresaPeriodo,
   getPeriodosPorSafraEmpresa,
+  ativarEmpresasPeriodo,
 };

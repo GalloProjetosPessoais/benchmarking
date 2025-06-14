@@ -1,46 +1,51 @@
-<div class="row">
-  <a class="btn btn-primary" href="/empresas/upsert/0">
-    <i class="bx bx-plus-circle"></i>
-    Adicionar Empresa
-  </a>
-</div>
+<% if (user.permissoes.some(p=> p.modulo === 'Empresas' && p.acao.includes('1'))) { %>
+  <div class="row">
+    <a class="btn btn-primary" href="/empresas/upsert/0">
+      <i class="bx bx-plus-circle"></i>
+      Adicionar Empresa
+    </a>
+  </div>
+<% } %>
 <div class="row mt-10">
-  <div class="col-sm-12 bg-secondary">
+  <div class="col-sm-12 bg-secondary d-none">
     <% if (data) { %>
-    <table id="table" class="display d-none" style="width: 100%">
-      <thead>
-        <th>Nome</th>
-        <th>Grupo</th>
-        <th>Ativo</th>
-        <th class="not-export-col">Ações</th>
-      </thead>
-      <tbody>
-        <% data.forEach(item=> { %>
-        <tr>
-          <td><%= item.nome %></td>
-          <td><%= item.grupo.descricao %></td>
-          <td>
-            <% if (item.ativo) { %>
-            <i class="bx bxs-check-circle fs-20 text-primary" alt="Ativo"></i>
-            <% } else { %>
-            <i class="bx bxs-x-circle fs-20 text-warning" alt="Desativado"></i>
-            <% } %>
-          </td>
-          <td class="fit">
-            <a href="/empresas/upsert/<%= item.id %>" class="bx bx-edit"></a>
-            <a
-              href="javascript:void(0)"
-              onclick="Delete('/empresas/delete/<%= item.id %>')"
-              title="Excluir"
-              class="bx bxs-trash"
-            ></a>
-          </td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
-    <% } else { %>
-    <p>Sem dados para exibir</p>
-    <% } %>
+      <table id="table" class="display" style="width: 100%">
+        <thead>
+          <th>Nome</th>
+          <th>Grupo</th>
+          <th>Ativo</th>
+          <th class="not-export-col">Ações&nbsp;&nbsp;</th>
+        </thead>
+        <tbody>
+          <% data.forEach(item=> { %>
+            <tr>
+              <td>
+                <%= item.nome %>
+              </td>
+              <td>
+                <%= item.grupo.descricao %>
+              </td>
+              <td>
+                <% if (item.ativo) { %>
+                  <i class="bx bxs-check-circle fs-20 text-primary" alt="Ativo"></i>
+                <% } else { %>
+                    <i class="bx bxs-x-circle fs-20 text-warning" alt="Desativado"></i>
+                <% } %>
+              </td>
+              <td>
+                <% if (user.permissoes.some(p=> p.modulo === 'Empresas' && p.acao.includes('3'))) { %>
+                  <a href="/empresas/upsert/<%= item.id %>" class="bx bx-edit"></a>
+                <% } %>
+                <% if (user.permissoes.some(p=> p.modulo === 'Empresas' && p.acao.includes('4'))) { %>
+                  <a href="javascript:void(0)" onclick="Delete('/empresas/delete/<%= item.id %>')" title="Excluir" class="bx bxs-trash"></a>
+                <% } %>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <p>Sem dados para exibir</p>
+      <% } %>
   </div>
 </div>

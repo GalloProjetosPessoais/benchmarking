@@ -13,8 +13,12 @@
       </a>
     </li>
     <li class="nav-item breadcrumb">
-      <h2><%= title %></h2>
-      <h4><%= subtitle %></h4>
+      <h2>
+        <%= title %>
+      </h2>
+      <h4>
+        <%= subtitle %>
+      </h4>
     </li>
   </ul>
   <!-- end nav left -->
@@ -31,21 +35,19 @@
     <li class="nav-item user-wrapper">
       <div class="user dropdown dropdown-toggle" data-toggle="user-menu">
         <div class="user-area">
-          <img
-            src="<%= user.foto != null ? user.foto : '/img/nophoto.png' %>"
-            alt="User image"
-          />
+          <img src="<%= user.foto != null ? user.foto : '/img/nophoto.png' %>" alt="User image" />
           <div class="user-data">
-            <b><%= user.nome %></b>
-            <span><%= user.perfil %></span>
+            <b>
+              <%= user.nome %>
+            </b>
+            <span>
+              <%= user.perfil %>
+            </span>
           </div>
         </div>
         <ul id="user-menu" class="dropdown-menu">
           <li class="dropdown-menu-item">
-            <a
-              href="/usuarios/perfil/<%- user.id %>"
-              class="dropdown-menu-link"
-            >
+            <a href="/usuarios/perfil/<%- user.id %>" class="dropdown-menu-link">
               <div>
                 <i class="bx bx-user-circle"></i>
               </div>
@@ -62,12 +64,7 @@
           </li>
           <hr />
           <li class="dropdown-menu-item">
-            <form
-              action="/logout"
-              method="post"
-              class="dropdown-menu-link"
-              onclick="this.submit();"
-            >
+            <form action="/logout" method="post" class="dropdown-menu-link" onclick="this.submit();">
               <div>
                 <i class="bx bx-log-out-circle"></i>
               </div>
@@ -78,6 +75,4 @@
       </div>
     </li>
   </ul>
-  <!-- end nav right -->
 </header>
-<!-- end navbar -->

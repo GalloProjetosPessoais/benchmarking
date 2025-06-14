@@ -156,106 +156,35 @@ async function carregarComparativo() {
   }
 }
 
-function formatarNumero(valor) {
-  if (valor === null || valor === undefined || valor === "-") return "-";
 
-  // Se for um número, formata com duas casas decimais
-  if (typeof valor === "number" || !isNaN(valor)) {
-    return parseFloat(valor).toFixed(2).replace(".", ",");
+function formatarNumero(valor, casas) {
+  // Se o valor é nulo, indefinido ou string vazia, exibe "-"
+  if (valor === null || valor === undefined || valor === '') {
+    return '-';
   }
 
-  // Verifica se é uma string de data válida (YYYY-MM-DD ou YYYY-MM-DDTHH:mm:ssZ)
-  const data = new Date(valor);
-  if (!isNaN(data.getTime()) && /^\d{4}-\d{2}-\d{2}/.test(valor)) {
-    return data.toLocaleDateString("pt-BR"); // Formato DD/MM/AAAA
+  if (casas == null) {
+    const data = new Date(valor);
+    if (!isNaN(data.getTime()) && /^\d{4}-\d{2}-\d{2}/.test(valor)) {
+      return data.toLocaleDateString("pt-BR"); 
+    }
   }
 
-  // Se não for número nem data, retorna o próprio valor
-  return valor;
+  // Converte para número
+  const numero = parseFloat(valor);
+
+  // Se não for número válido, exibe "-"
+  if (isNaN(numero)) {
+    return '-';
+  }
+
+  // Formata com X casas decimais
+  return numero.toLocaleString('pt-BR', {
+    minimumFractionDigits: casas,
+    maximumFractionDigits: casas
+  });
 }
 
-// function atualizarTabela(dados) {
-//   const tabelaContainer = document.getElementById("tabelaComparativoContainer");
-
-//   if (!tabelaContainer) {
-//     console.error(
-//       "Erro: Elemento 'tabelaComparativoContainer' não encontrado."
-//     );
-//     return;
-//   }
-
-//   if (dados.length === 0) {
-//     tabelaContainer.innerHTML = "<p>Nenhum dado encontrado.</p>";
-//     return;
-//   }
-
-//   const nomeGrupo = dados[0].grupoDescricao.toUpperCase();
-
-//   let tableHTML = `
-//         <table class="comparativo-table">
-//             <thead>
-//                 <tr class="grupo-nome">
-//                     <th colspan="99">${nomeGrupo}</th>
-//                 </tr>
-//                 <tr>
-//                     <th>Indicador</th>
-//                     <th>Medidas</th>`;
-
-//   const anos = [...new Set(dados.map((d) => d.ano))];
-//   anos.forEach((ano) => {
-//     tableHTML += `<th>${ano}</th>`;
-//   });
-
-//   tableHTML += `</tr></thead><tbody>`;
-
-//   const indicadores = [
-//     { nome: "Início de Safra", chave: "inicioSafra", unidade: "dd/mm/aaaa" },
-//     { nome: "Moagem Estimada", chave: "moagemEstimada", unidade: "t" },
-//     { nome: "Moagem Reestimada", chave: "moagemReestimada", unidade: "t" },
-//     { nome: "Moagem Realizada", chave: "moagemRealizada", unidade: "t" },
-//     { nome: "Realizado", chave: "realizado", unidade: "%" },
-//     {
-//       nome: "Realizado Cana Própria",
-//       chave: "realizadoCanaPropria",
-//       unidade: "%",
-//     },
-//     {
-//       nome: "Realizado Cana Fornecedor",
-//       chave: "realizadoCanaFornecedor",
-//       unidade: "%",
-//     },
-//     { nome: "ATR Dia", chave: "atrDia", unidade: "kg/t" },
-//     { nome: "ATR Acumulado", chave: "atrAcumulado", unidade: "kg/t" },
-//     { nome: "TCH Estimado", chave: "tchEstimado", unidade: "t/ha" },
-//     { nome: "TCH Realizado", chave: "tchRealizado", unidade: "t/ha" },
-//     { nome: "Idade Média", chave: "idadeMedia", unidade: "Anos" },
-//     { nome: "Chuva Mês", chave: "chuvaMes", unidade: "mm" },
-//     { nome: "Chuva Acumulada", chave: "chuvaAcumulada", unidade: "mm" },
-//     {
-//       nome: "Índice Infestação Final",
-//       chave: "indiceInfestacaoFinal",
-//       unidade: "%",
-//     },
-//     { nome: "Impureza Mineral", chave: "impurezaMineral", unidade: "kg/t" },
-//     { nome: "Impureza Vegetal", chave: "impurezaVegetal", unidade: "kg/t" },
-//     { nome: "Pureza", chave: "pureza", unidade: "kg/t" },
-//   ];
-
-//   indicadores.forEach((indicador) => {
-//     tableHTML += `<tr><th>${indicador.nome}</th><td>${indicador.unidade}</td>`;
-
-//     anos.forEach((ano) => {
-//       const dadoAno = dados.find((d) => d.ano == ano);
-//       const valor = dadoAno ? dadoAno[indicador.chave] || "-" : "-";
-//       tableHTML += `<td>${formatarNumero(valor)}</td>`;
-//     });
-
-//     tableHTML += `</tr>`;
-//   });
-
-//   tableHTML += `</tbody></table>`;
-//   tabelaContainer.innerHTML = tableHTML;
-// }
 
 function atualizarTabela(dados) {
   const tabelaContainer = document.getElementById("tabelaComparativoContainer");
@@ -311,29 +240,25 @@ function atualizarTabela(dados) {
 
   // Lista de indicadores
   const indicadores = [
-    { nome: "Início de Safra", chave: "inicioSafra", unidade: "dd/mm/aaaa" },
-    { nome: "Moagem Estimada", chave: "moagemEstimada", unidade: "t" },
-    { nome: "Moagem Reestimada", chave: "moagemReestimada", unidade: "t" },
-    { nome: "Moagem Realizada", chave: "moagemRealizada", unidade: "t" },
-    { nome: "Realizado", chave: "realizado", unidade: "%" },
-    { nome: "Cana Própria", chave: "realizadoCanaPropria", unidade: "%" },
-    { nome: "Cana Fornecedor", chave: "realizadoCanaFornecedor", unidade: "%" },
-    { nome: "ATR Dia", chave: "atrDia", unidade: "kg/t" },
-    { nome: "ATR Acumulado", chave: "atrAcumulado", unidade: "kg/t" },
-    { nome: "TCH Estimado", chave: "tchEstimado", unidade: "t/ha" },
-    { nome: "TCH Realizado", chave: "tchRealizado", unidade: "t/ha" },
-    { nome: "Idade Média", chave: "idadeMedia", unidade: "Anos" },
-    { nome: "Chuva Mês", chave: "chuvaMes", unidade: "mm" },
-    { nome: "Chuva Acumulada", chave: "chuvaAcumulada", unidade: "mm" },
-    {
-      nome: "Índice Infestação Final",
-      chave: "indiceInfestacaoFinal",
-      unidade: "%",
-    },
-    { nome: "Impureza Mineral", chave: "impurezaMineral", unidade: "kg/t" },
-    { nome: "Impureza Vegetal", chave: "impurezaVegetal", unidade: "kg/t" },
-    { nome: "Pureza", chave: "pureza", unidade: "kg/t" },
-    { nome: "Data Informação", chave: "dataInformacao", unidade: "dd/mm/aaaa" },
+    { nome: "Início de Safra", chave: "inicioSafra", unidade: "dd/mm/aaaa", casas: null },
+    { nome: "Moagem Estimada", chave: "moagemEstimada", unidade: "t", casas: 0 },
+    { nome: "Moagem Reestimada", chave: "moagemReestimada", unidade: "t", casas: 0 },
+    { nome: "Moagem Realizada", chave: "moagemRealizada", unidade: "t", casas: 0 },
+    { nome: "Realizado", chave: "realizado", unidade: "%", casas: 2 },
+    { nome: "Cana Própria", chave: "realizadoCanaPropria", unidade: "%", casas: 2 },
+    { nome: "Cana Fornecedor", chave: "realizadoCanaFornecedor", unidade: "%", casas: 2 },
+    { nome: "ATR Dia", chave: "atrDia", unidade: "kg/t", casas: 1 },
+    { nome: "ATR Acumulado", chave: "atrAcumulado", unidade: "kg/t", casas: 1 },
+    { nome: "TCH Estimado", chave: "tchEstimado", unidade: "t/ha", casas: 1 },
+    { nome: "TCH Realizado", chave: "tchRealizado", unidade: "t/ha", casas: 1 },
+    { nome: "Idade Média", chave: "idadeMedia", unidade: "Anos", casas: 2 },
+    { nome: "Chuva Mês", chave: "chuvaMes", unidade: "mm", casas: 0 },
+    { nome: "Chuva Acumulada", chave: "chuvaAcumulada", unidade: "mm", casas: 0 },
+    { nome: "Índice Infestação Final", chave: "indiceInfestacaoFinal", unidade: "%", casas: 2 },
+    { nome: "Impureza Mineral", chave: "impurezaMineral", unidade: "kg/t", casas: 2 },
+    { nome: "Impureza Vegetal", chave: "impurezaVegetal", unidade: "kg/t", casas: 2 },
+    { nome: "Pureza", chave: "pureza", unidade: "kg/t", casas: 2 },
+    { nome: "Data Informação", chave: "dataInformacao", unidade: "dd/mm/aaaa", casas: null },
   ];
 
   // Criar linhas dos indicadores
@@ -345,7 +270,10 @@ function atualizarTabela(dados) {
         .sort((a, b) => a.ano - b.ano)
         .forEach((d) => {
           const valor = d[indicador.chave] || "-";
-          tableHTML += `<td>${formatarNumero(valor)}</td>`;
+          
+          console.log(formatarNumero(valor, d[indicador.casas]));
+
+          tableHTML += `<td>${formatarNumero(valor, d[indicador.casas])}</td>`;
         });
     });
 

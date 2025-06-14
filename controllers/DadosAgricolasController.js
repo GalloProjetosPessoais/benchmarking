@@ -42,6 +42,10 @@ const getAmbienteProducaoPartial = async (req, res) => {
     if (ambiente && ambiente.inicioSafra) {
       ambiente.inicioSafra = formatDateForInput(ambiente.inicioSafra);
     }
+    if (ambiente && ambiente.terminoSafra) {
+      ambiente.terminoSafra = formatDateForInput(ambiente.terminoSafra);
+    }
+
     return res.render("dadosAgricolas/ambientePartial", {
       layout: false,
       ambiente,
@@ -65,7 +69,6 @@ const saveAmbiente = async (req, res) => {
     let result;
     if (ambiente.moagemReestimada == "") ambiente.moagemReestimada = null;
     if (ambiente.terminoSafra == "") ambiente.terminoSafra = null;
-    //    console.log(ambiente);
     if (response.isSuccess && response.result) {
       // Alteração
       ambiente.Id = response.result.id;
@@ -161,12 +164,35 @@ const saveDados = async (req, res) => {
   }
 };
 
+
+const deleteDadosAgricolas = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Dados.deleteDados(req, id);
+    if (data.isSuccess) {
+      return res
+        .status(200)
+        .json({ message: "Dados agrícolas excluídos com sucesso!" });
+    } else {
+      return res
+        .status(400)
+        .json({ message: "Falha ao excluir os Dados Agrícolas." });
+    }
+  } catch (error) {
+    console.error("Erro ao excluir Dados:", error);
+    return res
+      .status(500)
+      .json({ message: "Erro interno ao excluir os Dados Agrícolas." });
+  }
+};
+
 module.exports = {
   getDados,
   getAmbienteProducaoPartial,
   saveAmbiente,
   getDadosAgricolasPartial,
   saveDados,
+  deleteDadosAgricolas,
 };
 
 const formatDateForInput = (dateString) => {

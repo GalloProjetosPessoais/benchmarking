@@ -113,6 +113,8 @@ const getUsuarios = async (req, res) => {
         subtitle: "Gerenciamento de Usuários",
         data: data2,
         useDatatable: true,
+        customJs: "/js/datatables-usuarios.js",
+        js: "/js/usuarios.js",
       });
     } else {
       throw new Error(
@@ -217,6 +219,30 @@ const getConfirmUsuario = async (req, res) => {
       message: data.isSuccess
         ? "Conta confirmada com sucesso!"
         : `Problemas ao confirmar conta: ${data.errorMessages}`,
+    });
+  } catch (error) {
+    console.error("Erro ao processar a solicitação:", error);
+    return res.render("account/confirm", {
+      layout: false,
+      message: "Erro interno do servidor. Tente novamente mais tarde.",
+    });
+  }
+};
+
+const getConfirmAccountUsuario = async (req, res) => {
+  const { id, code, codePass } = req.query;
+  try {
+    const data = await Usuarios.confirmarUsuario(req, id, code);
+    if (data.isSuccess) {
+      return res.render("account/reset", {
+        layout: false,
+        data: { id, code: codePass },
+      });
+    }
+
+    return res.render("account/confirm", {
+      layout: false,
+      message: `Problemas ao confirmar conta: ${data.errorMessages}`,
     });
   } catch (error) {
     console.error("Erro ao processar a solicitação:", error);
@@ -360,8 +386,8 @@ const postRecuperarConta = async (req, res) => {
     return res.render("account/recover", {
       layout: false,
       message: data.isSuccess
-        ? "Você receberá um email com os próximos passos"
-        : `Problemas ao tentar recuperar conta: ${data.errorMessages}`,
+        ? "Você receberá um e-mail com os próximos passos"
+        : `Não foi encontrado um usuário com o email informado. Verifique o email informado ou entre em contato com a administração`,
     });
   } catch (error) {
     console.error("Erro ao processar a solicitação:", error);
@@ -384,7 +410,7 @@ const postTrocarSenha = async (req, res) => {
       layout: false,
       data: { id: reset.id, code: reset.code },
       error: {
-        title: "Problemas no Registro",
+        title: "Problemas ao Redefinir",
         message: "As senhas não coincidem!",
       },
     });
@@ -442,45 +468,6 @@ const getPerfilUsuario = async (req, res) => {
   }
 };
 
-// const postPerfilUsuario = async (req, res) => {
-//   const { id } = req.params;
-//   const usuario = req.body;
-//   const arquivoFoto = req.file;
-//   try {
-//     const formData = new FormData();
-//     Object.keys(usuario).forEach((key) => {
-//       formData.append(key, usuario[key]);
-//     });
-//     if (arquivoFoto) {
-//       const blob = new Blob([arquivoFoto.buffer], {
-//         type: arquivoFoto.mimetype,
-//       });
-//       formData.append("arquivoFoto", blob, arquivoFoto.originalname);
-//     }
-//     const data = await Usuarios.editarPerfilUsuario(req, id, formData);
-
-//     if (data.statusCode === 204 && data.isSuccess) {
-//       req.session.success = {
-//         title: "Sucesso",
-//         message: "Perfil editado com sucesso!",
-//       };
-//       return res.redirect("/");
-//     }
-//     req.session.error = {
-//       title: "Problemas ao Editar Perfil",
-//       message:
-//         data.errorMessages?.join("<br>") || "Erro ao Editar Perfil de Usuário.",
-//     };
-//   } catch (error) {
-//     console.error("Erro ao processar a solicitação:", error);
-//     req.session.error = {
-//       title: "Erro Interno",
-//       message: "Falha ao processar a solicitação. Tente novamente mais tarde.",
-//     };
-//   }
-//   req.session.usuarioData = usuario;
-//   return getPerfilUsuario(req, res);
-// };
 
 const postPerfilUsuario = async (req, res) => {
   const { id } = req.params;
@@ -524,6 +511,73 @@ const postPerfilUsuario = async (req, res) => {
   return getPerfilUsuario(req, res);
 };
 
+
+const postResetSenha = async (req, res) => {
+  const email = req.body; 
+
+  if (!email) {
+    return res.status(400).json({ ok: false, message: "E-mail é obrigatório." });
+  }
+
+  try {
+    const data = await Usuarios.recuperarContaUsuario(req, email);
+    if (data.isSuccess) {
+      return res.json({ ok: true });
+    }
+    return res.json({ ok: false, message: data.errorMessages });
+  } catch (error) {
+    console.error("Erro no reset de senha:", error);
+    res.status(500).json({ ok: false, message: "Erro interno do servidor." });
+  }
+};
+
+
+const desativarUsuario = async(req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Usuarios.desativarUsuario(req, id)
+    if (data.isSuccess) {
+      req.session.success = { title: 'Sucesso', message: `Usuário desativado com Sucesso!` };
+      return res.redirect('/usuarios');
+    }
+    req.session.error = {
+      title: 'Problemas ao Desativar',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Desativar Usuário.',
+    };
+  } catch (error) {
+    console.error('Erro ao processar a solicitação:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
+  }
+  return res.redirect(`/usuarios`);
+}
+
+const reativarUsuario = async(req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Usuarios.reativarUsuario(req, id)
+    if (data.isSuccess) {
+      req.session.success = { title: 'Sucesso', message: `Usuário reativado com Sucesso!` };
+      return res.redirect('/usuarios');
+    }
+    req.session.error = {
+      title: 'Problemas ao Reativar',
+      message: data.errorMessages?.join('<br>') || 'Erro ao Reativar Usuário.',
+    };
+  } catch (error) {
+    console.error('Erro ao processar a solicitação:', error);
+    req.session.error = {
+      title: 'Erro Interno',
+      message: 'Falha ao processar a solicitação. Tente novamente mais tarde.',
+    };
+  }
+  return res.redirect(`/usuarios`);
+}
+
+
+
 module.exports = {
   getLogin,
   postLogin,
@@ -532,6 +586,7 @@ module.exports = {
   getCreateUsuario,
   postCreateUsuario,
   getConfirmUsuario,
+  getConfirmAccountUsuario,
   getDetailsUsuario,
   getPerfilUsuario,
   postPerfilUsuario,
@@ -542,4 +597,7 @@ module.exports = {
   postRecuperarConta,
   getTrocarSenha,
   postTrocarSenha,
+  postResetSenha,
+  desativarUsuario,
+  reativarUsuario,
 };

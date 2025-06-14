@@ -56,6 +56,7 @@ routes.post(`/login`, AccountController.postLogin);
 routes.post(`/logout`, AccountController.postLogout);
 
 routes.get(`/usuarios/confirmarEmail`, AccountController.getConfirmUsuario);
+routes.get(`/usuarios/confirmarConta`, AccountController.getConfirmAccountUsuario);
 routes.get(`/usuarios/recuperarConta`, AccountController.getRecuperarConta);
 routes.post(`/usuarios/recuperarConta`, AccountController.postRecuperarConta);
 routes.get(`/usuarios/trocarSenha`, AccountController.getTrocarSenha);
@@ -68,40 +69,17 @@ routes.get(`/`, autenticar, HomeController.getHome);
 // Usuários
 routes.get(`/usuarios`, autenticar, AccountController.getUsuarios);
 routes.get(`/usuarios/create`, autenticar, AccountController.getCreateUsuario);
-routes.post(
-  `/usuarios/create`,
-  autenticar,
-  upload.single("arquivoFoto"),
-  AccountController.postCreateUsuario
-);
-routes.get(
-  `/usuarios/details/:id`,
-  autenticar,
-  AccountController.getDetailsUsuario
-);
-routes.get(
-  `/usuarios/perfil/:id`,
-  autenticar,
-  AccountController.getPerfilUsuario
-);
-routes.post(
-  `/usuarios/perfil/:id`,
-  autenticar,
-  upload.single("arquivoFoto"),
-  AccountController.postPerfilUsuario
-);
+routes.post(`/usuarios/create`, autenticar, upload.single("arquivoFoto"), AccountController.postCreateUsuario);
+routes.get(`/usuarios/details/:id`, autenticar, AccountController.getDetailsUsuario);
+routes.get(`/usuarios/perfil/:id`, autenticar, AccountController.getPerfilUsuario);
+routes.post(`/usuarios/perfil/:id`, autenticar, upload.single("arquivoFoto"), AccountController.postPerfilUsuario);
 routes.get(`/usuarios/edit/:id`, autenticar, AccountController.getEditUsuario);
-routes.post(
-  `/usuarios/edit/:id`,
-  autenticar,
-  upload.single("arquivoFoto"),
-  AccountController.postEditUsuario
-);
-routes.delete(
-  `/usuarios/delete/:id`,
-  autenticar,
-  AccountController.deleteUsuario
-);
+routes.post(`/usuarios/edit/:id`, autenticar, upload.single("arquivoFoto"), AccountController.postEditUsuario);
+routes.delete(`/usuarios/delete/:id`, autenticar, AccountController.deleteUsuario);
+routes.post(`/usuarios/resetPassword`, autenticar, AccountController.postResetSenha);
+
+routes.get(`/usuarios/desativar/:id`, autenticar, AccountController.desativarUsuario);
+routes.get(`/usuarios/reativar/:id`, autenticar, AccountController.reativarUsuario);
 
 // Grupos
 routes.get(`/grupos`, autenticar, GruposController.getGrupos);
@@ -111,21 +89,9 @@ routes.delete(`/grupos/delete/:id`, autenticar, GruposController.deleteGrupo);
 
 // Empresas
 routes.get(`/empresas`, autenticar, EmpresasController.getEmpresas);
-routes.get(
-  `/empresas/upsert/:id`,
-  autenticar,
-  EmpresasController.getUpsertEmpresa
-);
-routes.post(
-  `/empresas/upsert/:id`,
-  autenticar,
-  EmpresasController.postUpsertEmpresa
-);
-routes.delete(
-  `/empresas/delete/:id`,
-  autenticar,
-  EmpresasController.deleteEmpresa
-);
+routes.get(`/empresas/upsert/:id`, autenticar, EmpresasController.getUpsertEmpresa);
+routes.post(`/empresas/upsert/:id`, autenticar, EmpresasController.postUpsertEmpresa);
+routes.delete(`/empresas/delete/:id`, autenticar, EmpresasController.deleteEmpresa);
 
 // Safras
 routes.get(`/safras`, autenticar, SafrasController.getSafras);
@@ -133,76 +99,36 @@ routes.get(`/safras/upsert/:id`, autenticar, SafrasController.getUpsertSafra);
 routes.post(`/safras/upsert/:id`, autenticar, SafrasController.postUpsertSafra);
 routes.get(`/safras/ativar/:id`, autenticar, SafrasController.ativarSafra);
 routes.delete(`/safras/delete/:id`, autenticar, SafrasController.deleteSafra);
+
 // Periodos e empresas da Safra
-routes.get(
-  `/safras/periodos/:id`,
-  autenticar,
-  PeriodosController.getPeriodosSafra
-);
-routes.get(
-  `/safras/empresas/:id`,
-  autenticar,
-  EmpresasSafrasController.getEmpresasSafra
-);
+routes.get(`/safras/periodos/:id`, autenticar, PeriodosController.getPeriodosSafra);
+routes.get(`/safras/empresas/:id`, autenticar, EmpresasSafrasController.getEmpresasSafra);
 
 // Gerenciar Periodos Safra
-routes.post(
-  `/periodos/gerar/:id`,
-  autenticar,
-  PeriodosController.postGerarPeriodos
-);
-routes.delete(
-  `/periodos/delete/:id`,
-  autenticar,
-  PeriodosController.deletePeriodo
-);
-routes.get(
-  `/periodos/ativar/:id`,
-  autenticar,
-  PeriodosController.ativarPeriodo
-);
+routes.post(`/periodos/gerar/:id`, autenticar, PeriodosController.postGerarPeriodos);
+routes.delete(`/periodos/delete/:id`, autenticar, PeriodosController.deletePeriodo);
+routes.get(`/periodos/ativar/:id/:status`, autenticar, PeriodosController.ativarPeriodo);
 
 //  Dados Agrícolas
 routes.get(`/dados`, autenticar, DadosAgricolasController.getDados);
 routes.post("/ambientes", autenticar, DadosAgricolasController.saveAmbiente);
 routes.post("/dados", autenticar, DadosAgricolasController.saveDados);
+routes.delete("/dados/:id", autenticar, DadosAgricolasController.deleteDadosAgricolas);
 
 // Empresas Periodos
-routes.get(
-  "/empresasSafras/ativar/:id",
-  autenticar,
-  EmpresasSafrasController.ativarEmpresaPeriodo
-);
-routes.get(
-  "/empresasSafras/desativar/:id",
-  autenticar,
-  EmpresasSafrasController.desativarEmpresaPeriodo
-);
+routes.get("/empresasSafras/ativar/:id", autenticar, EmpresasSafrasController.ativarEmpresaPeriodo);
+routes.get("/empresasSafras/desativar/:id", autenticar, EmpresasSafrasController.desativarEmpresaPeriodo);
+routes.put("/empresasSafras/ativar", autenticar, EmpresasSafrasController.ativarEmpresasPeriodo);
 
 // Rotas de retorno de dados
 routes.get("/buscar/empresaGrupo", EmpresasController.getDadosEmpresasGrupo);
-routes.get(
-  "/buscar/empresaGrupo/:id",
-  EmpresasController.getDadosEmpresasPorGrupo
-);
-routes.get(
-  "/buscar/periodosSafra/:id",
-  PeriodosController.getDadosPeriodosPorSafra
-);
-routes.get(
-  "/buscar/periodosSafraEmpresa/:safraId/:empresaId",
-  EmpresasSafrasController.getPeriodosPorSafraEmpresa
-);
+routes.get("/buscar/empresaGrupo/:id", EmpresasController.getDadosEmpresasPorGrupo);
+routes.get("/buscar/periodosSafra/:id", PeriodosController.getDadosPeriodosPorSafra);
+routes.get("/buscar/periodosSafraEmpresa/:safraId/:empresaId", EmpresasSafrasController.getPeriodosPorSafraEmpresa);
 
 // Rotas de partials
-routes.get(
-  "/partials/ambiente-producao",
-  DadosAgricolasController.getAmbienteProducaoPartial
-);
-routes.get(
-  "/partials/dados-agricolas",
-  DadosAgricolasController.getDadosAgricolasPartial
-);
+routes.get("/partials/ambiente-producao", DadosAgricolasController.getAmbienteProducaoPartial);
+routes.get("/partials/dados-agricolas", DadosAgricolasController.getDadosAgricolasPartial);
 
 // Rotas Relatorios
 routes.get(`/relatorios`, autenticar, RelatoriosController.getRelatorios);
@@ -210,10 +136,7 @@ routes.get("/relatorios/dados", RelatoriosController.getRelatoriosData);
 
 // Rotas Comparativo
 routes.get(`/comparativos`, autenticar, ComparativosController.getComparativos);
-routes.get(
-  `/comparativos/dados`,
-  autenticar,
-  ComparativosController.getComparativosData
+routes.get(`/comparativos/dados`, autenticar, ComparativosController.getComparativosData
 );
 
 module.exports = routes;

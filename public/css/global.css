@@ -10,7 +10,7 @@
 .select2-container--default .select2-selection--multiple {
   border: none;
   background-color: var(--second-bg-color);
-	color: #000;
+	color: var(--main-color);
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
@@ -33,6 +33,14 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__clear {
+  color: var(--main-color);
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: var(--main-bg-color);
+}
+
+textarea {
   color: var(--main-color);
 }
 
@@ -101,11 +109,21 @@
 
 /* ---------- CORPO DA TABELA ---------- */
 #dados tbody tr:nth-child(odd) {
-  background-color: white;
+  background-color: white !important;
 }
 
 #dados tbody tr:nth-child(even) {
-  background-color: rgb(219, 234, 183);
+  background-color: rgb(219, 234, 183) !important;
+}
+
+/* Estilo fixo para linhas ímpares das colunas fixas */
+.dtfc-fixed-left tbody tr:nth-child(odd) {
+  background-color: white !important;
+}
+
+/* Estilo fixo para linhas pares das colunas fixas */
+table.dataTable tbody tr>.dtfc-fixed-start {
+  background-color: inherit !important;
 }
 
 /* Removendo efeitos de transição e hover */
@@ -152,10 +170,39 @@
 }
 
 
+table.dataTable th,
+table.dataTable td {
+  text-align: center !important;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+table.dataTable thead th {
+  background-color: #165B22 !important;
+  color: white !important;
+  font-size: 9px !important;
+  text-transform: uppercase;
+  padding: 9px !important;
+  border-bottom: 2px solid white;
+}
+
+table.dataTable tfoot th {
+  background: rgb(175, 212, 151) !important;
+  color: black !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+} 
+
+
+
 
 
 .graficoTitulo {
   text-align: center;
+  display: inline-block;
+  width: 100%;
   padding: 10px 0;
   margin-bottom: 15px;
   margin-top: 30px;
@@ -166,8 +213,8 @@
 
 .grafico {
   width: 100%;
-  background: var(--main-bg-color);
-  color: var(--main-color);
+  background: var(--light-background);
+  color: var(--light-color);
   border-radius: 10px;
   border: 1px solid var(--verde-claro);
   padding-bottom: 10px;
@@ -347,3 +394,9 @@
   transition: background-color 0.2s ease-in-out;
 }
 
+
+
+#dados tbody tr:hover {
+	color: #fff;
+  background-color: #165B22 !important;
+}

@@ -37,7 +37,7 @@ const getPerfis = async (req) => {
 };
 
 const registrarUsuario = async (req, registro) => {
-  return await server.post(req.cookies.authToken, `${url}/registro`, registro);
+  return await server.post(req.cookies.authToken, `${url}/registro_reset`, registro);
 };
 
 const confirmarUsuario = async (req, id, code) => {
@@ -89,6 +89,14 @@ const editarPerfilUsuario = async (req, id, usuario) => {
   );
 };
 
+const desativarUsuario = async (req, id) => {
+  return await server.put(req.cookies.authToken, `${url}/desativar/${id}`);
+};
+
+const reativarUsuario = async (req, id) => {
+  return await server.put(req.cookies.authToken, `${url}/reativar/${id}`);
+};
+
 module.exports = {
   verificarAutenticacao,
   autenticarUsuario,
@@ -104,4 +112,6 @@ module.exports = {
   recuperarContaUsuario,
   trocarSenha,
   editarPerfilUsuario,
+  desativarUsuario,
+  reativarUsuario,
 };

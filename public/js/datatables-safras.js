@@ -10,19 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
         url: '../../lib/datatables.json',
       },
       columnDefs: [
-        { orderable: false, width: '50px', targets: -1 },
+        { orderable: false, width: '50px', targets: [-1, 1], className: 'dt-head-center dt-body-center' },
         { targets: '_all', className: 'dt-head-left dt-body-left' }
       ],
       order: [[0, 'desc']],
+      responsive: true,
       layout: {
-        topStart: {
+        topStart: 'pageLength', // Seletor de registros por página (esquerda)
+        topEnd: 'search',       // Campo de pesquisa (direita)
+        top2Start: {
             buttons: [
               { extend: 'copy', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'csv', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'excel', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'pdf', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
               { extend: 'print', exportOptions: { columns: ':visible(:not(.not-export-col))'} },
-              'colvis'
+              { extend: 'colvis', text: "Campos" }
             ],
         }
       }

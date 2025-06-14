@@ -36,7 +36,7 @@
             "_": "%d linhas copiadas com sucesso"
         },
         "collection": "Coleção  <span class=\"ui-button-icon-primary ui-icon ui-icon-triangle-1-s\"></span>",
-        "colvis": "Visibilidade da Coluna",
+        "colvis": "Colunas",
         "colvisRestore": "Restaurar Visibilidade",
         "copy": "Copiar",
         "copyKeys": "Pressione ctrl ou u2318 + C para copiar os dados da tabela para a área de transferência do sistema. Para cancelar, clique nesta mensagem ou pressione Esc..",

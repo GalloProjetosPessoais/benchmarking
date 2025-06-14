@@ -1,62 +1,77 @@
-<!-- <div class="row">
-  <a class="btn btn-primary" href="/periodos/0">
-    <i class='bx bx-plus-circle'></i>
-    Gerar Períodos
-  </a> 
-  <a class="btn btn-primary" href="/periodos/0">
-    <i class='bx bx-check-double'></i>
-    Ativar/Desativar Todos
-  </a>
-</div> -->
-
 <div class="row">
-  <div class="col-sm-12 bg-secondary">
-    <% if (data.length==0) { %>
-    <p></p>
-    <% } %>
-
-    <table id="table" class="display d-none" style="width: 100%">
+  <div class="col-sm-12 bg-secondary d-none">
+    <table id="table" class="display" style="width:100%">
       <thead>
+        <th>
+          <div class="checkbox-wrapper-4">
+            <input id="select-all" class="inp-cbx" type="checkbox" />
+            <label class="check-box cbx" for="select-all"><span>
+                <svg width="12px" height="10px">
+                  <use xlink:href="#check-4"></use>
+                </svg></span></label>
+            <svg class="inline-svg">
+              <symbol id="check-4" viewbox="0 0 12 10">
+                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+              </symbol>
+            </svg>
+          </div>
+        </th>
         <th>Grupo</th>
         <th>Empresa</th>
         <th>Safra</th>
-        <th>Data Inicial</th>
-        <th>Data Final</th>
+        <th>Início</th>
+        <th>Término</th>
         <th>Ativo</th>
-        <th>Ação</th>
+        <th>Ação&nbsp;&nbsp;</th>
       </thead>
       <tbody>
         <% data.forEach(item=> { %>
-        <tr>
-          <td><%= item.grupo %></td>
-          <td><%= item.empresa %></td>
-          <td><%= item.anoSafra %></td>
-          <td><%= new Date(item.dataInicio).toLocaleDateString('pt-BR') %></td>
-          <td><%= new Date(item.dataFim).toLocaleDateString('pt-BR') %></td>
-          <td>
-            <% if (item.ativo) { %>
-            <i class="bx bxs-check-circle fs-20 text-primary"></i>
-            <% } else { %>
-            <i class="bx bxs-x-circle fs-20 text-warning"></i>
-            <% } %>
-          </td>
-          <td>
-            <% if (item.ativo) { %>
-            <a
-              class="btn-sm btn-danger mx-10"
-              href="/empresasSafras/desativar/<%= item.id %>"
-              >Desativar</a
-            >
-            <% } else { %>
-            <a
-              class="btn-sm btn-primary mx-10"
-              href="/empresasSafras/ativar/<%= item.id %>"
-              >Ativar</a
-            >
-            <% } %>
-          </td>
-        </tr>
-        <% }); %>
+          <tr>
+            <td>
+              <div class="checkbox-wrapper-4">
+                <input class="inp-cbx" id="<%= item.id %>" data-id="<%= item.id %>" type="checkbox" />
+                <label class="cbx" for="<%= item.id %>"><span>
+                    <svg width="12px" height="10px">
+                      <use xlink:href="#check-4"></use>
+                    </svg></span></label>
+                <svg class="inline-svg">
+                  <symbol id="check-4" viewbox="0 0 12 10">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                </svg>
+              </div>
+            </td>
+            <td>
+              <%= item.grupo %>
+            </td>
+            <td>
+              <%= item.empresa %>
+            </td>
+            <td>
+              <%= item.anoSafra %>
+            </td>
+            <td>
+              <%= new Date(item.dataInicio).toLocaleDateString('pt-BR') %>
+            </td>
+            <td>
+              <%= new Date(item.dataFim).toLocaleDateString('pt-BR') %>
+            </td>
+            <td>
+              <% if (item.ativo) { %>
+                <i class="bx bxs-check-circle fs-20 text-primary"></i>
+                <% } else { %>
+                  <i class="bx bxs-x-circle fs-20 text-warning"></i>
+                  <% } %>
+            </td>
+            <td>
+              <% if (item.ativo) { %>
+                <a class="btn-sm btn-danger w-100" href="/empresasSafras/desativar/<%= item.id %>">Desativar</a>
+                <% } else { %>
+                  <a class="btn-sm btn-primary w-100" href="/empresasSafras/ativar/<%= item.id %>">Ativar</a>
+                  <% } %>
+            </td>
+          </tr>
+          <% }); %>
       </tbody>
     </table>
   </div>

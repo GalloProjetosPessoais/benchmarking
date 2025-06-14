@@ -1,5 +1,5 @@
 <div class="row">
-    <form class="col-sm-12 bg-secondary" method="post" action="/periodos/gerar/<%= safra.id %>">
+    <form class="col-12 bg-secondary" method="post" action="/periodos/gerar/<%= safra.id %>">
         <h3>A Safra de <%= safra.ano %>, ainda não possui períodos gerados!</h3>
         <h4 class="mt-10">Use o formulário abaixo para geração dos períodos</h4>
         <input type="hidden" id="anoSafra" name="anoSafra" value="<%= safra.ano %>">

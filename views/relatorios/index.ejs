@@ -1,13 +1,15 @@
 <div class="row">
-  <div class="col-sm-12 bg-secondary">
+  <div class="col-sm-12 w-100 bg-secondary">
     <div class="row">
       <div class="form-group col-sm-12 col-md-12 col-lg-6">
         <label for="safraId">Safra</label>
         <select id="safraId" name="safraId">
-          <option value="" disabled selected>Selecione uma Safra</option>
           <% if (safras && safras.length> 0) { %> <% safras.forEach(safra=> { %>
-          <option value="<%= safra.id %>"><%= safra.ano %></option>
-          <% }); %> <% } %>
+              <option value="<%= safra.id %>">
+                <%= safra.ano %>
+              </option>
+              <% }); %>
+                <% } %>
         </select>
       </div>
       <div class="form-group col-sm-12 col-md-12 col-lg-6">
@@ -18,18 +20,15 @@
       </div>
       <div class="form-group col-sm-12 col-md-12 col-lg-12">
         <label for="empresasSelect">Empresas:</label>
-        <select
-          id="empresasSelect"
-          class="js-example-basic-multiple form-control"
-          name="empresas[]"
-          multiple="multiple"
-        ></select>
+        <select id="empresasSelect" class="js-example-basic-multiple form-control" name="empresas[]"
+          multiple="multiple"></select>
       </div>
     </div>
   </div>
 </div>
 
 <div id="partial-container">
+
   <div class="row">
     <div class="col-sm-12 bg-secondary">
       <div class="row">
@@ -43,13 +42,16 @@
         </div>
 
         <div id="graficos" class="w-100 d-none">
-          <div class="col-sm-12 col-md-12 col-lg-12" id="relatorio">
-            <h2 class="graficoTitulo" style="margin-top: 0 !important">Dados Agrícolas</h2>
-            <table id="dados" class="display">
+
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="relatorio">
+            <h2 id="dtitle" class="graficoTitulo" style="margin-top: 0 !important">Dados Agrícolas</h2>
+            <table id="dados" class="display w-100">
               <thead>
                 <tr>
                   <th rowspan="2">Usina</th>
                   <th rowspan="2">Início Safra</th>
+                  <th rowspan="2">Moagem Est. (t)</th>
+                  <th rowspan="2">Moagem Ree. (t)</th>
                   <th rowspan="2">Moagem Acu. (t)</th>
                   <th rowspan="2">% Realizado</th>
                   <th rowspan="2">ATR Dia (KG/T)</th>
@@ -66,7 +68,7 @@
                   <th colspan="5">Ambiente de Produção</th>
                   <th rowspan="2">Observação</th>
                 </tr>
-        
+
                 <tr>
                   <th>A</th>
                   <th>B</th>
@@ -76,9 +78,11 @@
                 </tr>
               </thead>
               <tbody></tbody>
-              <tfoot class="d-none">
+              <tfoot>
                 <tr>
-                  <th colspan="2">TOTAIS</th>
+                  <th colspan="2">TOTAIS/MÉDIAS</th>
+                  <th id="totalEstimado" class="text-center"></th>
+                  <th id="totalReestimado" class="text-center"></th>
                   <th id="totalMoagem" class="text-center"></th>
                   <th></th>
                   <th id="totalATR_Dia" class="text-center"></th>
@@ -99,97 +103,54 @@
             </table>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoProducao">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoProducao">
             <h2 class="graficoTitulo">
               Produção Estimada X Produção Reestimada
             </h2>
-            <canvas
-              class="grafico"
-              id="graficoProducao"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoProducao" width="400" height="200"></canvas>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoProducaoAcumulada">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoProducaoAcumulada">
             <h2 class="graficoTitulo">
               Produção Acumulada
             </h2>
-            <canvas
-              class="grafico"
-              id="graficoProducaoAcumulada"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoProducaoAcumulada" width="400" height="200"></canvas>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoTCH">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoTCH">
             <h2 class="graficoTitulo">
               TCH Estimado X TCH Realizado
             </h2>
-            <canvas
-              class="grafico"
-              id="graficoTCH"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoTCH" width="400" height="200"></canvas>
           </div>
-          
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoATR">
+
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoATR">
             <h2 class="graficoTitulo">
               ATR Médio Acumulado
             </h2>
-            <canvas
-              class="grafico"
-              id="graficoATR"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoATR" width="400" height="200"></canvas>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoTAH">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoTAH">
             <h2 class="graficoTitulo">TAH Médio</h2>
-            <canvas
-              class="grafico"
-              id="graficoTAH"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoTAH" width="400" height="200"></canvas>
           </div>
 
-          <div
-            class="col-sm-12 col-md-12 col-lg-12"
-            id="GraficoIndiceInfestacao"
-          >
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoIndiceInfestacao">
             <h2 class="graficoTitulo">Índice de Infestação Final</h2>
-            <canvas
-              class="grafico"
-              id="graficoIndiceInfestacao"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoIndiceInfestacao" width="400" height="200"></canvas>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoChuvaAcumulada">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoChuvaAcumulada">
             <h2 class="graficoTitulo">Índice Pluviométrico - Acumulado</h2>
-            <canvas
-              class="grafico"
-              id="graficoChuvaAcumulada"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoChuvaAcumulada" width="400" height="200"></canvas>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoIDEA">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoIDEA">
             <h2 class="graficoTitulo">Índice IDEA do Benchmarking Acumulado</h2>
-            <canvas
-              class="grafico"
-              id="graficoIDEA"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoIDEA" width="400" height="200"></canvas>
 
-            <div class="indice-idea-container">
+            <div id="LegendaIDEA" class="indice-idea-container">
               <h2 class="graficoTitulo">Índice IDEA</h2>
               <table class="indice-idea-table">
                 <thead>
@@ -224,40 +185,19 @@
             </div>
           </div>
 
-          <div
-            class="col-sm-12 col-md-12 col-lg-12"
-            id="GraficoImpurezasMineral"
-          >
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoImpurezasMineral">
             <h2 class="graficoTitulo">Impureza Mineral</h2>
-            <canvas
-              class="grafico"
-              id="graficoImpurezasMineral"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoImpurezasMineral" width="400" height="200"></canvas>
           </div>
 
-          <div
-            class="col-sm-12 col-md-12 col-lg-12"
-            id="GraficoImpurezasVegetal"
-          >
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoImpurezasVegetal">
             <h2 class="graficoTitulo">Impureza Vegetal</h2>
-            <canvas
-              class="grafico"
-              id="graficoImpurezasVegetal"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoImpurezasVegetal" width="400" height="200"></canvas>
           </div>
 
-          <div class="col-sm-12 col-md-12 col-lg-12" id="GraficoPureza">
+          <div class="col-sm-12 col-md-12 col-lg-12 print-section" id="GraficoPureza">
             <h2 class="graficoTitulo">Pureza</h2>
-            <canvas
-              class="grafico"
-              id="graficoPureza"
-              width="400"
-              height="200"
-            ></canvas>
+            <canvas class="grafico" id="graficoPureza" width="400" height="200"></canvas>
           </div>
         </div>
       </div>

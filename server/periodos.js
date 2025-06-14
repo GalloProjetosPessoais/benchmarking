@@ -21,8 +21,8 @@ const deletePeriodo = async (req, id) => {
     return await server.del(req.cookies.authToken, `${url}/${id}`);
 }
 
-const ativarPeriodo = async (req, id) => {
-    return await server.post(req.cookies.authToken, `${url}/${id}`, null);
+const ativarPeriodo = async (req, id, status) => {
+    return await server.post(req.cookies.authToken, `${url}/${id}/${status}`, null);
 }
 
 module.exports = {

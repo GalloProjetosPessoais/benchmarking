@@ -1,70 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Benchmarking CMAA - Login</title>
-    <link rel="stylesheet" href="/css/cores.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/login.css" />
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="shortcut icon"
-      href="/img/fav-ico/favicon.ico"
-      type="image/x-icon"
-    />
-  </head>
 
-  <body>
-    <div class="overlay"></div>
-    <div class="loader"></div>
-    <div class="container">
-      <div class="painel-esquerdo">
-        <div class="logo">
-          <img src="/img/logo.png" class="logo" />
-        </div>
-        <h1>Bem-vindo!</h1>
-        <p>
-          Sistema Desenvolvido por Hadare Tecnologia da Informação para a
-          Companhia Mineira de Açúcar e Álcool.
-        </p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmarking CMAA - Login</title>
+  <link rel="stylesheet" href="/css/cores.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="/img/fav-ico/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+  <div class="overlay"></div>
+  <div class="loader"></div>
+  <div class="container">
+    <div class="painel-esquerdo">
+      <div class="logo">
+        <img src="/img/logo.png" class="logo" />
       </div>
+      <h1>Bem-vindo!</h1>
+      <p>
+        Sistema Desenvolvido por Hadare Tecnologia da Informação para a
+        Companhia Mineira de Açúcar e Álcool.
+      </p>
+    </div>
 
-      <div class="painel-direito">
-        <div class="login">
-          <h2>Acesso ao Sistema</h2>
-          <form action="/login" method="POST" class="login-form" onsubmit="showLoading()">
-            <div class="input-group">
-              <input
-                type="text"
-                id="nomeUsuario"
-                name="nomeUsuario"
-                placeholder="Digite seu e-mail"
-                required
-              />
-            </div>
-            <div class="input-group">
-              <input
-                type="password"
-                id="senha"
-                name="senha"
-                placeholder="Digite sua senha"
-                required
-              />
-            </div>
-            <button class="btn" type="submit">Entrar</button>
-            <a href="/usuarios/recuperarConta">Esqueceu a Senha?</a>
-          </form>
-        </div>
+    <div class="painel-direito">
+      <div class="login">
+        <h2>Acesso ao Sistema</h2>
+        <form action="/login" method="POST" class="login-form" onsubmit="showLoading()">
+          <div class="input-group">
+            <input type="text" id="nomeUsuario" name="nomeUsuario" placeholder="Digite seu e-mail" required />
+          </div>
+          <div class="input-group">
+            <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required />
+          </div>
+          <button class="btn" type="submit">Entrar</button>
+          <a href="/usuarios/recuperarConta">Redefinir Senha!</a>
+        </form>
       </div>
     </div>
-    <script src="/js/theme.js"></script>
-    <script src="/js/loading.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <% if (typeof error !== 'undefined') { %>
+  </div>
+  <script src="/js/theme.js"></script>
+  <script src="/js/loading.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <% if (typeof error !=='undefined' ) { %>
     <script>
       hideLoading();
       Swal.fire({
@@ -74,6 +56,7 @@
         confirmButtonColor: "var(--primary)",
       });
     </script>
-    <% } %>
-  </body>
+  <% } %>
+</body>
+
 </html>

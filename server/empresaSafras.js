@@ -20,9 +20,14 @@ const editEmpresaSafra = async (req, id, empresaSafra) => {
   return await server.put(req.cookies.authToken, `${url}/${id}`, empresaSafra);
 };
 
+const activateEmpresaSafra = async (req, empresaSafra) => {
+  return await server.put(req.cookies.authToken, `${url}`, empresaSafra);
+};
+
 module.exports = {
   getEmpresaSafra,
   getEmpresasSafras,
   getEmpresaSafraPeriodos,
   editEmpresaSafra,
+  activateEmpresaSafra,
 };

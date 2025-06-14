@@ -31,7 +31,7 @@
                         <input type="text" id="perfil" name="perfil" value="<%= usuario ? usuario.perfil : '' %>"
                             disabled>
                     </div>
-                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <!-- <div class="form-group col-sm-12 col-md-6 col-lg-6">
                         <label for="ultimaAlteracaoSenha">Última Alteração de Senha</label>
                         <% if (usuario.ultimaAlteracaoSenha=='0001-01-01T00:00:00' ) { %>
                             <input type="text" id="ultimaAlteracaoSenha" name="ultimaAlteracaoSenha" disabled>
@@ -40,9 +40,9 @@
                                     value="<%= new Date(usuario.ultimaAlteracaoSenha).toLocaleDateString('pt-BR') %>"
                                     disabled>
                                 <% } %>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="form-checked col-sm-12 col-md-6 col-lg-6">
                         <input type="checkbox" id="ativo" name="ativo" disabled
                             value=<%= usuario.ativo %> <%= usuario.ativo ? 'checked' : 'unchecked' %>>
@@ -53,7 +53,7 @@
                             value=<%= usuario.bloqueado %> <%= usuario.bloqueado ? 'checked' : 'unchecked' %>>
                         <label for="bloqueado">Bloqueado</label>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="form-group col-sm-12 col-md-4 col-lg-2">
                 <label>Foto</label>
@@ -67,6 +67,11 @@
             <a class="btn btn-warning mt-10" href="/usuarios/edit/<%= usuario.id %>">
                 <i class='bx bxs-edit'></i> Alterar
             </a>
+            <% if (usuario.ativo) { %>
+            <a class="btn btn-danger mt-10" href="/usuarios/desativar/<%= usuario.id %>">Desativar</a>
+            <% } else { %>
+            <a class="btn btn-primary mt-10" href="/usuarios/reativar/<%= usuario.id %>">Ativar</a>
+            <% } %>
             <a class="btn btn-info mt-10" href="/usuarios">
                 <i class='bx bx-arrow-back'></i> Voltar
             </a>

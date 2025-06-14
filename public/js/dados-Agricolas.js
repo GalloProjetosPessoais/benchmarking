@@ -15,10 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
         empresaSelect.innerHTML = "";
 
         empresas.forEach((empresa) => {
-          const option = document.createElement("option");
-          option.value = empresa.id;
-          option.textContent = empresa.nome;
-          empresaSelect.appendChild(option);
+          if (empresa.ativo) {
+            const option = document.createElement("option");
+            option.value = empresa.id;
+            option.textContent = empresa.nome;
+            empresaSelect.appendChild(option);
+          }
         });
         const container = document.getElementById("partial-container");
         container.innerHTML = "";
@@ -83,6 +85,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (grupoSafras) {
     grupoSafras.dispatchEvent(new Event("change"));
   }
+
+  document.getElementById("periodoId").addEventListener("change", (event) => {
+    const container = document.getElementById("partial-container");
+    if (container.innerHTML != "") {
+      container.innerHTML = "";
+    }
+  });
+
 
   document
     .querySelector("#empresaId")
@@ -181,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     const form = event.target;
-
     if (form.id == "form-ambiente-producao") {
       if (!validarSomaAmbientes()) {
         return;
@@ -227,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
-
+    
     if (form.id == "form-dados-agricolas") {
       formatarNumeros();
       const formData = new FormData(form);
@@ -241,7 +250,6 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify(data),
         });
-
         const result = await response.json();
         if (response.ok) {
           Swal.fire({
@@ -350,10 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 🔥 Captura SEM aplicar formatação no meio da digitação
       let moagemRealizada = limparNumero(moagemRealizadaInput.value);
-      let moagemEstimada =
-        limparNumero(document.getElementById("moagemEstimada").value) || 0;
-      let moagemReestimada =
-        limparNumero(document.getElementById("moagemReestimada").value) || 0;
+      let moagemEstimada = document.getElementById("moagemEstimada").value || 0;
+      let moagemReestimada = document.getElementById("moagemReestimada").value || 0;
 
       const base = moagemReestimada > 0 ? moagemReestimada : moagemEstimada;
 
@@ -385,3 +391,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300); // Aguarda 300ms antes de calcular (evita erros ao digitar)
   }
 });
+
+async function excluirDados() {
+  const id = document.querySelector('#dadosId')?.value;
+
+  if (!id) {
+    Swal.fire({
+      icon: "warning",
+      title: "Problemas ao Excluir",
+      text: "Nenhum dado agrícola foi selecionado para exclusão.",
+      confirmButtonColor: "var(--primary)"
+    });
+    return;
+  }
+
+  try {
+    const result = await Swal.fire({
+      title: "Confirma a exclusão deste<br>Dado Agrícola?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: "Excluir",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: 'var(--danger)',
+      cancelButtonColor: 'var(--primary)',
+    });
+
+    if (result.isConfirmed) {
+      const response = await fetch(`/dados/${id}`, { method: "DELETE" });
+
+      if (!response.ok) {
+        throw new Error("Falha ao excluir os dados agrícolas.");
+      }
+
+      await Swal.fire({
+        icon: "success",
+        title: "Dados Agrícolas Excluídos",
+        confirmButtonColor: "var(--primary)",
+      });
+
+      // Recarregar a página ou redirecionar para atualizar os dados
+      window.location.reload();
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Erro ao excluir",
+      text: error.message || "Tente novamente mais tarde.",
+      confirmButtonColor: "var(--primary)",
+    });
+    console.error("Erro ao excluir os dados agrícolas:", error);
+  }
+}

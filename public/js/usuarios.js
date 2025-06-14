@@ -19,3 +19,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 });
+
+async function resetPassword(email) {
+    showLoading();
+    try {
+        const response = await fetch("/usuarios/resetPassword", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify({ email }), // Agora o email está dentro de um objeto
+        });
+
+        const result = await response.json();
+
+        Swal.fire({
+            icon: result.ok ? "success" : "error",
+            title: result.ok ? "Troca de Senha" : "Erro",
+            text: result.ok || "Enviado email de troca de senha.",
+            confirmButtonColor: "var(--primary)",
+        });
+        hideLoading();
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: "Erro inesperado. Tente novamente mais tarde.",
+            confirmButtonColor: "var(--primary)",
+        });
+    }
+    hideLoading();
+}

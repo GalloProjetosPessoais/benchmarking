@@ -82,7 +82,7 @@ const postUpsertEmpresa = async (req, res) => {
         ? await Empresas.createEmpresa(req, empresa)
         : await Empresas.editEmpresa(req, id, empresa);
     if (data.isSuccess) {
-      req.session.tempData = {
+      req.session.success = {
         title: "Sucesso",
         message: `Empresa ${id == 0 ? "registrada" : "alterada"} com sucesso!`,
       };
