@@ -680,6 +680,11 @@ function atualizarGrafico(
 
   // **Adicionar barras primeiro**
   dataLabels.forEach((label, index) => {
+
+    let fontSize = 12;
+    if (window.innerWidth <= 768 && dataValues[0].length > 10) {
+      fontSize = 8; 
+    }
     datasets.push({
       label: label,
       data: dataValues[index],
@@ -692,7 +697,7 @@ function atualizarGrafico(
         color: "#000",
         font: {
           weight: "bold",
-          size: 12,
+          size: fontSize,
         },
         rotation: 270,
         formatter: (value) =>
@@ -715,7 +720,7 @@ function atualizarGrafico(
       borderDash: [5, 5],
       fill: false,
       pointStyle: "circle",
-      pointRadius: 5,
+      pointRadius: 3,
       pointBackgroundColor: "red",
       yAxisID: "y",
       datalabels: { display: false },
@@ -872,7 +877,7 @@ function inicializarTabela() {
                       ? data.replace(/\./g, '').replace(',', '.')
                       : data;
                   },
-                  footer: function(data, row, column, node) {
+                  footer: function (data, row, column, node) {
                     const i = $(column).attr('data-dt-column');
                     if (i == 10 || i == 13) return data.replace(/<\/?[^>]+(>|$)/g, '').replace(/[▲▼●]/g, '').trim();
                     return typeof data === 'string'
@@ -892,7 +897,7 @@ function inicializarTabela() {
                       ? data.replace(/\./g, '').replace(',', '.')
                       : data;
                   },
-                  footer: function(data, row, column, node) {
+                  footer: function (data, row, column, node) {
                     const i = $(column).attr('data-dt-column');
                     if (i == 10 || i == 13) return data.replace(/<\/?[^>]+(>|$)/g, '').replace(/[▲▼●]/g, '').trim();
                     return typeof data === 'string'
@@ -912,7 +917,7 @@ function inicializarTabela() {
                       ? data.replace(/\./g, '').replace(',', '.')
                       : data;
                   },
-                  footer: function(data, row, column, node) {
+                  footer: function (data, row, column, node) {
                     const i = $(column).attr('data-dt-column');
                     if (i == 10 || i == 13) return data.replace(/<\/?[^>]+(>|$)/g, '').replace(/[▲▼●]/g, '').trim();
                     return typeof data === 'string'
